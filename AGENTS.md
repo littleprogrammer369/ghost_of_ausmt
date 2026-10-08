@@ -97,6 +97,7 @@ For every coding task:
 - Stage only explicit task files; never use `git add .` or `git add -A`.
 - Never stage `.env`, API keys, tokens, Claude settings containing secrets, personal/university data, or unreviewed generated output.
 - Run the relevant validation, inspect the full diff, run `git diff --check`, and check the staged diff for secrets before committing.
+- Before committing, verify the repository-local Git author identity is intentional and not a sample placeholder. If `user.name`/`user.email` is missing or the email is not confirmed by the owner as their verified GitHub address or GitHub noreply, stop before commit/push and ask the owner to set it with `git config --local`. Never print the email, set it with `--global`, or guess it.
 - If required validation fails, do not commit or push; report the exact failure.
 - If validation passes, create a focused commit and push to the same current branch on `origin`. Never force-push. If the branch is protected, diverged, or the push is rejected, stop and report; do not create a workaround branch or rewrite history.
 - Read-only audit prompts must not edit, commit, or push anything.

@@ -185,12 +185,12 @@ Do not change or delete any other file.</pre>
   <table>
     <tr><th>کار</th><th>وضعیت</th><th>قدم بعد</th></tr>
     <tr><td>فاز محصول، ERD، صفحات، طراحی</td><td><span class="status done">مستند شده</span></td><td>در تسک واقعی، اسناد با کد هم‌گام نگه داشته شوند.</td></tr>
-    <tr><td>قواعد مشترک ایجنت</td><td><span class="status done">AGENTS.md / CLAUDE.md ساخته شد</span></td><td>به ریشه‌ی ریپوی محصول منتقل/کپی شوند.</td></tr>
-    <tr><td>Git clone + Repo scaffold</td><td><span class="status done">clone تأیید؛ `main` تمیز و synced با `origin/main`</span></td><td>انتقال اسناد مرجع به clone؛ سپس P0/P1. هنوز کدی commit/push نشده است.</td></tr>
+    <tr><td>قواعد مشترک ایجنت</td><td><span class="status done">AGENTS.md / CLAUDE.md در ریشه‌ی مخزن‌اند و در commit 8690bbc push شده‌اند</span></td><td>در ریشه نگه داشته شوند؛ پیش از هر commit هویت Git محلی بررسی شود.</td></tr>
+    <tr><td>Git clone + Repo scaffold</td><td><span class="status done">clone و `origin/main` تأیید؛ baseline مستندات در `8690bbc` push شده؛ کد محصول هنوز نیست</span></td><td>بسته‌ی refresh را بازبینی کن؛ پیش از commit بعدی هویت Git را درست کن؛ پیش از P0 هزینه‌ی صفر را تأیید کن.</td></tr>
     <tr><td>AgentRouter direct / tool-use</td><td><span class="status pending">Claude Code بالا می‌آید؛ رایگان‌بودن تأیید نشده</span></td><td>قبل از prompt مدل، قیمت/اعتبار صفر را تأیید کن؛ سپس smoke test ابزار.</td></tr>
     <tr><td>Prompt pack #1</td><td><span class="status pending">پیش‌نویس با سیاست same-branch push</span></td><td>پس از clone واقعی، مدارک مرجع و گیت هزینه، ابتدا P0/P1 اجرا شود. Auth تا تأیید سند ۰۲، نقش‌ها و شناسه‌ی ورود متوقف است.</td></tr>
   </table>
-  <p class="small">این workspace فعلاً شامل سندها، فایل‌های قواعد ایجنت و version markerهای Node است؛ اپلیکیشن، Compose و install/update/backup script هنوز ساخته نشده‌اند.</p>
+  <p class="small">در repo هنوز فقط اسناد، قواعد ایجنت و markerهای Node وجود دارند؛ اپلیکیشن، Compose، CI و اسکریپت‌های نصب/ارتقای محصول ساخته نشده‌اند. اسکریپت refresh اسناد فقط داخل ZIP کمکی است و به repo کپی نمی‌شود.</p>
 </section>
 
 <p class="footer">سند ۰۵ · ساختار ریپو و قرارداد ایجنت‌ها · نسخه‌ی فنی برای Claude Code / Cline</p>

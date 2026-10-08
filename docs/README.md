@@ -12,7 +12,8 @@
 | `04-design-system.html` | سیستم طراحی و قراردادهای بصری | پیش‌نویس ۰.۱ | نگاشت پوسته‌ها، پالت پیشنهادی، توکن‌ها، کامپوننت‌ها، دسترس‌پذیری و قواعد پیاده‌سازی |
 | `05-repo-and-agent-rules.html` | نقشه‌ی ریپو، قوانین ایجنت و آماده‌سازی ابزار | آماده | نسخه‌های پایه، ساختار مونوریپو، سیاست GitHub same-branch push، استقرار و چک‌لیست AgentRouter مستقیم/هزینه/tool-use |
 | `06-prompt-pack-1.html` | بسته‌ی پرامپت شماره ۱ Claude Code | پیش‌نویس، اعتبارسنجی‌نشده | پرامپت‌های مرحله‌ای برای ممیزی، workspace، پوسته‌ی وب و API؛ Auth عمداً تا تصمیم‌های مدل داده متوقف است؛ coding prompts ملزم به commit/push همان branch هستند |
-| `07-implementation-roadmap-and-github-workflow.md` | نقشه‌ی اجرایی و گردش کار GitHub | نسخه‌ی ۰.۱ | milestoneها، گیت‌های ورود/خروج، تصمیم‌های باز، معیارهای کیفیت و سیاست branch/commit/push برای استقرار بعدی |
+| `07-implementation-roadmap-and-github-workflow.md` | نقشه‌ی اجرایی و گردش کار GitHub | نسخه‌ی ۰.۲ | milestoneها، گیت‌های ورود/خروج، وضعیت واقعی مخزن، تصمیم‌های باز و سیاست branch/commit/push |
+| `08-current-state-and-next-steps.md` | وضعیت واقعی و قدم‌های بعدی | snapshot ۸ اکتبر ۲۰۲۶ | commit پایه، خطای ایمیل نویسنده، روش امن جایگزینی اسناد و گیت هزینه‌ی صفر |
 
 ## فایل‌های اجرایی/ایجنت در ریشه
 
@@ -42,12 +43,20 @@
 - پالت پیشنهادی: Indigo `#5B57D9` · Teal `#139A8A` · Violet `#9573E9` · Canvas `#F5F6FB` · Ink `#202641`.
 - قواعد محصول: بدون درگاه در MVP · حالت داوری قابل تنظیم per conference · تاریخ گواهی در هر دو قالب · سقف مقاله per conference قابل تنظیم، مقدار خالی یعنی بدون سقف.
 
-## وضعیت فعلی
+## وضعیت مخزن (snapshot پیش از اعمال بسته‌ی refresh)
 
-- اسناد ۰۰ تا ۰۷، فایل‌های `AGENTS.md` و `CLAUDE.md` و version markerهای Node در workspace دستیار آماده‌اند؛ هنوز به Ubuntu کاربر یا GitHub منتقل نشده‌اند.
-- حساب GitHub و دسترسی به مخزن خصوصی تأیید شده‌اند. clone واقعی در `/home/jcode/claude_code/ghost_of_ausmt` بررسی شده: `origin` درست، branch `main` همگام با `origin/main` و working tree تمیز است. هنوز هیچ کدی commit/push نشده است.
-- سیاست coding promptها به‌روزرسانی شده: branch فعلی حفظ شود؛ پس از پاس‌شدن تست‌ها commit و push به همان branch؛ بدون force-push، secret یا stage کردن تغییرات قبلی.
-- Claude Code CLI v2.1.294 اجرا شده و هشدار تداخل `ANTHROPIC_AUTH_TOKEN`/`ANTHROPIC_API_KEY` رفع شده؛ ولی مدل‌پیکر `API Usage Billing` و نرخ‌های دلاری را نشان داده است. رایگان‌بودن مدل/سهمیه تأیید نشده؛ درخواست مدل تا تأیید هزینه‌ی صفر متوقف بماند.
-- اپلیکیشن، Compose، CI و اسکریپت‌های deploy هنوز ساخته نشده‌اند. P0/P1 بسته‌ی prompt روی clone واقعی اجرا نشده‌اند.
-- مدل داده‌ی سند ۰۲ پیش‌نویس است؛ Auth تا تصویب ERD، شناسه‌ی ورود، نقش‌ها و مدل refresh-session متوقف است.
-- تصمیم‌های محصول باز: نام/دامنه‌ی برند، نمونه‌ی واقعی گواهی، سرویس پیش‌فرض پیامک/ایمیل، و تکلیف نام داخلی `hamayesh-platform` در برابر مخزن `ghost_of_ausmt`.
+- مسیر clone: `/home/jcode/claude_code/ghost_of_ausmt`؛ remote: `https://github.com/littleprogrammer369/ghost_of_ausmt.git`؛ branch: `main`.
+- طبق خروجی مالک در ۸ اکتبر ۲۰۲۶، commit `8690bbc` روی `origin/main` push شده و working tree پاک بوده است. این commit شامل baseline مستندات است؛ کد اپلیکیشن هنوز نوشته نشده.
+- **هویت نویسنده‌ی commit پایه اشتباه است:** دستور `git config` با متن نمونه‌ی `YOUR_VERIFIED_GITHUB_EMAIL_OR_NOREPLY` اجرا شده است. commit منتشرشده را rewrite نکن؛ ایمیل واقعی/noreply را برای commitهای بعدی فقط در تنظیم محلی همین مخزن ثبت کن. به‌هیچ‌وجه مقدار ایمیل را در چت یا فایل‌های پروژه نفرست.
+- بسته‌ی refresh فایل‌های مشخص‌شده را یک‌دست جایگزین می‌کند و قبل از آن از مسیرهای هدف backup خارج از repo می‌گیرد. `.git`, remote, history, branch و تنظیمات بیرونی `/home/jcode/claude_code/.claude/` نباید پاک یا جابه‌جا شوند.
+- مدل‌پیکر Claude Code پیام `API Usage Billing` و نرخ‌های دلاری نشان داده است؛ هزینه‌ی صفر/سهمیه هنوز تأیید نشده. تا تأیید شناسه‌ی دقیق مدل، مسیر، قیمت/سهمیه و مجوز حساب، **هیچ درخواست مدلی، حتی P0، اجرا نشود**.
+- اپلیکیشن، Compose، CI، deploy و dependency install ساخته/اجرا نشده‌اند. سند ۰۲ پیش‌نویس است؛ Auth تا تصویب مدل داده، شناسه‌ی ورود، نقش‌ها و refresh-session متوقف است.
+
+### ترتیب اقدام بعدی
+
+1. بسته را بیرون از مخزن استخراج و `apply.sh` را اجرا کن؛ فقط فایل‌های فهرست‌شده جایگزین می‌شوند و backup path را نگه دار.
+2. `git diff --check` و diff کامل را بازبینی کن. اسکریپت چیزی را stage/commit/push نمی‌کند.
+3. با `set-git-author.sh` نام و ایمیل محلی را اصلاح کن؛ ایمیل را از GitHub Settings → Emails کپی کن و در چت نفرست.
+4. تغییرات اسناد را فقط پس از بازبینی، روی همان `main` commit و push کن؛ force-push و branch جدید ممنوع.
+5. پیش از هر اجرای Claude Code/Cline، گیت رایگان‌بودن مسیر مدل را مستنداً پاس کن؛ اگر مدرک صفر بودن هزینه نیست، متوقف بمان.
+6. بعد از این گیت‌ها P0 فقط‌خواندنی اجرا شود؛ P1 تنها پس از بازبینی گزارش P0.

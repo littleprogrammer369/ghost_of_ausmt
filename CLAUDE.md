@@ -26,7 +26,7 @@ For a non-trivial task, begin with a short plan and state which repository docum
 
 ## GitHub branch and push protocol
 
-Follow the mandatory same-branch workflow in `AGENTS.md`: verify the repository root, `origin`, current branch, and baseline status before editing; stay on that exact branch; never initialize a repository, create/switch branches, or force-push. Stage only files from the current task, never secrets or pre-existing user changes. After all relevant checks pass and the diff is reviewed, make a focused commit and push to that same branch on `origin`. If the repository/remote/branch is wrong, checks fail, or push is rejected, stop and report rather than changing branches or rewriting history. Read-only audits never commit or push.
+Follow the mandatory same-branch workflow in `AGENTS.md`: verify the repository root, `origin`, current branch, and baseline status before editing; stay on that exact branch; never initialize a repository, create/switch branches, or force-push. Stage only files from the current task, never secrets or pre-existing user changes. Before committing, verify the local author identity is correct; if the email is missing or is a placeholder, stop and ask the owner to configure a verified GitHub email/noreply with `git config --local`. Never print the email or change global identity. After all relevant checks pass and the diff is reviewed, make a focused commit and push to that same branch on `origin`. If the repository/remote/branch is wrong, checks fail, or push is rejected, stop and report rather than changing branches or rewriting history. Read-only audits never commit or push.
 
 Do not:
 

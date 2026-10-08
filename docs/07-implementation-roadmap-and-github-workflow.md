@@ -1,6 +1,6 @@
 # نقشهٔ اجرایی سامانهٔ مدیریت همایش و گردش‌کار GitHub
 
-**نسخه:** 0.1
+**نسخه:** 0.2
 **تاریخ:** ۸ اکتبر ۲۰۲۶
 **وضعیت:** نقشهٔ اجرایی؛ پیش از شروع پیاده‌سازی باید Git clone واقعی، منبع مستندات و مسیر رایگان/مجاز مدل کدنویسی تأیید شوند.
 
@@ -20,56 +20,35 @@
 - هر تغییر وضعیت مقاله در `status_history` و هر اقدام حساس در `audit_logs` ثبت می‌شود.
 - هیچ API key، `.env`، اطلاعات شخصی یا فایل مقاله‌ای در Git، prompt، گزارش یا log قرار نمی‌گیرد.
 
-## ۲. وضعیت فعلی و گیت‌های قبل از کدنویسی
+## ۲. وضعیت واقعی مخزن و گیت‌های قبل از کدنویسی
+
+> **Snapshot:** ۸ اکتبر ۲۰۲۶؛ بر اساس خروجی ترمینالی که مالک محصول فرستاده است. وضعیت‌های بعدی باید با Git بررسی شوند، نه با حدس.
 
 ### موارد تأییدشده
 
-- `gh api user` حساب `littleprogrammer369` را برگردانده و `gh repo view` دسترسی به مخزن خصوصی `littleprogrammer369/ghost_of_ausmt` را تأیید کرده است.
-- خطای اولیه‌ی `not a git repository` برطرف شد. طبق خروجی ترمینال کاربر، clone واقعی در `/home/jcode/claude_code/ghost_of_ausmt` قرار دارد؛ ریشهٔ Git همان مسیر است، `origin` به `https://github.com/littleprogrammer369/ghost_of_ausmt.git` وصل است و branch `main` با `origin/main` همگام و working tree تمیز است.
-- احراز هویت GitHub و دسترسی به مخزن خصوصی تأیید شده؛ این به‌تنهایی هنوز write/push آزمایشی انجام نداده و هیچ کدی commit/push نشده است.
-- طبق خروجی Claude Code، تنظیم AgentRouter فعلاً در `/home/jcode/claude_code/.claude/settings.json` است، در حالی که تنظیم کاربری `/home/jcode/.claude/settings.json` خالی گزارش شده. پس نباید فرض کرد تنظیم پروژه پس از رفتن به clone تازه هم اعمال می‌شود.
-- اسناد اولیه ۰۰/۰۱/۰۳ مسیر توسعه از طریق 9Router را فرض کرده بودند؛ وضعیت فعلی کاربر استفادهٔ مستقیم Claude Code از AgentRouter است. این تغییر فقط مسیر ابزار توسعه را توصیف می‌کند و معماری AI داخل محصول را عوض نمی‌کند.
-- رابط مدل Claude Code پیام `API Usage Billing` و نرخ‌های دلاری نشان داده است. موفق‌شدن احراز هویت به معنی رایگان‌بودن استفاده نیست؛ قیمت نمایش‌داده‌شده در Claude Code نیز به‌تنهایی قیمت واقعی AgentRouter را ثابت نمی‌کند.
+- مخزن واقعی در `/home/jcode/claude_code/ghost_of_ausmt` است؛ `origin` برابر `https://github.com/littleprogrammer369/ghost_of_ausmt.git`، branch فعال `main` و upstream برابر `origin/main` است.
+- commit پایه‌ی مستندات `8690bbc` با پیام `docs: add roadmap and coding-agent workflow` ساخته و به `main` push شده است. خروجی کاربر پس از push نشان داد branch با `origin/main` همگام و working tree پاک است.
+- مخزن در این snapshot فقط مستندات/قواعد/README و markerهای Node دارد؛ اپلیکیشن، dependency install، CI، Compose و deploy پیاده‌سازی نشده‌اند.
+- **هویت نویسنده‌ی `8690bbc` اشتباه است:** دستور ثبت‌شده مقدار نمونه‌ی `YOUR_VERIFIED_GITHUB_EMAIL_OR_NOREPLY` را عیناً به `user.email` داده است. این metadata را با amend/rebase/force-push تغییر نده؛ تاریخچه‌ی منتشرشده حفظ می‌شود. پیش از commit بعدی، email واقعی تأییدشده یا GitHub noreply را فقط در `git config --local` تنظیم کن؛ مقدار email را در گفتگو یا فایل پروژه منتشر نکن.
+- کاربر یک بسته‌ی refresh می‌گیرد که فایل‌های پروژه را از ابتدا و یک‌دست جایگزین می‌کند. اسکریپت بسته باید قبل از تغییر backup زمان‌دار خارج از repo بگیرد، فقط مسیرهای فهرست‌شده را جایگزین کند، `.git` و تنظیمات بیرونی Claude Code را دست‌نخورده نگه دارد و خودش commit/push نکند.
+- طبق خروجی Claude Code، تنظیم AgentRouter در `/home/jcode/claude_code/.claude/settings.json` گزارش شده؛ این مسیر بیرون از مخزن محصول است و با `/home/jcode/.claude/settings.json` یکی نیست. token را در مخزن یا bundle کپی نکن.
+- در Claude Code پیام `API Usage Billing` و نرخ‌های دلاری دیده شده‌اند. اتصال سبز یا کارکرد ابزار، رایگان‌بودن را ثابت نمی‌کند. هیچ promptی—حتی P0—پیش از تأیید مستندِ هزینه‌ی صفر یا سهمیه‌ی رایگان معتبر اجرا نشود.
 
-### اقدامات ایمن برای آماده‌سازی ریپو
+### روش امن استفاده از بسته‌ی refresh
 
-1. `git init` را روی پوشهٔ فعلی اجرا نکن و پوشهٔ تنظیمات Claude Code را به ریپوی محصول تبدیل نکن.
-2. مقصد انتخاب‌شدهٔ مالک محصول `/home/jcode/claude_code/ghost_of_ausmt` است. این اسکریپت پوشهٔ موجود را بررسی می‌کند، داده‌ای را حذف نمی‌کند و فقط در صورت خالی‌بودن پوشه clone می‌کند:
-
-   ```bash
-   PROJECT=/home/jcode/claude_code/ghost_of_ausmt
-   if git -C "$PROJECT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-     echo "این مسیر از قبل Git worktree است."
-     git -C "$PROJECT" remote -v
-   elif [ ! -e "$PROJECT" ]; then
-     gh repo clone littleprogrammer369/ghost_of_ausmt "$PROJECT"
-   elif [ -z "$(find "$PROJECT" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ]; then
-     rmdir "$PROJECT" && gh repo clone littleprogrammer369/ghost_of_ausmt "$PROJECT"
-   else
-     echo "مسیر وجود دارد و خالی نیست؛ هیچ فایلی تغییر نکرد. فهرست را بازبینی کن."
-     ls -la "$PROJECT"
-   fi
-   ```
-
-3. clone را تأیید کن:
-
-   ```bash
-   git -C /home/jcode/claude_code/ghost_of_ausmt rev-parse --show-toplevel
-   git -C /home/jcode/claude_code/ghost_of_ausmt remote -v
-   git -C /home/jcode/claude_code/ghost_of_ausmt status --short --branch
-   git -C /home/jcode/claude_code/ghost_of_ausmt branch --show-current
-   ```
-
-4. باید ریشهٔ Git و `origin` مربوط به مخزن موردنظر دیده شود. نام branch را از خروجی واقعی ثبت کن؛ اسم آن را حدس نزن.
-5. پیش از اجرای Claude Code در clone جدید، تنظیم AgentRouter باید در تنظیمات کاربری امن و خارج از مخزن محصول قرار گیرد؛ توکن را در فایل‌های ریپو کپی نکن. کلیدی را که قبلاً در گفتگو فرستاده شده دوباره استفاده نکن.
-6. پیش از prompt کدنویسی، مدل انتخابی و سیاست اعتبار حساب باید صریحاً `0$` یا پوشش رایگان معتبر را نشان دهند. تا آن زمان هیچ promptی که درخواست مدل بفرستد اجرا نشود.
-7. اسناد مرجع ۰۰ تا ۰۷، `AGENTS.md` و `CLAUDE.md` اکنون در clone محلی هستند؛ تا وقتی docs-only commit و push انجام نشده‌اند، در GitHub نیستند.
+1. ZIP را بیرون از repo استخراج کن؛ بسته حاوی `.git` نیست.
+2. `apply.sh` فقط وقتی ادامه می‌دهد که ریشه، `origin`, branch `main`, upstream و working tree با مخزن مورد انتظار هم‌خوان باشند. اگر وضعیت فرق دارد، متوقف می‌شود.
+3. پیش از جایگزینی، نسخه‌ی پشتیبان timestampدار بیرون از repo می‌سازد. فقط `README.md`، `AGENTS.md`، `CLAUDE.md`، `.gitignore`، `.nvmrc`، `.node-version` و `docs/` را جایگزین می‌کند؛ `.git`، remote، branch، history، `.claude/` بیرونی و هر مسیر دیگری را حذف نمی‌کند.
+4. اسکریپت فایل‌ها را نصب و `git diff --check` را اجرا می‌کند؛ هیچ فایل را stage، commit یا push نمی‌کند. diff را بازبینی کن.
+5. قبل از commit، اسکریپت `set-git-author.sh` را برای ثبت نام و ایمیل محلی اجرا کن. ایمیل از GitHub Settings → Emails کپی می‌شود؛ اسکریپت آن را روی صفحه چاپ نمی‌کند و هیچ تنظیم global نمی‌سازد.
+6. پس از بازبینی، فقط فایل‌های مشخص‌شده را stage کن؛ commit/push بعدی روی همان `main` و بدون force-push است.
+7. گیت صفرِ هزینه جداست: تا شناسه‌ی دقیق مدل، route، قیمت/سهمیه و مجوز استفاده برای همان حساب ثابت نشده، هیچ درخواست Claude Code/AgentRouter نفرست.
 
 ## ۳. نقشهٔ milestoneها
 
 | مرحله | هدف و خروجی | معیار عبور |
 |---|---|---|
-| **M0 — دسترسی و سلامت ریپو** | clone واقعی، `origin` صحیح، branch فعال، احراز هویت GitHub، کنترل secretها، انتقال اسناد مرجع و تثبیت استفاده از همان branch | `git status`، ریشه و `origin` درست باشند؛ branch مشخص باشد؛ فایل secret در Git نباشد؛ مدل کدنویسی برای استفادهٔ موردنظر واقعاً رایگان تأیید شده باشد. |
+| **M0 — سلامت ریپو و آماده‌سازی کم‌هزینه** | تأیید clone/`origin`/branch، اعمال و بازبینی بسته‌ی refresh، هویت commit معتبر، کنترل secretها و تثبیت همان branch | `git status`، ریشه و `origin` درست باشند؛ refresh بدون حذف `.git` بازبینی و روی branch فعلی push شود؛ فایل secret در Git نباشد؛ هزینه‌ی صفر برای مسیر مدل تأیید شده باشد. |
 | **M1 — ممیزی و اسکلت مونوریپو** | اجرای P0 فقط‌خواندنی؛ سپس P1 برای ریشهٔ pnpm/Turborepo، نسخه‌های قفل‌شده، `README`، تنظیم TypeScript/lint/format و lockfile | نصب frozen تکرارپذیر باشد؛ اسکریپت‌های افزوده‌شده واقعاً اجرا شوند؛ CI پایه lint/typecheck/test/build را اجرا کند؛ تمام تغییرات روی branch موجود push شوند. |
 | **M2 — پوستهٔ UI و API** | P2: پوستهٔ سایت شرکتی و همایش، design tokens، `fa/en` و RTL/LTR؛ P3: پوستهٔ NestJS، پیکربندی معتبر، liveness/readiness و error envelope | build هر app موفق؛ ترجمه‌ها parity داشته باشند؛ تست locale و health پاس شود؛ هنوز schema دامنه و auth ساخته نشده باشد. |
 | **M3 — تثبیت نیازمندی و قرارداد داده** | بازبینی و تصویب سند ۰۲ و ۰۳؛ نهایی‌کردن ERD، ماشین وضعیت، permission matrix، قرارداد API و ADRهای ابهام‌دار | مالک محصول موارد باز را صریحاً تأیید کند. تا آن زمان Prisma schema دامنه و احراز هویت کامل ممنوع است. |
@@ -119,7 +98,9 @@ GITHUB / SAME-BRANCH POLICY (MANDATORY)
   keys, tokens, Claude settings containing secrets, private data, or generated artifacts.
 - After implementation, run the relevant tests, inspect the full diff, run `git diff --check`, and verify the
   staged diff contains no secrets. If a required validation fails, do not commit or push; report the failure.
-- If validations pass, make a focused commit and push it to the same current branch on `origin`. Never force-push.
+- Before committing, verify the repo-local Git author is owner-confirmed and not a sample placeholder. If it is
+  missing or uncertain, stop and ask the owner to set it locally; never print the email or change global identity.
+- If validations and author identity pass, make a focused commit and push it to the same current branch on `origin`. Never force-push.
   If the remote branch is protected, diverged, or rejects the push, STOP; do not create another branch or rewrite
   history. Report the exact branch, commit hash, push result, and remaining issues.
 - Read-only audit prompts must not edit, commit, or push anything.
@@ -127,10 +108,10 @@ GITHUB / SAME-BRANCH POLICY (MANDATORY)
 
 ## ۷. اقدام‌های بعدی، به ترتیب
 
-1. **انجام شد:** clone در `/home/jcode/claude_code/ghost_of_ausmt`، `origin` درست، branch `main` و working tree تمیز و sync با `origin/main`.
-2. **استخراج محلی انجام شد:** اسناد ۰۰ تا ۰۷ و `AGENTS.md`/`CLAUDE.md` در clone حاضرند و هنوز untracked هستند. پیش از baseline docs-only commit، فایل‌ها و نبود secret بازبینی شوند.
-3. قرار دادن AgentRouter در تنظیمات user-level خارج از Git؛ بررسی اینکه `ANTHROPIC_API_KEY` با `ANTHROPIC_AUTH_TOKEN` هم‌زمان تنظیم نشده باشد.
-4. تأیید کتبی/شفاف اینکه مدل انتخابی واقعاً رایگان یا با اعتبار مجاز پوشش داده می‌شود؛ در غیر این صورت اجرای prompt مدل متوقف بماند.
-5. اجرای P0 فقط‌خواندنی روی clone و بازبینی گزارش؛ پس از آن P1 و هر milestone با diff/test/commit/push جداگانه روی همان branch.
-6. پیش از P4، M3 را کامل و نقش‌ها، شناسهٔ ورود و refresh-session را تصویب کن.
-7. پس از پاس‌شدن MVP، استقرار آزمایشی روی Ubuntu و سپس آماده‌سازی runbook برای دیپلوی دستی روی سرور دیگر؛ هرگز server credential را در Git یا prompt نگذار.
+1. **انجام شد طبق خروجی کاربر:** clone در `/home/jcode/claude_code/ghost_of_ausmt`، `origin` درست، branch `main` و `origin/main` همگام در commit `8690bbc`.
+2. **انجام شد:** baseline اسناد در `8690bbc` به GitHub push شده است؛ هیچ کد اپلیکیشن نوشته نشده.
+3. بسته‌ی refresh را با `apply.sh` نصب کن، backup path را نگه دار و diff را بازبینی کن؛ `.git`، history و تنظیمات `.claude` بیرونی را حذف نکن.
+4. قبل از commit refresh، هویت Git را با `set-git-author.sh` به نام دلخواه و ایمیل تأییدشده/noreply به‌صورت local تنظیم کن. ایمیل نمونه‌ی commit قبلی را در تاریخچه بازنویسی نکن.
+5. هزینه‌ی صفر و route دقیق مدل را مستنداً تأیید کن؛ اگر تأیید نشد، هیچ prompt مدلی، حتی P0، اجرا نشود.
+6. بعد از review diff و `git diff --check`، تغییرات مستندات را به همان `main` commit/push کن؛ سپس P0 فقط‌خواندنی و در صورت تأیید، P1 را اجرا کن.
+7. پیش از M3، نقش‌ها، شناسهٔ ورود و refresh-session را تصویب کن؛ پس از MVP، Ubuntu pilot و runbook استقرار دستی را آماده کن.

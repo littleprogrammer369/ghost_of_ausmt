@@ -74,13 +74,17 @@
   <p class="lead">این prompt نباید فایل تغییر دهد یا dependency نصب کند. هدفش این است که مدل پیش از هر کار، اسناد، نسخه‌ها و وضعیت واقعی ریپو را درست بخواند.</p>
   <pre>You are the lead engineer for this repository. This task is READ-ONLY.
 
-Read AGENTS.md, CLAUDE.md, docs/README.md, and the applicable documents in docs/00 through docs/07.
-For the current GitHub and developer-CLI setup, docs/07 is the latest operational addendum and supersedes older
-9Router-specific setup assumptions in docs/00-05 only; it does not change the product AI architecture.
+Read README.md, AGENTS.md, CLAUDE.md, docs/README.md, the applicable documents in docs/00 through docs/07,
+and docs/08-current-state-and-next-steps.md. For the current repository state, branch, existing commit, Git author
+identity caveat, and next actions, docs/08 is the latest operational snapshot. For GitHub/developer-CLI setup,
+docs/07 remains the operational addendum and supersedes older 9Router-specific assumptions in docs/00-05 only;
+these operational updates do not change the product AI architecture.
 Inspect the current repository tree and git status. Verify the active Node version against .nvmrc and
 .node-version. Report the installed pnpm version if available. Record the Git root, current branch, and
-sanitized `origin` host/repository. If this is not a Git worktree or `origin` is missing or unexpected, stop
-and report; do not run `git init`, clone, switch branches, edit files, commit, or push. Never print credentials
+sanitized `origin` host/repository. Check whether the local Git author identity is configured and not the known
+literal placeholder; if it is missing or wrong, report that status without printing the email value. Do not
+rewrite the already-pushed baseline commit. If this is not a Git worktree or `origin` is missing or unexpected,
+stop and report; do not run `git init`, clone, switch branches, edit files, commit, or push. Never print credentials
 embedded in a remote URL. Do not print environment variables, read or expose secrets, install packages, run
 migrations, or execute destructive commands.
 
@@ -99,24 +103,27 @@ If a required document or command is missing, state that plainly. Do not invent 
   <p class="lead">فقط package/workspace پایه؛ هنوز اپ Next، API، دیتابیس یا feature ساخته نمی‌شود.</p>
   <pre>Implement the minimal JavaScript monorepo root only.
 
-Before editing, read AGENTS.md, CLAUDE.md, docs/README.md, docs/01-architecture-and-build-plan.html,
-and docs/05-repo-and-agent-rules.html, and docs/07-implementation-roadmap-and-github-workflow.md. Check
-the Git root, `origin`, current branch, and status. Stay on the
+Before editing, read README.md, AGENTS.md, CLAUDE.md, docs/README.md, docs/01-architecture-and-build-plan.html,
+docs/05-repo-and-agent-rules.html, docs/07-implementation-roadmap-and-github-workflow.md, and
+docs/08-current-state-and-next-steps.md. Check the Git root, `origin`, current branch, and status. Stay on the
 already checked-out branch; if this is not the intended clone, `origin` is wrong/missing, HEAD is detached,
 or the branch is unexpected, STOP and report. Never initialize Git or create/switch branches. Verify Node is
 exactly the version in .nvmrc. If the working tree has user changes, preserve and do not stage them. If the
 required Node version is unavailable, STOP and report.
 
 Scope:
-- Create the root package.json, pnpm-workspace.yaml, turbo.json, .gitignore, .editorconfig, and root
-  TypeScript/lint/format configuration needed for a pnpm + Turborepo monorepo.
+- Create the root package.json, pnpm-workspace.yaml, turbo.json, .editorconfig, and root TypeScript/lint/format
+  configuration needed for a pnpm + Turborepo monorepo.
+- Review the starter `.gitignore` already in the repo and add only necessary framework/build exclusions; do not
+  replace it wholesale or remove its environment/credential protections.
 - Pin the exact pnpm version in package.json's packageManager field and commit the generated pnpm lockfile.
   Use a current stable pnpm release compatible with the pinned Node version. Do not use an unpinned `latest`
   dependency. Do not create package-lock.json or yarn.lock.
 - Use strict TypeScript defaults. Keep each app free to use the module settings required by its framework;
   the NestJS 12 API must remain ESM.
 - Add only the root scripts that can be made truthful now. A script may not report success when it skipped
-  all work. Add a README.md at the repository root describing only commands that exist.
+  all work. The root README.md already exists: update only bootstrap instructions that become verified, preserve
+  its approved product/status summary, and document only commands that exist.
 - Preserve docs/, AGENTS.md, CLAUDE.md, .nvmrc, and .node-version exactly unless a documented conflict requires
   a proposed change; ask before changing them.
 
@@ -130,7 +137,10 @@ Validation:
 
 GitHub completion gate:
 - Review the full diff and `git diff --check`; stage only the explicit P1 files, never pre-existing changes or secrets.
-- If every required validation passes, create a focused commit and push to the same current branch on `origin`.
+- Before committing, verify local `user.name` and `user.email` are set intentionally. The email must not be a sample placeholder;
+  if missing or placeholder, stop before commit/push and ask the owner to set a verified GitHub email or their GitHub noreply address.
+  Do not print the email, set it globally, or rewrite the already-pushed baseline commit.
+- If every required validation passes and author identity is valid, create a focused commit and push to the same current branch on `origin`.
 - Never force-push. If checks fail, the branch diverged/is protected, or push is rejected, do not switch branches
   or rewrite history; stop and report the exact blocker.
 
@@ -143,11 +153,12 @@ and any blocked follow-up. Do not claim that a framework app exists; this task o
   <p class="lead">این مرحله فقط UI skeleton و ترجمه‌هاست؛ بدون احراز هویت واقعی، درخواست API، ثبت‌نام، مقاله یا داده‌ی ساختگیِ گمراه‌کننده.</p>
   <pre>Scaffold the two frontend applications and the shared UI foundation as a small, reviewable vertical slice.
 
-Read AGENTS.md, CLAUDE.md, docs/01-architecture-and-build-plan.html, docs/03-pages-and-wireframes.html,
-docs/04-design-system.html, docs/04-design-system-preview.html, and
-`docs/07-implementation-roadmap-and-github-workflow.md`. Verify the approved Next.js 16.3.x,
-React peer version, Tailwind CSS v4, next-intl, Radix/shadcn, and Lucide compatibility using official
-package/framework documentation before selecting exact versions. Pin exact versions in the lockfile.
+Read README.md, AGENTS.md, CLAUDE.md, docs/01-architecture-and-build-plan.html, docs/03-pages-and-wireframes.html,
+docs/04-design-system.html, docs/04-design-system-preview.html,
+`docs/07-implementation-roadmap-and-github-workflow.md`, and `docs/08-current-state-and-next-steps.md`.
+Verify the approved Next.js 16.3.x, React peer version, Tailwind CSS v4, next-intl, Radix/shadcn, and Lucide
+compatibility using official package/framework documentation before selecting exact versions. Pin exact versions
+in the lockfile.
 If a required package is incompatible, stop and report alternatives; do not silently downgrade the stack.
 
 Scope:
@@ -174,7 +185,9 @@ exist or fails. Include a short manual RTL/LTR check list and changed files.
 GitHub completion gate:
 - Stay on the branch recorded before editing. Review the full diff, run `git diff --check`, and stage only
   explicit P2 files; do not stage pre-existing changes or secrets.
-- If all required validations pass, create a focused commit and push to that same branch on `origin`.
+- Before committing, ensure local Git author identity is owner-confirmed and not a placeholder; if uncertain, stop and
+  ask the owner to configure it locally. Do not print the email or rewrite prior pushed history.
+- If all required validations and author-identity checks pass, create a focused commit and push to that same branch on `origin`.
 - Never force-push or change branches. If tests fail or push is rejected, stop and report the exact blocker.</pre>
 </section>
 
@@ -183,9 +196,9 @@ GitHub completion gate:
   <p class="lead">API را بالا می‌آورد اما هنوز مدل داده‌ی دانشگاه/کاربر/مقاله را نمی‌سازد؛ با این کار پیش‌نویس ERD به migration اشتباه تبدیل نمی‌شود.</p>
   <pre>Scaffold the NestJS API foundation only. Do not implement authentication or domain persistence yet.
 
-Read AGENTS.md, CLAUDE.md, docs/01-architecture-and-build-plan.html, docs/02-data-model.html,
-docs/05-repo-and-agent-rules.html, and `docs/07-implementation-roadmap-and-github-workflow.md`.
-Note that docs/02-data-model.html is a DRAFT. Use NestJS 12.1.x
+Read README.md, AGENTS.md, CLAUDE.md, docs/01-architecture-and-build-plan.html, docs/02-data-model.html,
+docs/05-repo-and-agent-rules.html, `docs/07-implementation-roadmap-and-github-workflow.md`,
+and `docs/08-current-state-and-next-steps.md`. Note that docs/02-data-model.html is a DRAFT. Use NestJS 12.1.x
 and its ESM conventions; verify the current official NestJS 12 setup before generating files. Use the pinned
 Node/pnpm versions from the repository. Do not copy CommonJS or NestJS 10/11 boilerplate.
 
@@ -209,7 +222,9 @@ or database reset command may be run against any shared or production database.
 GitHub completion gate:
 - Stay on the branch recorded before editing. Review the full diff, run `git diff --check`, and stage only
   explicit P3 files; do not stage pre-existing changes or secrets.
-- If all required validations pass, create a focused commit and push to that same branch on `origin`.
+- Before committing, ensure local Git author identity is owner-confirmed and not a placeholder; if uncertain, stop and
+  ask the owner to configure it locally. Do not print the email or rewrite prior pushed history.
+- If all required validations and author-identity checks pass, create a focused commit and push to that same branch on `origin`.
 - Never force-push or change branches. If tests fail or push is rejected, stop and report the exact blocker.</pre>
 </section>
 
@@ -222,7 +237,7 @@ proposed data-model amendment for human approval.
 
 Prerequisites:
 - The owner has explicitly approved docs/02-data-model.html and the relevant gates in
-  docs/07-implementation-roadmap-and-github-workflow.md.
+  docs/07-implementation-roadmap-and-github-workflow.md and docs/08-current-state-and-next-steps.md.
 - The role taxonomy and role-to-permission matrix are reconciled across the product documents and approved.
 - The login identifier policy is documented (email, mobile, or both).
 - The refresh-session/token storage and rotation/revocation model is documented.
@@ -248,7 +263,10 @@ Use only a disposable local database created for this task. Report migration nam
 GitHub completion gate (only if all prerequisites are satisfied and validations pass):
 - Stay on the branch recorded before editing. Review the full diff, run `git diff --check`, and stage only
   explicit P4 files; do not stage pre-existing changes or secrets.
-- Create a focused commit and push to that same branch on `origin`. Never force-push or change branches.
+- Before committing, ensure local Git author identity is owner-confirmed and not a placeholder; if uncertain, stop and
+  ask the owner to configure it locally. Do not print the email or rewrite prior pushed history.
+- Create a focused commit and push to that same branch on `origin` only after validations and author identity pass.
+  Never force-push or change branches.
 - If a prerequisite/test fails or push is rejected, do not commit/push or create a workaround branch; stop and report.</pre>
 </section>
 
@@ -285,7 +303,7 @@ I did not run (and why):
     <tr><td>مدل داده</td><td><span class="pill hold">پیش‌نویس</span></td><td>تأیید ERD و تعیین login identifier + refresh session model.</td></tr>
     <tr><td>Repo bootstrap</td><td><span class="pill hold">هنوز اجرا نشده</span></td><td>اجرای موفق P0/P1 توسط ایجنت روی ریپوی مقصد؛ review diff و lockfile.</td></tr>
   </table>
-  <div class="callout green"><strong>قدم فعلی:</strong> clone واقعی تأیید شده (`main` با `origin/main` همگام و working tree تمیز است). اسناد مرجع را به clone منتقل کن و هزینه‌ی صفر مدل را پیش از هر API request تأیید کن؛ بعد P0 را فقط‌خواندنی اجرا و گزارشش را پیش از P1 بازبینی کن.</div>
+  <div class="callout green"><strong>قدم فعلی:</strong> baseline مستندات در commit `8690bbc` روی `main` push شده است. ابتدا بسته‌ی refresh را با اسکریپت امن نصب و diff را بازبینی کن؛ سپس هویت Git محلی را اصلاح کن. پیش از هر درخواست مدل، هزینه‌ی صفر را برای همان route ثابت کن؛ آن‌وقت P0 فقط‌خواندنی را اجرا و پیش از P1 گزارشش را بازبینی کن.</div>
 </section>
 
 <p class="footer">سند ۰۶ · Prompt Pack #1 · متن پرامپت‌ها انگلیسی است تا مستقیم به Claude Code داده شود</p>
