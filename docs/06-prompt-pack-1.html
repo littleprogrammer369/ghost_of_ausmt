@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سند ۰۶ — بسته‌ی پرامپت شماره ۱ برای Claude Code</title>
+<style>
+  :root{--bg:#f5f6fa;--card:#fff;--ink:#202641;--muted:#66708a;--line:#e1e5ef;--brand:#5150c8;--teal:#128a7a;--amber:#a56d12;--red:#b43c53}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.9 "Vazirmatn","Segoe UI",Tahoma,Arial,sans-serif}
+  .wrap{max-width:1150px;margin:0 auto;padding:25px 20px 75px}
+  header{background:linear-gradient(125deg,#171e40,#4542ad 67%,#128a7a 130%);color:#fff;border-radius:20px;padding:26px 29px;margin-bottom:18px;position:relative;overflow:hidden}
+  header:after{content:"";position:absolute;inset-inline-start:-75px;top:-155px;width:235px;height:235px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18)}
+  header h1{font-size:22px;margin:0 0 6px;position:relative;z-index:1}
+  header p{margin:0;max-width:900px;font-size:13px;opacity:.92;position:relative;z-index:1}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px;position:relative;z-index:1}
+  .meta span{font-size:10.5px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.24)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px 22px;margin:0 0 15px;box-shadow:0 5px 18px rgba(33,42,80,.04)}
+  h2{font-size:17px;color:#34377d;margin:0 0 11px;padding-bottom:9px;border-bottom:2px solid #efeffa}
+  h2 .n{display:inline-block;background:#eeeeff;border:1px solid #dcdcf8;color:#4948b9;border-radius:8px;padding:1px 8px;margin-left:7px;font-size:12px;vertical-align:2px}
+  h3{font-size:14px;color:#34405e;margin:17px 0 7px}
+  p{margin:7px 0}
+  .lead{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+  .callout{border-right:4px solid var(--brand);background:#f1f2ff;border-radius:10px;padding:11px 14px;margin:10px 0}
+  .callout.green{border-right-color:var(--teal);background:#edf9f5}
+  .callout.warn{border-right-color:var(--amber);background:#fff7e7}
+  .callout.red{border-right-color:var(--red);background:#fff1f2}
+  .callout strong{color:#303657}
+  .small{font-size:11.5px;color:var(--muted)}
+  code{direction:ltr;display:inline-block;background:#f0f2f8;border:1px solid #e1e4ef;border-radius:5px;padding:0 5px;font:11.5px Consolas,Monaco,monospace}
+  pre{direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;background:#171b2e;color:#e6e9ff;border-radius:12px;padding:15px 16px;overflow-x:auto;font:11.5px/1.8 Consolas,Monaco,monospace;margin:10px 0}
+  .prompt-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+  .prompt-title h3{margin:0}
+  .pill{border-radius:999px;padding:3px 8px;font-size:10px;font-weight:800;white-space:nowrap}
+  .ready{background:#e9f7f1;color:#1b7057}.hold{background:#fff3dc;color:#80570b}.blocked{background:#fcebed;color:#9b344a}
+  table{width:100%;border-collapse:collapse;margin:9px 0;font-size:12.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right;vertical-align:top}
+  th{background:#f2f4fb;color:#333a67;font-weight:800}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .box{border:1px solid var(--line);border-radius:12px;background:#fcfcff;padding:12px}
+  .box h3{margin:0 0 5px}
+  ul,ol{margin:7px 0;padding-right:21px}
+  li{margin:4px 0}
+  .footer{text-align:center;color:#838ba0;font-size:11px;margin-top:18px}
+  @media(max-width:760px){.wrap{padding:15px 11px 46px}section{padding:15px}header{padding:20px}header h1{font-size:19px}.grid2{grid-template-columns:1fr}pre{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>سند ۰۶ — بسته‌ی پرامپت شماره ۱ برای Claude Code</h1>
+  <p>پرامپت‌ها انگلیسی و مرحله‌ای نوشته شده‌اند تا به Claude Code داده شوند. این بسته برای آماده‌کردن اسکلت قابل‌تست ریپو است؛ دستورها را یک‌جا paste نکن و هیچ‌کدام را پیش از موفقیت smoke test ابزار اجرا نکن.</p>
+  <div class="meta"><span>وضعیت: پیش‌نویس · روی مدل کاربر اجرا/اعتبارسنجی نشده</span><span>مدل هدف: Node 24 · Next 16 · Nest 12 · Prisma 7</span><span>داده‌ی واقعی: ممنوع در تست</span></div>
+</header>
+
+<section>
+  <h2><span class="n">۱</span>قاعده‌ی استفاده</h2>
+  <div class="callout warn"><strong>Gate صفر:</strong> ابتدا مسیر مستقیم AgentRouter/Claude Code را در بند ۷ سند ۰۵ بررسی کن. پیش از هر درخواست مدل، هزینه‌ی صفر یا اعتبار رایگان کافی باید در حساب تأیید شود؛ نمایش API Usage Billing یا سبزشدن اتصال اثبات رایگان‌بودن نیست. اگر هزینه‌ی صفر تأیید نشد، هیچ‌یک از coding prompts را اجرا نکن. پس از تأیید هزینه، smoke test ابزار را انجام بده.</div>
+  <ol>
+    <li>هر بار فقط یک پرامپت را داخل clone واقعی مخزن محصول اجرا کن.</li>
+    <li>بعد از هر مرحله، diff و گزارش تست را بررسی کن؛ بعد مرحله‌ی بعد را paste کن.</li>
+    <li>کلید API، `.env`، مقاله‌ی دانشگاه یا مشخصات شخصی را داخل prompt قرار نده.</li>
+    <li>اگر مدل از تصمیم سندها خارج شد یا درباره‌ی destructive operation سؤال دارد، اجازه نده حدس بزند؛ کار را متوقف کند.</li>
+  </ol>
+  <div class="callout"><strong>قانون GitHub برای همه‌ی پرامپت‌های کدنویسی:</strong> فقط روی branchای کار کن که از قبل checkout شده؛ branch نساز/عوض نکن و `git init` نزن. پیش از تغییر، Git root، `origin`، branch و status را بررسی کن. پس از پاس‌شدن تست‌ها، فقط فایل‌های همین تسک را stage کن، diff و secret را بازبینی کن، commit بساز و به همان branch در `origin` push کن. در صورت نبود Git/remote، خطای تست یا ردشدن push توقف کن؛ force-push و branch جایگزین ممنوع. P0 فقط‌خواندنی است و commit/push نمی‌کند.</div>
+  <div class="grid2">
+    <div class="box"><h3>ترتیب پیشنهادی</h3><p class="small">P0 بررسی فقط‌خواندنی → P1 workspace root → P2 دو اپ وب → P3 API health shell → بازبینی diff و CI.</p></div>
+    <div class="box"><h3>عمداً خارج از این بسته</h3><p class="small">ساخت schema نهایی و migrationهای دامنه، درگاه پرداخت، deploy/backup production، و auth/RBAC کامل. سند ۰۲ هنوز پیش‌نویس است و شناسه‌ی ورود/جدول نشست refresh باید پیش از پیاده‌سازی auth نهایی شود.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="prompt-title"><h2><span class="n">P0</span>ممیزی فقط‌خواندنی ریپو</h2><span class="pill ready">اولین اجرا</span></div>
+  <p class="lead">این prompt نباید فایل تغییر دهد یا dependency نصب کند. هدفش این است که مدل پیش از هر کار، اسناد، نسخه‌ها و وضعیت واقعی ریپو را درست بخواند.</p>
+  <pre>You are the lead engineer for this repository. This task is READ-ONLY.
+
+Read AGENTS.md, CLAUDE.md, docs/README.md, and the applicable documents in docs/00 through docs/07.
+For the current GitHub and developer-CLI setup, docs/07 is the latest operational addendum and supersedes older
+9Router-specific setup assumptions in docs/00-05 only; it does not change the product AI architecture.
+Inspect the current repository tree and git status. Verify the active Node version against .nvmrc and
+.node-version. Report the installed pnpm version if available. Record the Git root, current branch, and
+sanitized `origin` host/repository. If this is not a Git worktree or `origin` is missing or unexpected, stop
+and report; do not run `git init`, clone, switch branches, edit files, commit, or push. Never print credentials
+embedded in a remote URL. Do not print environment variables, read or expose secrets, install packages, run
+migrations, or execute destructive commands.
+
+Return only:
+1) A concise summary of the product and its hard invariants.
+2) The repository state you actually observed (do not infer missing files).
+3) Any conflict between the task and the documents.
+4) The smallest safe next implementation step, with exact proposed files and validation commands.
+5) Any decision that blocks implementation.
+
+If a required document or command is missing, state that plainly. Do not invent test results.</pre>
+</section>
+
+<section>
+  <div class="prompt-title"><h2><span class="n">P1</span>ساخت ریشه‌ی مونوریپو</h2><span class="pill hold">پس از P0 و smoke test</span></div>
+  <p class="lead">فقط package/workspace پایه؛ هنوز اپ Next، API، دیتابیس یا feature ساخته نمی‌شود.</p>
+  <pre>Implement the minimal JavaScript monorepo root only.
+
+Before editing, read AGENTS.md, CLAUDE.md, docs/README.md, docs/01-architecture-and-build-plan.html,
+and docs/05-repo-and-agent-rules.html, and docs/07-implementation-roadmap-and-github-workflow.md. Check
+the Git root, `origin`, current branch, and status. Stay on the
+already checked-out branch; if this is not the intended clone, `origin` is wrong/missing, HEAD is detached,
+or the branch is unexpected, STOP and report. Never initialize Git or create/switch branches. Verify Node is
+exactly the version in .nvmrc. If the working tree has user changes, preserve and do not stage them. If the
+required Node version is unavailable, STOP and report.
+
+Scope:
+- Create the root package.json, pnpm-workspace.yaml, turbo.json, .gitignore, .editorconfig, and root
+  TypeScript/lint/format configuration needed for a pnpm + Turborepo monorepo.
+- Pin the exact pnpm version in package.json's packageManager field and commit the generated pnpm lockfile.
+  Use a current stable pnpm release compatible with the pinned Node version. Do not use an unpinned `latest`
+  dependency. Do not create package-lock.json or yarn.lock.
+- Use strict TypeScript defaults. Keep each app free to use the module settings required by its framework;
+  the NestJS 12 API must remain ESM.
+- Add only the root scripts that can be made truthful now. A script may not report success when it skipped
+  all work. Add a README.md at the repository root describing only commands that exist.
+- Preserve docs/, AGENTS.md, CLAUDE.md, .nvmrc, and .node-version exactly unless a documented conflict requires
+  a proposed change; ask before changing them.
+
+Do not scaffold apps, install a database, add domain models, configure production deployment, add secrets,
+create CI against an unknown git host, or write install/update/backup scripts in this task.
+
+Validation:
+- Run pnpm install and confirm the lockfile is reproducible with a frozen install.
+- Run every root script you added and report its exact command and output summary.
+- Check there is one JS lockfile, the workspace config parses, and no secret values were written.
+
+GitHub completion gate:
+- Review the full diff and `git diff --check`; stage only the explicit P1 files, never pre-existing changes or secrets.
+- If every required validation passes, create a focused commit and push to the same current branch on `origin`.
+- Never force-push. If checks fail, the branch diverged/is protected, or push is rejected, do not switch branches
+  or rewrite history; stop and report the exact blocker.
+
+Before finishing, show the changed-file list, tests/commands run, current branch, commit hash, push result,
+and any blocked follow-up. Do not claim that a framework app exists; this task only creates the workspace root.</pre>
+</section>
+
+<section>
+  <div class="prompt-title"><h2><span class="n">P2</span>ساخت پوسته‌ی دو اپ وب و سیستم طراحی</h2><span class="pill hold">پس از تأیید P1</span></div>
+  <p class="lead">این مرحله فقط UI skeleton و ترجمه‌هاست؛ بدون احراز هویت واقعی، درخواست API، ثبت‌نام، مقاله یا داده‌ی ساختگیِ گمراه‌کننده.</p>
+  <pre>Scaffold the two frontend applications and the shared UI foundation as a small, reviewable vertical slice.
+
+Read AGENTS.md, CLAUDE.md, docs/01-architecture-and-build-plan.html, docs/03-pages-and-wireframes.html,
+docs/04-design-system.html, docs/04-design-system-preview.html, and
+`docs/07-implementation-roadmap-and-github-workflow.md`. Verify the approved Next.js 16.3.x,
+React peer version, Tailwind CSS v4, next-intl, Radix/shadcn, and Lucide compatibility using official
+package/framework documentation before selecting exact versions. Pin exact versions in the lockfile.
+If a required package is incompatible, stop and report alternatives; do not silently downgrade the stack.
+
+Scope:
+- Create apps/web (public conference shell plus empty role-aware route groups) and apps/marketing (company
+  marketing shell) using the current supported App Router conventions.
+- Create packages/ui for design tokens and a few accessible primitives only: Button, Card, TextField,
+  StatusBadge, and a responsive page shell. Do not build the full product UI in this pass.
+- Apply the documented skins at layout boundaries: marketing = restrained Neumorphism; public conference
+  pages = controlled Glassmorphism; panel shell = restrained Claymorphism. Dense forms and tables remain
+  solid, readable, and high-contrast. Use the semantic tokens in docs/04; never scatter raw colors.
+- Set up fa/en with next-intl using translation files and a parity check. Default to Persian/RTL and verify
+  English/LTR. Every visible label, error, title, and status must come from translations.
+- Use Lucide icons only; no emoji. No external font/CDN dependency. If local font assets are absent, use a
+  documented local fallback and report the font assets needed; do not hotlink fonts.
+- Add responsive layouts, visible keyboard focus, reduced-motion support, and a small set of tests for locale
+  switching and the shared primitives.
+
+Do not add API calls, authentication, real university branding, payment flows, external analytics, or
+production secrets. Any demo text/data must be visibly marked as sample content.
+
+Run the relevant lint, typecheck, unit tests, and builds for both apps. Report any command that does not
+exist or fails. Include a short manual RTL/LTR check list and changed files.
+
+GitHub completion gate:
+- Stay on the branch recorded before editing. Review the full diff, run `git diff --check`, and stage only
+  explicit P2 files; do not stage pre-existing changes or secrets.
+- If all required validations pass, create a focused commit and push to that same branch on `origin`.
+- Never force-push or change branches. If tests fail or push is rejected, stop and report the exact blocker.</pre>
+</section>
+
+<section>
+  <div class="prompt-title"><h2><span class="n">P3</span>ساخت پوسته‌ی API با Health endpoint</h2><span class="pill hold">پس از تأیید P1</span></div>
+  <p class="lead">API را بالا می‌آورد اما هنوز مدل داده‌ی دانشگاه/کاربر/مقاله را نمی‌سازد؛ با این کار پیش‌نویس ERD به migration اشتباه تبدیل نمی‌شود.</p>
+  <pre>Scaffold the NestJS API foundation only. Do not implement authentication or domain persistence yet.
+
+Read AGENTS.md, CLAUDE.md, docs/01-architecture-and-build-plan.html, docs/02-data-model.html,
+docs/05-repo-and-agent-rules.html, and `docs/07-implementation-roadmap-and-github-workflow.md`.
+Note that docs/02-data-model.html is a DRAFT. Use NestJS 12.1.x
+and its ESM conventions; verify the current official NestJS 12 setup before generating files. Use the pinned
+Node/pnpm versions from the repository. Do not copy CommonJS or NestJS 10/11 boilerplate.
+
+Scope:
+- Create apps/api with ConfigModule and validated environment configuration.
+- Add a liveness endpoint that does not reveal configuration, versions, credentials, or internal topology.
+- Add a readiness endpoint with a truthful dependency status. If dependencies are not provisioned, return
+  not-ready rather than faking healthy status.
+- Add a global exception/error envelope matching docs/03-pages-and-wireframes.html, but keep all user-facing
+  wording out of API responses; return stable error codes and structured details.
+- Add unit/e2e tests for health behavior, missing configuration, and error serialization.
+- Configure structured logs with request IDs and secret/PII redaction. Do not log request bodies or paper text.
+
+Do not add Prisma schema, migrations, login, JWT, roles, conference tables, Redis jobs, provider secrets,
+external network calls, or production Docker files in this task. If current docs conflict with the requested
+health paths or error envelope, stop and report the exact conflict.
+
+Run API lint, typecheck, unit tests, and e2e tests. Report exact commands and pass/fail results. No test
+or database reset command may be run against any shared or production database.
+
+GitHub completion gate:
+- Stay on the branch recorded before editing. Review the full diff, run `git diff --check`, and stage only
+  explicit P3 files; do not stage pre-existing changes or secrets.
+- If all required validations pass, create a focused commit and push to that same branch on `origin`.
+- Never force-push or change branches. If tests fail or push is rejected, stop and report the exact blocker.</pre>
+</section>
+
+<section>
+  <div class="prompt-title"><h2><span class="n">P4</span>احراز هویت و نقش‌ها</h2><span class="pill blocked">در انتظار نهایی‌شدن تصمیم‌های مدل داده</span></div>
+  <div class="callout red"><strong>فعلاً اجرا نکن:</strong> `docs/02-data-model.html` هنوز پیش‌نویس است و شناسه‌ی ورود (موبایل، ایمیل یا هر دو) و مدل ذخیره/چرخش refresh session در آن نهایی نشده. این prompt عمداً از ایجنت می‌خواهد در صورت نبود تصمیم، توقف کند.</div>
+  <pre>Implement the authentication and conference-membership authorization vertical slice ONLY if all prerequisites
+below are satisfied. If any prerequisite is missing, do not modify code; return the exact blockers and a
+proposed data-model amendment for human approval.
+
+Prerequisites:
+- The owner has explicitly approved docs/02-data-model.html and the relevant gates in
+  docs/07-implementation-roadmap-and-github-workflow.md.
+- The role taxonomy and role-to-permission matrix are reconciled across the product documents and approved.
+- The login identifier policy is documented (email, mobile, or both).
+- The refresh-session/token storage and rotation/revocation model is documented.
+- The API scaffold and the isolated local test database are running.
+- The selected AgentRouter/provider route has passed the tool-use smoke test and a zero-cost/free-credit gate has been verified.
+
+If approved, implement only:
+- Argon2id password hashing; never store or log raw passwords.
+- Short-lived access JWT plus rotating refresh session in Secure, HttpOnly, SameSite cookie; persist only
+  a hash/identifier needed to revoke sessions, with expiry and reuse detection.
+- Authentication guards and conference membership resolution. Derive conference scope from the verified
+  membership/session context; never trust a role or conference ID supplied by the client.
+- Roles: super_admin, editor, support, reviewer, committee, author. Do not let users self-assign a role.
+- Minimum auth endpoints defined by the approved contract; rate-limit login and verification paths.
+- Audit events for login failure/success, session revoke, and role/member changes without recording secrets.
+- Unit, integration, and e2e tests including cross-conference access denial, privilege escalation attempts,
+  refresh rotation/reuse, invalid credentials, and expired sessions.
+
+Do not implement registration forms, paper workflows, online payments, 2FA, password reset, or admin UI in
+this slice unless those are explicitly included in the approved schema and task. Do not run `migrate reset`.
+Use only a disposable local database created for this task. Report migration names and all validation results.
+
+GitHub completion gate (only if all prerequisites are satisfied and validations pass):
+- Stay on the branch recorded before editing. Review the full diff, run `git diff --check`, and stage only
+  explicit P4 files; do not stage pre-existing changes or secrets.
+- Create a focused commit and push to that same branch on `origin`. Never force-push or change branches.
+- If a prerequisite/test fails or push is rejected, do not commit/push or create a workaround branch; stop and report.</pre>
+</section>
+
+<section>
+  <h2><span class="n">۲</span>برگه‌ی گزارش پس از هر prompt</h2>
+  <p class="lead">این بخش را از Claude Code بخواه و نتیجه را قبل از prompt بعدی با من بررسی کن.</p>
+  <pre>Implemented:
+- ...
+Files changed:
+- ...
+Commands actually run and results:
+- ...
+Security/tenant checks:
+- ...
+Assumptions or decisions required:
+- ...
+Known failures or untested areas:
+- ...
+
+GitHub status:
+- Current branch:
+- Commit hash:
+- Push to same branch on origin: success / blocked (reason)
+
+I did not run (and why):
+- ...</pre>
+</section>
+
+<section>
+  <h2><span class="n">۳</span>گیت‌های باقی‌مانده پیش از P4</h2>
+  <table>
+    <tr><th>گیت</th><th>وضعیت</th><th>شرط عبور</th></tr>
+    <tr><td>AgentRouter direct / tool-use</td><td><span class="pill blocked">هزینه‌ی صفر تأیید نشده</span></td><td>اول قیمت/اعتبار مدل و مسیر Anthropic را تأیید کن؛ سپس گزارش `/status` و ساخت/خواندن/ویرایش فایل.</td></tr>
+    <tr><td>مدل داده</td><td><span class="pill hold">پیش‌نویس</span></td><td>تأیید ERD و تعیین login identifier + refresh session model.</td></tr>
+    <tr><td>Repo bootstrap</td><td><span class="pill hold">هنوز اجرا نشده</span></td><td>اجرای موفق P0/P1 توسط ایجنت روی ریپوی مقصد؛ review diff و lockfile.</td></tr>
+  </table>
+  <div class="callout green"><strong>قدم فعلی:</strong> clone واقعی تأیید شده (`main` با `origin/main` همگام و working tree تمیز است). اسناد مرجع را به clone منتقل کن و هزینه‌ی صفر مدل را پیش از هر API request تأیید کن؛ بعد P0 را فقط‌خواندنی اجرا و گزارشش را پیش از P1 بازبینی کن.</div>
+</section>
+
+<p class="footer">سند ۰۶ · Prompt Pack #1 · متن پرامپت‌ها انگلیسی است تا مستقیم به Claude Code داده شود</p>
+</div>
+</body>
+</html>

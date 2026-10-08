@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سند ۰۳ — نقشه‌ی صفحات و وایرفریم پنل‌ها</title>
+<style>
+  :root{--bg:#f5f6fa;--card:#fff;--ink:#161a2b;--muted:#5c6478;--line:#e3e6ef;
+    --brand:#3b4fd8;--brand2:#0f9d8f;--violet:#6d28d9;--amber:#b45309;--red:#b91c1c;--green:#15803d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.9;font-size:14.6px}
+  .wrap{max-width:1140px;margin:0 auto;padding:28px 20px 90px}
+  header.hero{background:linear-gradient(135deg,#1f2a6e,#3b4fd8 55%,#0f9d8f);color:#fff;border-radius:18px;padding:26px;margin-bottom:22px}
+  header.hero h1{margin:0 0 8px;font-size:22px;line-height:1.6}
+  header.hero p{margin:0;opacity:.94;font-size:14.2px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .meta span{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);padding:4px 10px;border-radius:999px;font-size:12.5px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:0 0 18px}
+  h2{font-size:18px;margin:0 0 12px;padding-bottom:10px;border-bottom:2px solid #eef1fb;color:#22307a}
+  h2 .n{display:inline-block;background:var(--brand);color:#fff;border-radius:8px;font-size:12.5px;padding:2px 9px;margin-left:8px;vertical-align:2px}
+  h3{font-size:15.5px;margin:20px 0 8px;color:#2b3467}
+  h4{font-size:14.2px;margin:14px 0 6px;color:#3a4272}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0;padding-right:22px}
+  li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.3px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:right;vertical-align:top}
+  th{background:#f2f4fc;color:#2b3467;font-weight:700}
+  tr:nth-child(even) td{background:#fafbff}
+  code{background:#f1f3fa;border:1px solid #e3e7f5;border-radius:6px;padding:0 5px;font-family:Consolas,Monaco,monospace;font-size:12.4px;direction:ltr;display:inline-block}
+  pre{direction:ltr;text-align:left;background:#151a2e;color:#dbe2ff;border-radius:12px;padding:14px 16px;overflow-x:auto;font-family:Consolas,Monaco,monospace;font-size:12.4px;line-height:1.7}
+  pre .c{color:#8fa0d8}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+  .callout{border-right:5px solid var(--brand);background:#f4f6ff;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .callout.green{border-right-color:var(--brand2);background:#f1fbf9}
+  .callout.warn{border-right-color:var(--amber);background:#fff7ed}
+  .callout.violet{border-right-color:var(--violet);background:#faf5ff}
+  .small{font-size:12.9px;color:var(--muted)}
+  .route{font-family:Consolas,Monaco,monospace;direction:ltr;display:inline-block;background:#eef1fb;border:1px solid #dfe4f7;color:#2b3467;border-radius:6px;padding:0 6px;font-size:12.2px}
+  .role{display:inline-block;font-size:11.4px;border-radius:6px;padding:1px 7px;border:1px solid #dbe0f3;background:#f6f7fd;color:#4a5170;margin:0 2px}
+  /* ===== wireframe system ===== */
+  .wf{border:2px solid #ccd4ea;border-radius:14px;background:#fff;padding:10px;margin:12px 0}
+  .wfcap{font-size:12.6px;color:var(--muted);margin:2px 4px 8px}
+  .wbar{display:flex;gap:8px;align-items:stretch}
+  .wrow{display:grid;gap:8px;margin-bottom:8px}
+  .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+  .g-1-3{grid-template-columns:1fr 3fr}.g-3-1{grid-template-columns:3fr 1fr}.g-2-1{grid-template-columns:2fr 1fr}.g-1-1-2{grid-template-columns:1fr 1fr 2fr}
+  @media(max-width:720px){.wrow{grid-template-columns:1fr!important}}
+  .wfb{border:1.5px dashed #b9c2dd;border-radius:9px;padding:8px 10px;background:#f8f9ff;font-size:12.4px;color:#3a4272;min-height:34px}
+  .wfb.solid{border-style:solid;background:#eef1fb;border-color:#c9d2ee}
+  .wfb.accent{border-style:solid;background:#f1fbf9;border-color:#bfe4dd}
+  .wfb.ai{border-style:solid;background:#faf5ff;border-color:#e2d4fa}
+  .wfb.warnb{border-style:solid;background:#fff7ed;border-color:#f3ddb6}
+  .wfb.dark{border-style:solid;background:#222a4d;border-color:#222a4d;color:#e8ecff}
+  .wfb.mute{background:#f4f4f8;color:#8b90a3}
+  .wfb b{color:#22307a;display:block;font-size:12.8px;margin-bottom:2px}
+  .wfb.accent b{color:#0b6b5f}.wfb.ai b{color:#5b21b6}.wfb.warnb b{color:#92400e}
+  .wfb.dark b{color:#fff}
+  .wfb .hint{font-size:11.6px;color:#7a8095}
+  .chipw{display:inline-block;font-size:11px;border-radius:999px;padding:0 7px;margin:1px;border:1px solid #dfe4f7;background:#fff;color:#4a5170}
+  .chipw.ok{border-color:#c7e6d3;background:#eaf7ef;color:#15803d}
+  .chipw.wa{border-color:#f3ddb6;background:#fff5e6;color:#b45309}
+  .chipw.bad{border-color:#f4c7c7;background:#fdeaea;color:#b91c1c}
+  .chipw.ai{border-color:#e0d2fa;background:#f7f2ff;color:#6d28d9}
+  .stepper{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .st{flex:1;min-width:88px;text-align:center;font-size:11.6px;border:1px solid #dfe4f7;background:#fff;border-radius:9px;padding:6px 4px;color:#4a5170}
+  .st.on{background:#3b4fd8;border-color:#3b4fd8;color:#fff}
+  .st.done{background:#eaf7ef;border-color:#c7e6d3;color:#15803d}
+  .fake{height:10px;border-radius:5px;background:#e7eaf6;margin:4px 0}
+  .fake.w70{width:70%}.fake.w50{width:50%}.fake.w30{width:30%}.fake.w90{width:90%}
+  .th{font-size:11.6px;color:#7a8095;border-bottom:1px solid #e3e6ef;padding-bottom:3px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>سند ۰۳ — نقشه‌ی صفحات، وایرفریم‌ها و مسیرهای ناوبری</h1>
+  <p>سه اپلیکیشن، پنج پنل کاربری، بی‌ایموجی و با تمرکز روی روانی کار برای ادیتور غیرفنی. این سند، ورودی مستقیم پرامپت‌های ساخت UI است.</p>
+  <div class="meta">
+    <span>وضعیت: پیش‌نویس برای تأیید</span>
+    <span>مکمل اسناد ۰۰ / ۰۱ / ۰۲</span>
+    <span>فارسی + انگلیسی، RTL/LTR کامل</span>
+  </div>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="n">۱</span>تصویر کلی: سه اپ، پنج پنل</h2>
+  <table>
+    <tr><th style="width:20%">اپلیکیشن</th><th style="width:26%">مخاطب</th><th>توضیح</th></tr>
+    <tr><td><b>سایت همایش</b><br><span class="small">apps/web</span></td><td>عموم + شرکت‌کنندگان + داوران + ادیتور</td><td>بخش عمومی سایت همایش + مسیرهای ورود/ثبت‌نام + میزبان همه‌ی پنل‌ها</td></tr>
+    <tr><td><b>پنل‌ها</b><br><span class="small">داخل apps/web با مسیر نقش‌محور</span></td><td>شرکت‌کننده، داور، ادیتور، ادمین شرکت</td><td>یک پوسته‌ی پنل مشترک + منوی مخصوص هر نقش. کاربری که چند نقش دارد، بین «فضاها» سوییچ می‌کند.</td></tr>
+    <tr><td><b>سایت شرکتی شما</b><br><span class="small">apps/marketing</span></td><td>مشتریان (دانشگاه‌ها و انجمن‌ها)</td><td>معرفی محصول، دمو، تعرفه، نمونه‌کارها، درخواست جلسه، بلاگ دو‌زبانه (SEO)</td></tr>
+  </table>
+  <div class="callout">
+    <b>الگوی سوییچ نقش:</b> یک حساب، چند نقش در یک همایش (مثلاً استادی که هم داور است و هم مقاله دارد). در هدر پنل یک منوی «فضای کاری» وجود دارد: <i>به‌عنوان شرکت‌کننده / به‌عنوان داور / به‌عنوان ادیتور</i>. این کار تکراری‌ترین سردرگمی کاربران را در سامانه‌های مشابه حل می‌کند.
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="n">۲</span>سایت عمومی همایش — نقشه‌ی صفحات</h2>
+  <table>
+    <tr><th style="width:30%">مسیر</th><th style="width:22%">صفحه</th><th>اجزای اصلی</th></tr>
+    <tr><td><span class="route">/</span></td><td>صفحه اصلی</td><td>اسلایدر، شمارش معکوس، تاریخ‌های مهم، معرفی همایش، محورها، اخبار، حامیان، کمیته‌ی علمی، میان‌بر ثبت‌نام و ارسال مقاله</td></tr>
+    <tr><td><span class="route">/dates</span></td><td>تاریخ‌های مهم</td><td>جدول تاریخ‌ها با حالت «گذشته/جاری/آینده» و هشدار مهلت‌ها</td></tr>
+    <tr><td><span class="route">/topics</span></td><td>محورهای همایش</td><td>گروه‌بندی‌شده، جست‌وجو در محورها، دکمه‌ی «ارسال مقاله در این محور»</td></tr>
+    <tr><td><span class="route">/news</span> و <span class="route">/news/[slug]</span></td><td>اخبار</td><td>لیست + صفحه‌ی خبر با اشتراک‌گذاری</td></tr>
+    <tr><td><span class="route">/accepted-papers</span></td><td>مقالات پذیرفته‌شده</td><td>فقط پس از اعلام نتایج؛ جست‌وجو، فیلتر محور، نمایش عنوان/نویسندگان/نوع ارائه</td></tr>
+    <tr><td><span class="route">/committee</span></td><td>کمیته‌ی علمی</td><td>کارت افراد با عکس، مرتبه، وابستگی</td></tr>
+    <tr><td><span class="route">/faq</span> / <span class="route">/contact</span></td><td>سوالات و تماس</td><td>آکاردئون سوالات + فرم تماس با ثبت در پنل ادیتور</td></tr>
+    <tr><td><span class="route">/register</span></td><td>ورود به ثبت‌نام</td><td>اگر لینک دعوت‌محور باشد، گروه ثبت‌نام از قبل تعیین می‌شود؛ در غیر این‌صورت انتخاب گروه</td></tr>
+    <tr><td><span class="route">/login</span> و کلیدواژه‌های ورود</td><td>احراز هویت</td><td>ورود با موبایل/ایمیل + کپچا، فراموشی رمز، تأیید موبایل/ایمیل، ورود با لینک یک‌بارمصرف</td></tr>
+    <tr><td><span class="route">/verify</span> و <span class="route">/verify/[code]</span></td><td>اعتبارسنجی گواهی</td><td>ورود کد رهگیری یا اسکن QR ⇒ نمایش گواهی معتبر با نام، عنوان و تاریخ (صفحه‌ی عمومی، بدون نیاز به ورود)</td></tr>
+    <tr><td><span class="route">/page/[slug]</span></td><td>صفحات پویا</td><td>هر صفحه‌ای که ادیتور می‌سازد (راهنمای نگارش، تعرفه‌ها، قوانین…)</td></tr>
+    <tr><td><span class="route">/en/...</span></td><td>نسخه انگلیسی</td><td>همه‌ی صفحات بالا با <code>hreflang</code> و متادیتای درست</td></tr>
+  </table>
+  <p class="small">SEO: متادیتای هر صفحه قابل ویرایش توسط ادیتور، نقشه‌ی سایت XML خودکار، داده‌ی ساخت‌یافته <code>Event</code> برای همایش، و پیش‌نمایش اشتراک‌گذاری در شبکه‌های اجتماعی.</p>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="n">۳</span>وایرفریم ۱ — صفحه اصلی همایش</h2>
+  <div class="wf">
+    <div class="wrow g-2">
+      <div class="wfb mute">نوار بالا: تلفن دبیرخانه · ایمیل · انتخاب زبان</div>
+      <div class="wfb mute">شبکه‌های اجتماعی</div>
+    </div>
+    <div class="wrow g-3" style="grid-template-columns:2fr 3fr 1fr">
+      <div class="wfb solid"><b>لوگوی همایش</b><span class="hint">از کانفیگ دانشگاه</span></div>
+      <div class="wfb solid"><b>منو</b><span class="hint">صفحه اصلی · تاریخ‌ها · محورها · اخبار · مقالات · کمیته · تماس</span></div>
+      <div class="wfb accent"><b>ورود / ثبت‌نام</b></div>
+    </div>
+    <div class="wrow g-3" style="grid-template-columns:3fr 1fr">
+      <div class="wfb dark"><b>اسلایدر اصلی / پوستر همایش</b><div class="fake w90"></div><div class="fake w50"></div><span class="hint">با دکمه‌های «ثبت‌نام در همایش» و «ارسال مقاله»</span></div>
+      <div class="wfb solid"><b>شمارش معکوس</b><span class="hint">روز / ساعت / دقیقه — تا تاریخ شروع همایش</span><div class="fake w70"></div><div class="fake w90"></div></div>
+    </div>
+    <div class="wrow g4">
+      <div class="wfb warnb"><b>مهلت ارسال مقاله</b><span class="hint">تاریخ شمسی</span></div>
+      <div class="wfb solid"><b>اعلام نتایج داوری</b><span class="hint">تاریخ شمسی</span></div>
+      <div class="wfb solid"><b>شروع همایش</b><span class="hint">تاریخ شمسی</span></div>
+      <div class="wfb solid"><b>پایان همایش</b><span class="hint">تاریخ شمسی</span></div>
+    </div>
+    <div class="wrow g-3" style="grid-template-columns:2fr 1fr">
+      <div class="wfb"><b>درباره‌ی همایش</b><div class="fake"></div><div class="fake w90"></div><div class="fake w70"></div></div>
+      <div class="wfb"><b>پوستر</b><span class="hint">تصویر قابل بزرگ‌نمایی</span></div>
+    </div>
+    <div class="wfb"><b>محورهای همایش</b><span class="hint">کارت‌های گروه‌بندی‌شده + شمارش مقالات هر محور</span>
+      <div class="wrow g3" style="margin:6px 0 0">
+        <div class="wfb solid">محور ۱<span class="hint">کلیدواژه‌ها</span></div>
+        <div class="wfb solid">محور ۲</div>
+        <div class="wfb solid">محور ۳</div>
+      </div>
+    </div>
+    <div class="wrow g-3" style="grid-template-columns:2fr 1fr">
+      <div class="wfb"><b>آخرین اخبار</b><span class="hint">سه کارت با تصویر، تاریخ شمسی، خلاصه</span></div>
+      <div class="wfb"><b>حامیان و ناشران</b><span class="hint">لوگوها + پیوند</span></div>
+    </div>
+    <div class="wfb"><b>کمیته‌ی علمی / برگزارکنندگان</b><span class="hint">اسلایدر کارت افراد</span></div>
+    <div class="wfb mute"><b>فوتر</b><span class="hint">چهار ستون: درباره، پیوندهای سریع، تماس، خبرنامه + گواهی‌های نمایه‌سازی (ISC و…)</span></div>
+  </div>
+  <p class="wfcap">نکته‌ی UX: تمام بخش‌ها پویا و از پنل ادیتور قابل روشن/خاموش و مرتب‌سازی هستند — همان انتظاری که مشتری از «طراحی صفحه اصلی کاملاً پویا» دارد.</p>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="n">۴</span>پنل شرکت‌کننده (نویسنده)</h2>
+  <h3>۴.۱ نقشه‌ی صفحات</h3>
+  <table>
+    <tr><th style="width:34%">مسیر</th><th style="width:22%">صفحه</th><th>محتوای اصلی</th></tr>
+    <tr><td><span class="route">/panel</span></td><td>داشبورد</td><td>وضعیت ثبت‌نام، مقالات من با وضعیت، کارهای انجام‌نشده (اصلاح مقاله، تکمیل اطلاعات یا فایل، دریافت گواهی)، اعلان‌ها و مهلت‌های نزدیک؛ بدون اقدام پرداخت آنلاین در MVP</td></tr>
+    <tr><td><span class="route">/panel/registration</span></td><td>ثبت‌نام من</td><td>فرم چندمرحله‌ای و مدارک؛ سقف مقاله بر اساس تنظیم همان همایش اعمال می‌شود. خدمات مالی و اتصال درگاه خارج از MVP.</td></tr>
+    <tr><td><span class="route">/panel/papers</span></td><td>مقالات من</td><td>جدول مقالات + وضعیت + آخرین اقدام + دکمه‌ی «ارسال مقاله جدید»</td></tr>
+    <tr><td><span class="route">/panel/papers/new</span></td><td><b>ارسال مقاله (با دستیار AI)</b></td><td>هفت گام: آپلود ← پردازش ← بازبینی فیلدها ← نویسندگان ← محوریت ← فایل‌های تکمیلی ← تأیید</td></tr>
+    <tr><td><span class="route">/panel/papers/[id]</span></td><td>جزئیات مقاله</td><td>وضعیت و تایم‌لاین، فایل‌ها، نظرات داوران (به‌صورت بی‌نام)، درخواست اصلاح و ارسال نسخه‌ی جدید، پیام‌ها</td></tr>
+    <tr><td><span class="route">/panel/papers/[id]/revise</span></td><td>ارسال نسخه‌ی اصلاح‌شده</td><td>آپلود فایل جدید + نامه‌ی پاسخ به داوران (الزامی)</td></tr>
+    <tr><td><span class="route">/panel/messages</span></td><td>پیام‌ها</td><td>گفت‌وگو با دبیرخانه در بستر هر مقاله</td></tr>
+    <tr><td><span class="route">/panel/certificates</span></td><td>گواهی‌های من</td><td>گواهی شرکت/ارائه/داوری با دانلود و اشتراک‌گذاری لینک اعتبارسنجی</td></tr>
+    <tr><td><span class="route">/panel/profile</span></td><td>پروفایل</td><td>اطلاعات فردی و تحصیلی، تغییر رمز، تأیید موبایل، تنظیم اعلان‌ها</td></tr>
+  </table>
+
+  <h3>۴.۲ وایرفریم ۲ — داشبورد شرکت‌کننده</h3>
+  <div class="wf">
+    <div class="wrow g-1-3" style="grid-template-columns:1fr 4fr">
+      <div class="wfb solid"><b>منوی کنار</b><span class="hint">داشبورد · ثبت‌نام من · مقالات من · پیام‌ها · گواهی‌ها · پروفایل</span><hr style="border:none;border-top:1px solid #dfe4f7"><span class="hint">سوییچ فضا: به‌عنوان داور / ادیتور (اگر نقش دارد)</span></div>
+      <div>
+        <div class="wrow g3">
+          <div class="wfb accent"><b>وضعیت ثبت‌نام</b><span class="chipw ok">تأییدشده</span><span class="hint">گروه: دانشجویی</span></div>
+          <div class="wfb warnb"><b>کارهای باقی‌مانده</b><span class="hint">۱ مورد: ارسال فایل نهایی مقاله</span></div>
+          <div class="wfb solid"><b>مهلت نزدیک</b><span class="hint">ارسال نسخه‌ی اصلاح‌شده — ۵ روز</span></div>
+        </div>
+        <div class="wfb"><b>مقالات من</b>
+          <div class="th">کد · عنوان · محور · وضعیت · آخرین اقدام · عملیات</div>
+          <div class="wrow g-3" style="grid-template-columns:1fr 1fr 1fr;margin:0">
+            <div class="wfb">مقاله ۱ <span class="chipw wa">در حال داوری</span></div>
+            <div class="wfb">مقاله ۲ <span class="chipw ok">پذیرفته‌شده</span></div>
+            <div class="wfb">مقاله ۳ <span class="chipw bad">بازگشت برای اصلاح</span></div>
+          </div>
+          <div style="margin-top:6px"><span class="chipw ai">ارسال مقاله جدید</span></div>
+        </div>
+        <div class="wrow g2">
+          <div class="wfb"><b>اعلان‌های اخیر</b><span class="hint">پیام‌های سیستمی، تغییر وضعیت، یادآوری‌ها</span></div>
+          <div class="wfb"><b>راهنمای سریع</b><span class="hint">قالب مقاله، راهنمای نگارش، ویدیوی کوتاه «چطور مقاله ارسال کنم»</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>۴.۳ وایرفریم ۳ — جریان ارسال مقاله با دستیار هوش مصنوعی <span class="chipw ai">تمایز اصلی</span></h3>
+  <div class="wf">
+    <div class="stepper">
+      <div class="st on">۱. آپلود فایل Word</div>
+      <div class="st">۲. پردازش خودکار</div>
+      <div class="st">۳. بازبینی فیلدها</div>
+      <div class="st">۴. نویسندگان</div>
+      <div class="st">۵. محوریت مقاله</div>
+      <div class="st">۶. فایل‌های تکمیلی</div>
+      <div class="st">۷. تأیید و ارسال</div>
+    </div>
+
+    <p class="wfcap" style="margin-top:0"><b>گام ۱ و ۲ — آپلود و پردازش:</b></p>
+    <div class="wrow g2">
+      <div class="wfb"><b>کشیدن و رها کردن فایل</b><span class="hint">پسوند مجاز: .docx — حداکثر ۲۰ مگابایت · پیام روشن در صورت نبود متن (فایل اسکن‌شده)</span></div>
+      <div class="wfb ai"><b>پیشرفت پردازش (بلادرنگ)</b>
+        <span class="hint">۱) خواندن ساختار فایل — انجام شد</span>
+        <span class="hint">۲) نرمال‌سازی متن فارسی — انجام شد</span>
+        <span class="hint">۳) تشخیص بخش‌ها و استخراج فیلدها — در حال اجرا…</span>
+        <span class="hint">۴) تطبیق محوریت — در انتظار</span>
+      </div>
+    </div>
+
+    <p class="wfcap"><b>گام ۳ — فرم پیش‌پر‌شده با امکان اصلاح (هسته‌ی تجربه):</b></p>
+    <div class="wfb ai">
+      <b>فیلدهای استخراج‌شده — لطفاً بازبینی و در صورت نیاز ویرایش کنید</b>
+      <div class="wrow g2" style="margin-top:8px">
+        <div class="wfb"><b>عنوان مقاله</b> «بررسی کاربرد یادگیری عمیق در تشخیص…» <span class="chipw ai">اطمینان ۹۲٪</span> <span class="hint">منبع: صفحه‌ی ۱ — قابل ویرایش</span></div>
+        <div class="wfb"><b>زبان مقاله</b> فارسی <span class="chipw ai">۹۹٪</span></div>
+      </div>
+      <div class="wfb" style="margin-top:8px"><b>چکیده</b><div class="fake"></div><div class="fake w90"></div><div class="fake w70"></div><span class="chipw ai">اطمینان ۸۴٪</span> <span class="hint">دکمه: «نمایش متن اصلی برای مقایسه»</span></div>
+      <div class="wrow g2" style="margin-top:8px">
+        <div class="wfb"><b>کلمات کلیدی</b><span class="chipw">یادگیری عمیق</span><span class="chipw">تشخیص پزشکی</span><span class="chipw">شبکه‌ی عصبی</span><span class="hint">افزودن/حذف آزاد</span></div>
+        <div class="wfb"><b>منابع</b><span class="hint">۱۸ مورد شناسایی شد — قابل ویرایش در ویرایشگر فهرست</span> <span class="chipw wa">۳ مورد نامطمئن</span></div>
+      </div>
+      <div class="wfb warnb" style="margin-top:8px"><b>هشدار پردازش</b><span class="hint">۴ فرمول ریاضی و ۲ تصویر استخراج نشدند؛ روی فایل اصلی تأثیری ندارد و فقط برای متن چکیده استفاده می‌شود.</span></div>
+    </div>
+
+    <p class="wfcap"><b>گام ۵ — انتخاب محوریت با پیشنهاد هوشمند:</b></p>
+    <div class="wrow g3">
+      <div class="wfb ai"><b>پیشنهاد اول — ۸۷٪</b> هوش مصنوعی در پزشکی و سلامت<span class="hint">دلیل: چکیده به تشخیص تصویری و شبکه‌های عمیق اشاره دارد</span><span class="chipw ai">انتخاب</span></div>
+      <div class="wfb"><b>پیشنهاد دوم — ۶۴٪</b> پردازش تصویر و بینایی ماشین<span class="hint">همپوشانی کلیدواژه‌ای</span><span class="chipw">انتخاب</span></div>
+      <div class="wfb"><b>پیشنهاد سوم — ۳۱٪</b> داده‌کاوی و تحلیل داده<span class="chipw">انتخاب</span></div>
+    </div>
+    <div class="wfb"><b>یا انتخاب دستی از فهرست کامل محورها</b><span class="hint">جست‌وجو در محورها + نمایش گروه محور</span></div>
+
+    <div class="wrow g2" style="margin-top:8px">
+      <div class="wfb"><b>گام ۷ — پیش‌نمایش و تأیید</b><span class="hint">جمع‌بندی همه‌ی فیلدها + دو تیک الزامی: صحت اطلاعات / مالکیت اثر و رضایت‌نامه</span></div>
+      <div class="wfb accent"><b>پس از ارسال</b><span class="hint">کد مقاله صادر می‌شود، ایمیل/پیامک تأیید می‌رود و وضعیت «ارسال‌شده» می‌شود.</span></div>
+    </div>
+  </div>
+  <div class="callout violet">
+    <b>سه قاعده‌ی UX که این بخش را متمایز می‌کند:</b>
+    ۱) کاربر همیشه <b>متن اصلی فایل</b> را کنار فیلد استخراج‌شده می‌بیند (اعتماد می‌سازد).
+    ۲) هیچ فیلدی بدون تأیید کاربر ثبت نمی‌شود (مسئولیت حقوقی + دقت بالاتر).
+    ۳) اگر موتور AI در دسترس نبود، فرم خالی و با پیام روشن نمایش داده می‌شود و کاربر بدون وقفه ادامه می‌دهد (تکمیل دستی).
+  </div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="n">۵</span>پنل داور</h2>
+  <table>
+    <tr><th style="width:34%">مسیر</th><th style="width:22%">صفحه</th><th>محتوای اصلی</th></tr>
+    <tr><td><span class="route">/panel/reviewer</span></td><td>داشبورد داور</td><td>کارتابل با مهلت‌ها، دعوت‌های در انتظار پاسخ، آمار داوری، هشدار تداخل منافع</td></tr>
+    <tr><td><span class="route">/panel/reviewer/invitations</span></td><td>دعوت‌ها</td><td>پذیرش/رد داوری با ذکر دلیل رد (تداخل منافع، خارج از تخصص، کمبود وقت)</td></tr>
+    <tr><td><span class="route">/panel/reviewer/assignments/[id]</span></td><td><b>فرم داوری</b></td><td>خلاصه‌ی مقاله، فایل، فرم امتیازدهی، نظرات، توصیه‌ی نهایی، ذخیره‌ی پیش‌نویس خودکار</td></tr>
+    <tr><td><span class="route">/panel/reviewer/history</span></td><td>سابقه‌ی داوری</td><td>داوری‌های انجام‌شده + گواهی داوری</td></tr>
+    <tr><td><span class="route">/panel/reviewer/profile</span></td><td>تخصص و دسترس‌پذیری</td><td>کلیدواژه‌های تخصص، محورهای مورد علاقه، ظرفیت همزمان، رزومه</td></tr>
+  </table>
+
+  <h3>وایرفریم ۴ — صفحه‌ی داوری</h3>
+  <div class="wf">
+    <div class="wrow g-3-1" style="grid-template-columns:3fr 1fr">
+      <div>
+        <div class="wfb solid"><b>مقاله: ITC-۰۰۰۷ — بررسی کاربرد یادگیری عمیق در تشخیص تصویری بیماری‌ها</b>
+          <span class="hint">محور: هوش مصنوعی در پزشکی · دور داوری: ۱ · حالت کور/غیرکور مطابق تنظیم همین همایش</span>
+          <span class="chipw wa">مهلت: ۷ روز</span>
+        </div>
+        <div class="wfb"><b>فایل‌های قابل مشاهده</b>
+          <span class="hint">متن کامل (PDF) در نمایشگر درون‌برنامه‌ای — بدون امکان دانلود/چاپ، با واترمارک شناسه‌ی داور</span>
+        </div>
+        <div class="wfb"><b>بخش ۱ — ارزیابی شکلی و موضوعی</b>
+          <span class="hint">تناسب با محور همایش — امتیاز ۱ تا ۵ (سلکت) · رعایت قالب نگارش — ۱ تا ۵</span>
+        </div>
+        <div class="wfb"><b>بخش ۲ — ارزیابی علمی</b>
+          <span class="hint">اصالت و نوآوری · روش‌شناسی · کیفیت تحلیل نتایج · کفایت منابع — هر کدام ۱ تا ۵ با وزن</span>
+          <div class="fake w70"></div><div class="fake w50"></div><div class="fake w90"></div>
+        </div>
+        <div class="wfb"><b>بخش ۳ — نظرات</b>
+          <span class="hint">نظر برای نویسنده (الزامی، محترمانه و بازنویسانه) · نظر محرمانه برای ادیتور · توصیه برای اصلاحات جزئی/کلی</span>
+        </div>
+        <div class="wfb accent"><b>جمع‌بندی</b>
+          <span class="hint">امتیاز نهایی محاسبه‌شده (وزنی) + <b>توصیه‌ی نهایی</b>: پذیرش / اصلاح جزئی / اصلاح کلی / رد</span>
+        </div>
+      </div>
+      <div>
+        <div class="wfb"><b>راهنما</b><span class="hint">دستورالعمل داوری، معیار هر امتیاز، نمونه‌ی نظر خوب</span></div>
+        <div class="wfb ai"><b>دستیار داور</b><span class="hint">خلاصه‌ی خودکار مقاله، فهرست ادعاهای اصلی، فهرست منابعی که در متن ارجاع نشده‌اند (تحلیل خودکار، استفاده اختیاری)</span></div>
+        <div class="wfb warnb"><b>تداخل منافع؟</b><span class="hint">دکمه‌ی گزارش + اعلام به ادیتور</span></div>
+        <div class="wfb accent"><b>ذخیره‌ی خودکار پیش‌نویس</b><span class="hint">هر ۳۰ ثانیه — خروج از صفحه، داده را از دست نمی‌دهد</span></div>
+        <div class="wfb"><b>ارسال به ادیتور</b><span class="hint">پس از ارسال، فقط تا مهلت تعیین‌شده امکان ویرایش دارد</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2><span class="n">۶</span>پنل ادیتور (قلب سامانه)</h2>
+  <h3>۶.۱ نقشه‌ی ماژول‌ها</h3>
+  <table>
+    <tr><th style="width:20%">ماژول</th><th style="width:34%">مسیرها</th><th>کارهای ادیتور</th></tr>
+    <tr><td>داشبورد</td><td><span class="route">/manage</span></td><td>شاخص‌های کلیدی، نمودار روند، کارهای معطل‌مانده، هشدار داوران عقب‌مانده</td></tr>
+    <tr><td>مقالات</td><td><span class="route">/manage/papers</span> · <span class="route">/manage/papers/[id]</span></td><td>صف، فیلترها، بررسی policy، ارجاع، بازگشت، رد، تصمیم نهایی، ارسال پیام، خروجی اکسل</td></tr>
+    <tr><td>داوران</td><td><span class="route">/manage/reviewers</span> · <span class="route">/manage/reviewers/[id]</span> · <span class="route">/manage/assignments</span></td><td>ساخت اکانت داور، تعریف تخصص، ظرفیت، پیگیری کارتابل و یادآوری، بار کاری</td></tr>
+    <tr><td>محورها</td><td><span class="route">/manage/topics</span></td><td>گروه‌ها و محورها + کلیدواژه‌ها + ترتیب + فعال/غیرفعال + مدیریت محور مقاله‌ها</td></tr>
+    <tr><td>فرم داوری و چک‌لیست</td><td><span class="route">/manage/review-form</span> · <span class="route">/manage/checklists</span></td><td>ساخت/ویرایش فرم داوری با drag &amp; drop، تعریف policyهای شکلی و قواعد خودکار</td></tr>
+    <tr><td>ثبت‌نام‌ها</td><td><span class="route">/manage/registrations</span> · <span class="route">/manage/registration-form</span> · <span class="route">/manage/groups</span></td><td>فرم‌ساز ثبت‌نام، گروه‌ها و تعرفه‌ها، تأیید مدارک، تأیید حضور، خدمات و فاکتور</td></tr>
+    <tr><td>گواهینامه</td><td><span class="route">/manage/certificates/templates</span> · <span class="route">/templates/[id]/design</span> · <span class="route">/batches</span> · <span class="route">/issued</span></td><td>آپلود قالب خام، جای‌گذاری فیلدها، امضاها، صدور گروهی، پیگیری و ابطال</td></tr>
+    <tr><td>ارتباطات</td><td><span class="route">/manage/messages</span> · <span class="route">/manage/templates</span></td><td>گفت‌وگوها، پیام انبوه (ایمیل/پیامک با فیلتر مخاطب)، ویرایش متن قالب‌ها</td></tr>
+    <tr><td>گزارش‌ها</td><td><span class="route">/manage/reports</span></td><td>آمار مقالات، عملکرد داوران، وضعیت ثبت‌نام و مالی، هزینه و کارایی موتور AI، خروجی اکسل/PDF</td></tr>
+    <tr><td>تنظیمات</td><td><span class="route">/manage/settings</span> · <span class="route">/manage/access</span> · <span class="route">/manage/audit</span> · <span class="route">/manage/ai</span></td><td>اطلاعات و برند همایش، حالت داوری کور/غیرکور، سقف تعداد مقاله به‌ازای هر فرستنده، محتوا و منو، دسترسی کاربران، لاگ ممیزی، تنظیمات موتور هوش مصنوعی و پروایدرها</td></tr>
+  </table>
+
+  <h3>۶.۲ وایرفریم ۵ — داشبورد ادیتور</h3>
+  <div class="wf">
+    <div class="wrow g4">
+      <div class="wfb solid"><b>مقالات دریافتی</b><span class="hint">۱۲۴ — رشد ۱۸٪ نسبت به هفته‌ی قبل</span></div>
+      <div class="wfb warnb"><b>در انتظار اقدام من</b><span class="hint">۲۳ مقاله</span></div>
+      <div class="wfb accent"><b>پذیرش نهایی</b><span class="hint">۴۱ — میانگین امتیاز ۴٫۱</span></div>
+      <div class="wfb"><b>داوران فعال / عقب‌مانده</b><span class="hint">۲۹ / ۴</span></div>
+    </div>
+    <div class="wrow g2">
+      <div class="wfb"><b>نمودار روند ارسال مقاله (۱۲ هفته)</b><div class="fake w90"></div><div class="fake w70"></div><div class="fake w50"></div></div>
+      <div class="wfb"><b>ق漏斗 وضعیت‌ها</b><span class="hint">ارسال‌شده → بررسی → داوری → تصمیم → پذیرش</span><div class="fake w90"></div><div class="fake w50"></div></div>
+    </div>
+    <div class="wrow g-2-1">
+      <div class="wfb"><b>کارهای فوری</b><span class="hint">جدول کوچک: مقاله، وضعیت، زمان انتظار، اقدام پیشنهادی</span></div>
+      <div class="wfb"><b>وضعیت سامانه</b><span class="hint">موتور AI: سالم · ایمیل: سالم · پیامک: اعتبار کم · آخرین بکاپ: امروز ۳ بامداد</span></div>
+    </div>
+  </div>
+  <p class="wfcap">نکته: ادیتور غیرفنی است؛ داشبورد باید «بگوید چه کاری باید بکنم» — نه فقط «چه اتفاقی افتاده».</p>
+
+  <h3>۶.۳ وایرفریم ۶ — صف مقالات</h3>
+  <div class="wf">
+    <div class="wfb"><b>نوار فیلتر</b>
+      <span class="chipw">وضعیت</span><span class="chipw">محور</span><span class="chipw">گروه ثبت‌نام</span><span class="chipw">داور</span><span class="chipw">بازه‌ی تاریخ ارسال</span><span class="chipw">وضعیت چک‌لیست</span><span class="chipw">دارای هشدار AI</span> <span class="hint">جست‌وجو در کد/عنوان/نویسنده</span>
+    </div>
+    <div class="wfb"><b>اقدام گروهی</b>
+      <span class="chipw">ارجاع گروهی به داور</span><span class="chipw">ارسال پیام</span><span class="chipw">تغییر وضعیت</span><span class="chipw">خروجی اکسل</span><span class="chipw">برچسب‌گذاری</span>
+    </div>
+    <div class="wfb">
+      <b>جدول مقالات</b>
+      <div class="th">انتخاب · کد · عنوان · نویسنده‌ی مسئول · محور · وضعیت · داوران · مهلت · اطمینان AI · آخرین تغییر · عملیات</div>
+      <div class="wfb" style="margin:4px 0">ITC-۰۰۰۷ · بررسی کاربرد یادگیری عمیق… · احمدی · هوش مصنوعی در پزشکی · <span class="chipw wa">در بررسی اولیه</span> · — · ۲ روز · <span class="chipw ai">۸۷٪</span> · امروز</div>
+      <div class="wfb" style="margin:4px 0">ITC-۰۰۰۶ · مدل پیش‌بینی تقاضای انرژی… · رضایی · انرژی و محیط زیست · <span class="chipw">در حال داوری</span> · ۲ داور · ۵ روز مانده</div>
+      <div class="wfb" style="margin:4px 0">ITC-۰۰۰۵ · ارزیابی الگوریتم‌های مسیریابی… · موسوی · شبکه و زیرساخت · <span class="chipw ok">پذیرفته‌شده</span> · — · —</div>
+      <span class="hint">صفحه‌بندی + انتخاب تعداد ردیف + مرتب‌سازی هر ستون + ذخیره‌ی «نمای من» (فیلترهای پرکاربرد)</span>
+    </div>
+  </div>
+
+  <h3>۶.۴ وایرفریم ۷ — جزئیات مقاله در پنل ادیتور (سه‌ستونی)</h3>
+  <div class="wf">
+    <div class="wfb solid"><b>سرصفحه‌ی مقاله</b><span class="hint">کد · عنوان · وضعیت · محور پیشنهادی AI · دکمه‌های اصلی: ارجاع به داور / بازگشت به نویسنده / رد / پذیرش</span></div>
+    <div class="wrow g-1-1-2" style="grid-template-columns:1fr 1.2fr 1fr">
+      <div>
+        <div class="wfb"><b>فایل‌ها</b><span class="hint">نسخه‌ها و انواع فایل، اندازه، تاریخ، دانلود با ثبت در لاگ</span></div>
+        <div class="wfb"><b>پیش‌نمایش متن</b><span class="hint">نمایشگر PDF درون‌برنامه‌ای + جست‌وجو در متن + پرش به چکیده/منابع</span></div>
+        <div class="wfb"><b>شباهت (فاز ۲)</b><span class="hint">میزان شباهت با آرشیو مقالات + مقالات مشابه</span></div>
+      </div>
+      <div>
+        <div class="wfb ai"><b>داده‌ی استخراج‌شده توسط AI</b>
+          <span class="hint">عنوان، چکیده، کلیدواژه‌ها، منابع، نویسندگان — هر فیلد با «اطمینان» و امکان «مشاهده‌ی متن مبنا» و دکمه‌ی «اصلاح»</span>
+          <span class="chipw ai">اجرای مجدد موتور</span>
+        </div>
+        <div class="wfb"><b>نویسندگان</b><span class="hint">ترتیب، وابستگی، مسئول، وضعیت عضویت در همایش</span></div>
+        <div class="wfb"><b>چک‌لیست policy</b>
+          <span class="chipw ok">تعداد صفحات: قبول (خودکار)</span>
+          <span class="chipw ok">طول چکیده: قبول (خودکار)</span>
+          <span class="chipw bad">قالب نگارش: بررسی دستی لازم</span>
+          <span class="chipw wa">کلمات کلیدی: ۲ مورد (حداقل ۳)</span>
+        </div>
+        <div class="wfb"><b>گزارش خلاصه‌ی AI برای من</b><span class="hint">چند جمله: موضوع، روش، ادعای اصلی، تناسب با محور (فاز ۲، اختیاری)</span></div>
+      </div>
+      <div>
+        <div class="wfb accent"><b>اقدام</b>
+          <span class="hint">۱) ارجاع به داور: پیشنهاد هوشمند (تخصص + بار کاری + سابقه) و انتخاب دستی · تعیین مهلت · کور بودن داوری</span>
+          <span class="hint">۲) بازگشت به نویسنده: انتخاب دلیل آماده + مهلت + پیام</span>
+          <span class="hint">۳) رد: انتخاب دلیل + تأیید دومرحله‌ای (چون برگشت‌ناپذیر است)</span>
+          <span class="hint">۴) تصمیم نهایی پس از داوری: پذیرش/اصلاح/رد + تعیین نوع ارائه</span>
+        </div>
+        <div class="wfb"><b>نظرات داوران</b><span class="hint">کارت هر داور: وضعیت، امتیاز، توصیه، نظر (با تفکیک نظر نویسنده / محرمانه)</span></div>
+        <div class="wfb"><b>تاریخچه و پیام‌ها</b><span class="hint">تایم‌لاین کامل وضعیت‌ها + گفت‌وگو با نویسنده و داوران</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>۶.۵ وایرفریم ۸ — ویرایشگر قالب گواهینامه <span class="chipw ai">تمایز اصلی</span></h3>
+  <div class="wf">
+    <div class="wrow g-1-1-2" style="grid-template-columns:1fr 2fr 1fr">
+      <div>
+        <div class="wfb"><b>تنظیمات قالب</b><span class="hint">نام قالب · نوع (شرکت/ارائه/داوری/کارگاه/کمیته) · فایل خام آپلودی (تصویر یا PDF) · اندازه صفحه و جهت (تشخیص خودکار A4 افقی/عمودی)</span></div>
+        <div class="wfb"><b>فیلدها</b>
+          <span class="chipw">نام و نام خانوادگی</span><span class="chipw">عنوان مقاله</span><span class="chipw">نقش (ارائه‌دهنده/داور)</span><span class="chipw">نام همایش</span><span class="chipw">تاریخ شمسی</span><span class="chipw">شماره سری</span><span class="chipw">QR اعتبارسنجی</span><span class="chipw">متن آزاد</span>
+          <span class="hint">هر فیلد را بکشید و روی قالب رها کنید</span>
+        </div>
+        <div class="wfb"><b>خواص فیلد انتخاب‌شده</b><span class="hint">فونت فارسی · اندازه (pt) · رنگ · ترازبندی · فاصله خطوط · قالب تاریخ (عدد/حروف) · کوچک‌سازی خودکار برای عنوان‌های بلند</span></div>
+        <div class="wfb"><b>امضاها و مهر</b><span class="hint">آپلود تصویر امضا + جای‌گذاری + عنوان امضاکننده</span></div>
+      </div>
+      <div>
+        <div class="wfb dark" style="min-height:230px;text-align:center">
+          <b>بوم پیش‌نمایش قالب دانشگاه</b>
+          <span class="hint">تصویر خام گواهی در پس‌زمینه؛ کادرهای فیلد به‌صورت کشیدنی روی آن</span>
+          <div class="wrow g2" style="margin-top:14px">
+            <div class="wfb mute" style="background:#39406b;color:#cfd6ff;border-color:#5a64a0">&nbsp;</div>
+            <div class="wfb mute" style="background:#39406b;color:#cfd6ff;border-color:#5a64a0">کادر «نام»</div>
+          </div>
+          <div class="wfb mute" style="background:#39406b;color:#cfd6ff;border-color:#5a64a0;margin-top:8px">کادر «عنوان مقاله»</div>
+          <div class="wrow g3" style="margin-top:8px">
+            <div class="wfb mute" style="background:#39406b;color:#cfd6ff;border-color:#5a64a0">تاریخ</div>
+            <div class="wfb mute" style="background:#39406b;color:#cfd6ff;border-color:#5a64a0">سری</div>
+            <div class="wfb mute" style="background:#39406b;color:#cfd6ff;border-color:#5a64a0">QR</div>
+          </div>
+          <span class="hint">ابزار بزرگ‌نمایی · شبکه‌ی راهنما · خط‌چین حاشیه‌ی امن چاپ</span>
+        </div>
+        <div class="wfb accent"><span class="hint">«پیش‌نمایش با داده‌ی واقعی» — انتخاب یک نفر از فهرست و رندر فوری</span></div>
+      </div>
+      <div>
+        <div class="wfb"><b>گام‌های صدور</b>
+          <span class="hint">۱) انتخاب مخاطب: شرکت‌کنندگان نهایی‌تأییدشده / ارائه‌دهندگان مقاله / داوران / کمیته / انتخاب دستی</span>
+          <span class="hint">۲) بازبینی فهرست و اصلاح نام‌ها (ویرایش تک‌تک قبل از صدور)</span>
+          <span class="hint">۳) صدور گروهی با نوار پیشرفت + گزارش خطاها</span>
+          <span class="hint">۴) دانلود فایل ZIP + ارسال ایمیل/پیامک اطلاع‌رسانی</span>
+        </div>
+        <div class="wfb accent"><b>وضعیت صدور</b><span class="hint">۲۱۰ از ۲۱۲ گواهی صادر شد · ۲ خطا (نام‌های فارسی بلند) — مشاهده و اصلاح</span></div>
+        <div class="wfb"><b>فهرست گواهی‌های صادرشده</b><span class="hint">جست‌وجو بر اساس نام/کد · وضعیت (معتبر/ابطال‌شده) · تعداد دانلود · ابطال با دلیل</span></div>
+        <div class="wfb"><b>صفحه‌ی اعتبارسنجی (عمومی)</b><span class="hint">ورود کد یا اسکن QR ⇒ نمایش «گواهی معتبر است» با نام، عنوان مقاله و تاریخ</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout green">
+    <b>نکته‌ی پیاده‌سازی:</b> مختصات فیلدها بر حسب <b>میلی‌متر</b> ذخیره می‌شود (نه پیکسل) تا خروجی چاپ در هر پرینتری درست باشد؛ و رندر نهایی با Chromium انجام می‌شود تا فونت فارسی و چیدمان دقیقاً همان چیزی باشد که ادیتور دیده است.
+  </div>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2><span class="n">۷</span>پنل ادمین شرکت (شما)</h2>
+  <table>
+    <tr><th style="width:34%">مسیر</th><th>کارکرد</th></tr>
+    <tr><td><span class="route">/admin</span></td><td>نمای کلی نصب: نسخه، وضعیت لایسنس، سلامت سرویس‌ها، مصرف منابع</td></tr>
+    <tr><td><span class="route">/admin/license</span></td><td>اطلاعات مجوز (مشتری، دامنه، پلن، اعتبار)، بارگذاری مجوز جدید، هشدار انقضا</td></tr>
+    <tr><td><span class="route">/admin/updates</span></td><td>مشاهده‌ی نسخه‌ی جدید، اجرای آپدیت، تاریخچه‌ی نسخه‌ها، بازگشت به نسخه‌ی قبل</td></tr>
+    <tr><td><span class="route">/admin/backups</span></td><td>فهرست بکاپ‌ها، اجرای دستی، بازیابی، دانلود، تنظیم زمان‌بندی</td></tr>
+    <tr><td><span class="route">/admin/health</span></td><td>پایش سرویس‌ها (دیتابیس، AI، ایمیل، فضای دیسک)، لاگ خطاها، تشخیص سریع</td></tr>
+    <tr><td><span class="route">/admin/users</span></td><td>ساخت/غیرفعال‌سازی ادیتور، بازنشانی رمز، ورود به‌جای کاربر با ثبت در لاگ ممیزی</td></tr>
+    <tr><td><span class="route">/admin/editors</span></td><td>کاربران ادیتور هر دانشگاه و وضعیت دسترسی</td></tr>
+  </table>
+
+  <h3>وایرفریم ۹ — پنل ادمین</h3>
+  <div class="wf">
+    <div class="wrow g4">
+      <div class="wfb accent"><b>لایسنس</b><span class="hint">دانشگاه الف · معتبر تا ۱۴۰۶/۰۶/۳۱</span></div>
+      <div class="wfb solid"><b>نسخه</b><span class="hint">۱٫۴٫۲ — نسخه‌ی جدید موجود است</span></div>
+      <div class="wfb solid"><b>سلامت</b><span class="hint">دیتابیس سالم · AI سالم · ایمیل سالم · دیسک ۴۱٪</span></div>
+      <div class="wfb warnb"><b>آخرین بکاپ</b><span class="hint">امروز ۰۳:۰۰ — موفق</span></div>
+    </div>
+    <div class="wrow g2">
+      <div class="wfb"><b>تاریخچه‌ی آپدیت‌ها</b><span class="hint">نسخه، تاریخ، تغییرات مهم، مدت زمان آپدیت</span></div>
+      <div class="wfb"><b>لاگ ممیزی (نمای کلی)</b><span class="hint">آخرین اقدام‌های حساس در چند روز گذشته</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2><span class="n">۸</span>ماتریس دسترسی صفحه‌به‌صفحه (خلاصه‌ی اجرایی)</h2>
+  <table>
+    <tr><th>گروه صفحه</th><th>مهمان</th><th>شرکت‌کننده</th><th>داور</th><th>ادیتور</th><th>ادمین</th></tr>
+    <tr><td>سایت عمومی + اعتبارسنجی گواهی</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td><td>✔</td></tr>
+    <tr><td>ثبت‌نام و پنل شرکت‌کننده</td><td>—</td><td>✔ (فقط داده‌ی خودش)</td><td>✔ (اگر مقاله دارد)</td><td>—</td><td>—</td></tr>
+    <tr><td>کارتابل و فرم داوری</td><td>—</td><td>—</td><td>✔ (فقط ارجاع‌های خودش)</td><td>✔ (به‌جای داور، با ثبت در لاگ)</td><td>✔</td></tr>
+    <tr><td>صف مقالات و جزئیات مقاله</td><td>—</td><td>—</td><td>محدود به مقاله‌ی ارجاعی</td><td>✔ (همه)</td><td>✔</td></tr>
+    <tr><td>داوران، محورها، فرم داوری، چک‌لیست</td><td>—</td><td>—</td><td>—</td><td>✔</td><td>✔</td></tr>
+    <tr><td>ثبت‌نام‌ها، فرم‌ساز، خدمات و مالی</td><td>—</td><td>—</td><td>—</td><td>✔</td><td>✔</td></tr>
+    <tr><td>قالب گواهی، صدور گروهی، ابطال</td><td>—</td><td>—</td><td>—</td><td>✔</td><td>✔</td></tr>
+    <tr><td>پیام‌های انبوه و قالب پیام‌ها</td><td>—</td><td>—</td><td>—</td><td>✔</td><td>✔</td></tr>
+    <tr><td>تنظیمات همایش، موتور AI، لاگ ممیزی</td><td>—</td><td>—</td><td>—</td><td>✔ (به‌جز موارد حساس)</td><td>✔</td></tr>
+    <tr><td>لایسنس، آپدیت، بکاپ، سلامت</td><td>—</td><td>—</td><td>—</td><td>—</td><td>✔</td></tr>
+  </table>
+  <p class="small">این ماتریس در کد به‌صورت سیاست‌های CASL پیاده می‌شود و روی هر endpoint و هر کوئری اعمال می‌گردد؛ تست خودکار دارد.</p>
+</section>
+
+<!-- 9 -->
+<section>
+  <h2><span class="n">۹</span>الگوهای UX مشترک (که کیفیت محصول را می‌سازند)</h2>
+  <div class="grid2">
+    <div>
+      <h4>ساختار پنل</h4>
+      <ul>
+        <li>منوی کناری جمع‌شو با آیکون + برچسب، مسیر راهنما (breadcrumb)، جست‌وجوی سراسری</li>
+        <li>هدر: نام همایش، سوییچ فضای کاری (نقش)، زنگ اعلان‌ها، منوی کاربر</li>
+        <li>هر جدول: فیلترهای قابل ذخیره، مرتب‌سازی، انتخاب ستون‌ها، خروجی اکسل، حالت چسبان سرصفحه</li>
+      </ul>
+      <h4>حالت‌های خاص</h4>
+      <ul>
+        <li>حالت خالی هر صفحه: توضیح + اقدام پیشنهادی (نه صفحه‌ی سفید)</li>
+        <li>اسکلتون لودینگ در جدول‌ها؛ هرگز پرش چیدمان</li>
+        <li>خطاها با پیام انسانی و راه‌حل («فایل .docx خوانده نشد؛ اگر فایل اسکن‌شده است، فیلدها را دستی وارد کنید»)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>اعتماد و شفافیت</h4>
+      <ul>
+        <li>هر خروجی AI با برچسب «استخراج خودکار — قابل ویرایش» و امکان مشاهده‌ی متن مبنا</li>
+        <li>هر اقدام حساس (رد مقاله، صدور گروهی، ابطال گواهی) تأیید دومرحله‌ای دارد</li>
+        <li>تایم‌لاین وضعیت برای هر مقاله، قابل مشاهده توسط نویسنده (شفافیت بدون افشای نظر محرمانه)</li>
+      </ul>
+      <h4>دسترس‌پذیری و موبایل</h4>
+      <ul>
+        <li>پنل شرکت‌کننده و داور کاملاً موبایل‌محور (اکثر نویسندگان با گوشی کار می‌کنند)</li>
+        <li>پنل ادیتور دسکتاپ‌محور با واکنش‌گرایی قابل قبول روی تبلت</li>
+        <li>تمام فرم‌ها با کیبورد قابل تکمیل؛ گواهی‌نامه‌ساز و ویرایشگر قالب نیاز به مرورگر دسکتاپ دارند</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section>
+  <h2><span class="n">۱۰</span>قرارداد API (استاندارد مشترک برای ایجنت‌ها)</h2>
+  <pre>
+Base:      /api/v1        (نسخه‌دار؛ تغییرات ناسازگار ⇒ v2 نه شکستن v1)
+Auth:      Bearer JWT (15m) + refresh cookie httpOnly (7d)
+Envelope:  { data, meta }  |  { error: { code, message, details } }
+Paging:    ?page=1&pageSize=25  ⇒  meta: { page, pageSize, total, totalPages }
+Filter:    ?status=desk_review&topicId=…&q=…&sort=-submittedAt
+Files:     POST /files (multipart) ⇒ { fileId } ; دانلود فقط با GET /files/:id/signed-url
+Progress:  GET /ai/jobs/:id/events  (SSE برای نوار پیشرفت استخراج)
+Idempotent: POST /certificate-batches  با هدر Idempotency-Key
+Audit:     هر mutation حساس ⇒ ثبت خودکار (خودکار در لایه‌ی سرویس)
+Errors:    400 validation · 401 auth · 403 policy · 404 · 409 conflict · 422 business-rule · 429 rate
+i18n:      همه‌ی پیام‌ها با کد خطا؛ متن نهایی در لایه‌ی ارائه ترجمه می‌شود
+  </pre>
+  <p class="small">قاعده: هیچ متن فارسی/انگلیسی در پاسخ API برنمی‌گردد؛ فقط کد و داده. متن، کار لایه‌ی وب است (تا دوزبانگی واقعی و قابل گسترش باشد).</p>
+</section>
+
+<!-- 11 -->
+<section>
+  <h2><span class="n">۱۱</span>تصمیم‌های ثبت‌شده و بازخوردهای باز</h2>
+  <div class="grid2">
+    <div class="callout green">
+      <b>تصمیم‌های ثبت‌شده</b>
+      <ul>
+        <li>درگاه پرداخت در MVP پیاده‌سازی نمی‌شود؛ پس از MVP و تست‌شدن محصول، اتصال API به درگاه‌های موجود اضافه خواهد شد (برای خرید محصول و هزینه‌های همایش).</li>
+        <li>حالت داوری برای هر همایش جداگانه قابل تنظیم است؛ تنظیم سراسری اجباری نداریم.</li>
+        <li>گواهی‌ساز هر دو شکل تاریخ عددی و نوشتاری را پشتیبانی می‌کند.</li>
+        <li>سقف تعداد مقاله برای هر شرکت‌کننده در سطح هر همایش قابل تنظیم است؛ مقدار خالی یعنی بدون سقف.</li>
+        <li>جهت بصری: سایت شرکتی Neumorphism، سایت عمومی همایش Glassmorphism کنترل‌شده (پیشنهاد من)، و پنل‌های همایش Claymorphism؛ پیش‌نمایش این ترکیب در <code>04-design-system-preview.html</code> قابل مشاهده است.</li>
+      </ul>
+    </div>
+    <div class="callout warn">
+      <b>بازخورد و تصمیم‌های باقی‌مانده</b>
+      <ul>
+        <li>نام برند و دامنه‌ی محصول، فایل نمونه‌ی گواهینامه، سرویس پیش‌فرض پیامک/ایمیل و مدل پشتیبانی دانشگاه‌ها.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <b>قدم بعدی (فاز ۰ ادامه):</b> سیستم طراحی و جهت بصری در سند ۰۴ ثبت شد. مرحله‌ی بعد ساخت اسکلت مونوریپو و قواعد ایجنت‌هاست؛ تست عملی 9Router را هم پیش از تسک‌های کدنویسی سنگین انجام می‌دهیم.
+  </div>
+</section>
+
+</div>
+</body>
+</html>
+ کدنویسی سنگین انجام می‌دهیم.
+  </div>
+</section>
+
+</div>
+</body>
+</html>

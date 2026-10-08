@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سند ۰۵ — نقشه‌ی مونوریپو، قوانین ایجنت و آماده‌سازی ابزار</title>
+<style>
+  :root{--bg:#f5f6fa;--card:#fff;--ink:#1d2338;--muted:#626b82;--line:#e1e5ef;--brand:#5050c8;--teal:#118b7c;--amber:#a86c10;--red:#b9384e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.9 "Vazirmatn","Segoe UI",Tahoma,Arial,sans-serif}
+  .wrap{max-width:1120px;margin:0 auto;padding:25px 20px 80px}
+  header{background:linear-gradient(125deg,#171e40,#4142a8 68%,#118b7c 130%);color:#fff;border-radius:20px;padding:27px 29px;margin-bottom:18px;position:relative;overflow:hidden}
+  header:after{content:"";position:absolute;inset-inline-start:-80px;top:-155px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2)}
+  header h1{font-size:22px;margin:0 0 7px;position:relative;z-index:1}
+  header p{margin:0;max-width:850px;font-size:13px;opacity:.93;position:relative;z-index:1}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
+  .meta span{font-size:11px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.23)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px 22px;margin:0 0 15px;box-shadow:0 5px 19px rgba(34,42,78,.035)}
+  h2{font-size:17px;color:#303679;margin:0 0 12px;padding-bottom:9px;border-bottom:2px solid #eeeefa}
+  h2 .n{display:inline-block;background:#efefff;color:#4846b4;border:1px solid #dddffc;border-radius:8px;padding:1px 8px;margin-left:7px;font-size:12px;vertical-align:2px}
+  h3{font-size:14.5px;color:#34405f;margin:18px 0 7px}
+  p{margin:7px 0}
+  .lead{color:var(--muted);font-size:12.8px;margin:0 0 11px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.6px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right;vertical-align:top}
+  th{background:#f2f4fc;color:#303a67;font-weight:800}
+  tr:nth-child(even) td{background:#fbfbfe}
+  .callout{border-right:4px solid var(--brand);background:#f2f3ff;border-radius:10px;padding:11px 14px;margin:10px 0}
+  .callout.green{border-right-color:var(--teal);background:#eef9f5}
+  .callout.warn{border-right-color:var(--amber);background:#fff8e9}
+  .callout.red{border-right-color:var(--red);background:#fff2f3}
+  .callout strong{color:#2f3858}
+  .small{font-size:11.5px;color:var(--muted)}
+  code{display:inline-block;direction:ltr;background:#f1f2f8;border:1px solid #e1e4ed;border-radius:5px;padding:0 5px;font:11.5px Consolas,Monaco,monospace}
+  pre{direction:ltr;text-align:left;white-space:pre;overflow:auto;background:#171b2e;color:#e0e5ff;border-radius:12px;padding:14px 16px;font:11.5px/1.8 Consolas,Monaco,monospace}
+  pre .c{color:#93a0cc}.green-txt{color:#81ddc3}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .box{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fcfcff}
+  .box h3{margin:0 0 6px}
+  ul,ol{margin:7px 0;padding-right:21px}
+  li{margin:4px 0}
+  .pill{display:inline-block;border:1px solid #e1e5ef;background:#f8f9fc;color:#515b75;border-radius:999px;padding:2px 8px;margin:2px;font-size:10.5px}
+  a{color:#4246b4;text-decoration:none}
+  a:hover{text-decoration:underline}
+  .status{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:800}
+  .done{background:#e8f6ef;color:#17664f}.pending{background:#fff3dc;color:#805b10}.blocked{background:#fcecee;color:#963248}
+  .footer{text-align:center;color:#838ba0;font-size:11px;margin-top:18px}
+  @media(max-width:760px){.wrap{padding:16px 11px 48px}section{padding:16px}.grid2{grid-template-columns:1fr}header{padding:21px}header h1{font-size:19px}table{font-size:11.5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>سند ۰۵ — نقشه‌ی مونوریپو، قوانین ایجنت و آماده‌سازی ابزار</h1>
+  <p>این سند ساختار کار ایجنت‌ها، قراردادهای اصلی، سیاست GitHub و گیت آزمون Claude Code با provider مستقیم AgentRouter را مشخص می‌کند.</p>
+  <div class="meta"><span>تاریخ بازبینی: ۸ اکتبر ۲۰۲۶</span><span>وضعیت: طرح اجرایی، پیش از ساخت اپلیکیشن</span><span>فایل‌های ایجنت: `AGENTS.md` و `CLAUDE.md`</span></div>
+</header>
+
+<section>
+  <h2><span class="n">۱</span>تازه‌سازی نسخه‌ها قبل از کدنویسی</h2>
+  <p class="lead">در بررسی امروز متوجه شدیم پیشنهاد قبلی Next.js 15 و PostgreSQL 16 دیگر خط مبنای مناسبی برای شروع تازه نیست. چون هنوز کد محصول نداریم، اکنون نسخه‌ی هدف را اصلاح می‌کنیم؛ بعد از ساخت ریپو، patch دقیق با lockfile و image digest قفل می‌شود.</p>
+  <table>
+    <tr><th>بخش</th><th>نسخه/سیاست هدف</th><th>دلیل</th></tr>
+    <tr><td>Node.js</td><td><code>24.21.0</code> · Active LTS</td><td>یک runtime مشترک برای Next/Nest و CLIهای ایجنت؛ فایل‌های `.nvmrc` و `.node-version` نیز در ریشه ثبت شده‌اند.</td></tr>
+    <tr><td>Next.js</td><td><code>16.3.8</code> در شروع bootstrap؛ شاخه‌ی <code>16.3.x</code></td><td>شاخه‌ی Active LTS. شاخه‌ی 15 وارد Maintenance LTS شده؛ ازاین‌رو برای شروع تازه 16 انتخاب می‌شود.</td></tr>
+    <tr><td>NestJS</td><td><code>12.1.x</code></td><td>نسخه‌ی پایدار جاری؛ این شاخه ESM است. Node 24.21 شرط نسخه‌ی بالای CLI را هم پوشش می‌دهد.</td></tr>
+    <tr><td>Prisma</td><td><code>7.x</code> پایدار</td><td>Prisma 8 در زمان این بازبینی هنوز RC است؛ نسخه‌ی آزمایشی را وارد هسته‌ی MVP نمی‌کنیم.</td></tr>
+    <tr><td>PostgreSQL</td><td><code>18.x</code> و همیشه آخرین patch امنیتی</td><td>نسخه‌ی اصلی جاری؛ patch دقیق و digest تصویر هنگام ساخت Compose قفل و در CI/restore آزمایش می‌شود.</td></tr>
+    <tr><td>JavaScript monorepo</td><td><code>pnpm</code> + <code>turborepo</code></td><td>Workspace قابل پیش‌بینی، نصب تکرارپذیر، اجرای موازی taskها؛ نسخه‌ی دقیق pnpm در `packageManager` و lockfile ثبت می‌شود.</td></tr>
+    <tr><td>Python AI</td><td>FastAPI + <code>uv</code> + lockfile</td><td>وابستگی‌های Python از workspace جاوااسکریپت جدا و دقیقاً قفل می‌شوند.</td></tr>
+  </table>
+  <div class="callout warn"><strong>Prisma migration:</strong> کدهای نمونه‌ی Prisma 6 را کپی نکنیم؛ ساختار config/client در Prisma 7 تغییر کرده است. دستورات migration/reset فقط در محیط local ایزوله؛ production هرگز reset نمی‌شود.</div>
+  <p class="small">منابع رسمی نسخه‌ها: <a href="https://nextjs.org/blog">Next.js releases</a> · <a href="https://nodejs.org/en/about/previous-releases">Node.js release schedule</a> · <a href="https://github.com/nestjs/nest/releases/tag/v12.1.0">NestJS 12.1.0</a> · <a href="https://www.postgresql.org/download/">صفحه‌ی رسمی دانلود PostgreSQL</a> · <a href="https://www.prisma.io/blog/prisma-orm-8-nestjs">وضعیت Prisma 8 RC</a>.</p>
+</section>
+
+<section>
+  <h2><span class="n">۲</span>ساختار ریپوی مقصد</h2>
+  <p class="lead">مخزن خصوصی GitHub کاربر `littleprogrammer369/ghost_of_ausmt` است. سندهای قبلی `hamayesh-platform` را نام داخلی محصول/ریپو فرض کرده بودند؛ این نام‌گذاری تا تأیید مالک محصول قطعی نیست. این ساختار blueprint است و هنوز runtime در مخزن کاربر ساخته نشده.</p>
+  <pre>hamayesh-platform/
+├── apps/
+│   ├── web/             <span class="c"># Next.js 16: conference site + participant/reviewer/editor/admin</span>
+│   ├── marketing/       <span class="c"># Next.js 16: bilingual company site (SEO)</span>
+│   ├── api/             <span class="c"># NestJS 12 ESM: REST API, auth, RBAC, business rules</span>
+│   ├── ai/              <span class="c"># FastAPI: DOCX extraction, topic matching, provider adapters</span>
+│   └── renderer/        <span class="c"># isolated Playwright/Chromium PDF worker</span>
+├── packages/
+│   ├── ui/              <span class="c"># shared components + approved design skins/tokens</span>
+│   ├── contracts/       <span class="c"># Zod/OpenAPI request/response contracts</span>
+│   ├── icons/           <span class="c"># Lucide exports; no emoji</span>
+│   ├── config/          <span class="c"># TS, ESLint, Prettier, Tailwind, test defaults</span>
+│   └── test-utils/      <span class="c"># shared fixtures/factories; never production data</span>
+├── infra/
+│   ├── compose/         <span class="c"># local and production Compose, networks, health checks</span>
+│   ├── caddy/           <span class="c"># TLS/reverse-proxy configuration</span>
+│   ├── scripts/         <span class="c"># install, update, backup, restore, health-check</span>
+│   └── monitoring/      <span class="c"># uptime, logs, metrics, alerting</span>
+├── docs/
+│   ├── adr/             <span class="c"># numbered architecture decision records</span>
+│   └── runbooks/        <span class="c"># install, restore, incident, release</span>
+├── AGENTS.md
+├── CLAUDE.md
+├── pnpm-workspace.yaml
+├── pnpm-lock.yaml
+├── turbo.json
+└── package.json</pre>
+  <div class="callout"><strong>مرز سرویس‌ها:</strong> فرانت‌اند مستقیم به دیتابیس وصل نمی‌شود؛ API تنها مرجع مجوز و داده است. AI و renderer فقط روی شبکه‌ی داخلی سرویس‌ها reachable هستند؛ Caddy فقط مسیرهای عمومی لازم را publish می‌کند.</div>
+</section>
+
+<section>
+  <h2><span class="n">۳</span>پوشه‌بندی دامنه‌ها و مالکیت کد</h2>
+  <table>
+    <tr><th>مالکیت</th><th>داخل آن</th><th>نباید وارد آن شود</th></tr>
+    <tr><td>`apps/web`</td><td>سایت همایش، مسیرهای نقش‌محور، فرم‌ها، جدول‌ها، RTL/LTR، حالت‌های خطا و بارگذاری</td><td>Prisma Client، query مستقیم DB، کلید AI یا منطق نهایی مجوز</td></tr>
+    <tr><td>`apps/marketing`</td><td>سایت دو‌زبانه‌ی شرکت، صفحات محصول، نمونه‌کار، SEO، فرم درخواست جلسه</td><td>داده‌ی مقالات دانشگاه یا API داخلی بدون نیاز</td></tr>
+    <tr><td>`apps/api`</td><td>هویت، مجوز، scope همایش، مقاله، داوری، تصمیم، صدور گواهی، audit/status، مالی آینده</td><td>متن UI یا CSS؛ بازگرداندن خطا با جمله‌ی فارسی/انگلیسی سخت‌کدشده</td></tr>
+    <tr><td>`apps/ai`</td><td>پردازش فایل در sandbox محدود، استخراج، تشخیص زبان، embedding/topic matching، fallback</td><td>صدور تصمیم نهایی مقاله یا ارسال خودکار متن مقاله به provider خارجی</td></tr>
+    <tr><td>`apps/renderer`</td><td>رندر امن PDF گواهی از قالب و داده‌ی snapshot</td><td>دسترسی عمومی به فایل‌های قالب یا مقاله؛ اجرای HTML نامطمئن</td></tr>
+    <tr><td>`packages/contracts`</td><td>schema/version مشترک، قراردادهای API و کد خطا</td><td>حاوی secret، database client، یا منطق دامنه‌ی وابسته به server</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2><span class="n">۴</span>قواعد حیاتی ایجنت‌ها</h2>
+  <div class="grid2">
+    <div class="box"><h3>قبل از تغییر</h3><ul><li>`git status` و فایل‌های مرتبط را بخوان.</li><li>اسناد ۰۰ تا ۰۴ را مرجع نیازمندی بگیر.</li><li>برنامه‌ی کوتاه، فایل‌های هدف، ریسک و تست را بگو.</li><li>اگر تصمیم با سند نمی‌خواند، توقف کن و تعارض را گزارش بده.</li></ul></div>
+    <div class="box"><h3>در حین تغییر</h3><ul><li>یک vertical slice کوچک بساز؛ refactor نامرتبط نکن.</li><li>مرز tenant را در API enforce کن؛ پنهان‌کردن دکمه مجوز نیست.</li><li>ترجمه، audit/status، accessibility و تست را هم‌زمان بساز.</li><li>schema change بدون migration/rollback و تست ممنوع.</li></ul></div>
+    <div class="box"><h3>حریم خصوصی و امنیت</h3><ul><li>هیچ secret یا مقاله‌ی واقعی را در prompt یا log قرار نده.</li><li>provider بیرونی AI فقط با مجوز روشن و حداقل داده؛ مسیر local/degraded باید باقی بماند.</li><li>دریافت/دانلود فایل فقط با کنترل مجوز و signed URL کوتاه‌عمر.</li><li>هیچ reset یا command تخریبی بدون تأیید صریح اجرا نکن.</li></ul></div>
+    <div class="box"><h3>قبل از پایان</h3><ul><li>lint/typecheck/testهای موجود را واقعاً اجرا کن.</li><li>دقیقاً command و نتیجه را گزارش کن؛ تست‌نشده را passing ننام.</li><li>فایل‌های تغییرکرده، فرض‌ها و gapها را فهرست کن.</li><li>در صورت نبود اپ/تست، صریح بگو که هنوز scaffold نشده.</li></ul></div>
+  </div>
+  <div class="callout red"><strong>قاعدة tenant:</strong> `conference_id` را از context احرازشده و عضویت مجاز استخراج کن؛ هیچ endpointی نباید صرفاً به `conference_id` فرستاده‌شده از مرورگر اعتماد کند.</div>
+</section>
+
+<section>
+  <h2><span class="n">۵</span>فایل‌های ایجنت و چرخه‌ی اعتبارسنجی</h2>
+  <table>
+    <tr><th>فایل</th><th>هدف</th><th>وضعیت در workspace</th></tr>
+    <tr><td><code>/AGENTS.md</code></td><td>قانون مشترک برای همه‌ی coding agentها: تصمیم‌ها، مرز معماری، invariantهای امنیت/داده، workflow و DoD.</td><td><span class="status done">آماده</span></td></tr>
+    <tr><td><code>/CLAUDE.md</code></td><td>قواعد اختصاصی Claude Code؛ `@AGENTS.md` را وارد می‌کند و مسیر خواندن سندها/قالب پاسخ را تعیین می‌کند.</td><td><span class="status done">آماده</span></td></tr>
+    <tr><td><code>infra/scripts/install.sh</code></td><td>بررسی پیش‌نیازها، secrets، Compose، migration کنترل‌شده و readiness probe.</td><td><span class="status pending">بعد از Compose</span></td></tr>
+    <tr><td><code>infra/scripts/update.sh</code></td><td>قفل نسخه، backup پیش از migration، rollout، health check و مسیر rollback.</td><td><span class="status pending">بعد از image/API</span></td></tr>
+    <tr><td><code>infra/scripts/backup.sh</code> + restore test</td><td>DB + فایل‌ها + config؛ retention، checksum، رمزنگاری و آزمایش restore.</td><td><span class="status pending">پس از تعیین storage</span></td></tr>
+  </table>
+  <div class="callout warn"><strong>چرا اسکریپت‌های deploy را هنوز نمی‌نویسیم؟</strong> تا Compose، migration command، storage mount، health endpoint و نسخه‌گذاری image وجود نداشته باشد، install/update واقعی یا غیرقابل‌آزمایش است یا ممکن است داده را خراب کند. قرارداد آن‌ها اینجا قفل شده؛ خود اسکریپت‌ها با همان compose و تست restore ساخته و آزمایش می‌شوند، نه به‌شکل stub که ظاهراً production-ready باشد.</div>
+</section>
+
+<section>
+  <h2><span class="n">۶</span>سیاست نسخه‌گذاری، CI و فرمان‌ها</h2>
+  <ul>
+    <li>Node در `.nvmrc` و `.node-version` قفل شده؛ exact package manager در `package.json` (`packageManager`) و exact JS packages در `pnpm-lock.yaml`.</li>
+    <li>Docker imageها برای توسعه می‌توانند major tag داشته باشند؛ production release باید patch و digest قابل‌ردیابی داشته باشد. هیچ image با `latest` به production نمی‌رود.</li>
+    <li>Prisma schema تنها با migrationهای شماره‌دار تغییر می‌کند. CI: generate → format/validate → unit/integration migration test روی Postgres هم‌نسخه → API tests.</li>
+    <li>CI حداقل: install frozen · lint · typecheck · unit tests · API integration tests · Next build · dependency/security scan · i18n-key parity check.</li>
+    <li>برای taskهای روزانه از scriptهای root استفاده می‌شود (پس از scaffold): `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm test:e2e`؛ agent حق ندارد package script موفقیت ساختگی چاپ کند.</li>
+  </ul>
+  <p class="small">Major upgrade فقط با ADR کوتاه، بررسی سازگاری، migration plan و CI سبز پذیرفته می‌شود؛ برای رفع آسیب‌پذیری، patch/minor update با review و آزمون هدفمند می‌تواند سریع‌تر انجام شود.</p>
+  <div class="callout warn"><strong>GitHub و branch ثابت:</strong> همه‌ی coding taskها در clone واقعی و روی branch فعلی اجرا می‌شوند؛ ایجنت branch جدید نمی‌سازد/عوض نمی‌کند. پس از پاس‌شدن تست‌ها، فقط فایل‌های همان task را stage می‌کند، commit می‌سازد و به همان branch در `origin` push می‌کند. اگر Git/`origin`/branch نامشخص باشد، تست شکست بخورد یا push رد شود، توقف و گزارش؛ force-push ممنوع. P0 فقط‌خواندنی است و push ندارد. هیچ secret یا فایل تنظیمات دارای token وارد Git نمی‌شود.</div>
+</section>
+
+<section>
+  <h2><span class="n">۷</span>تست عملی Claude Code / AgentRouter — لازم قبل از promptهای توسعه</h2>
+  <p class="lead">این آزمایش روی Ubuntu خودت اجرا می‌شود؛ من به process و حساب تو دسترسی ندارم. اتصال فعلی Claude Code به AgentRouter مستقیم است، نه از مسیر 9Router. هدف سنجش tool-use است؛ اما پیش از هر درخواست، رایگان‌بودن واقعی مدل/سهمیه را در حساب AgentRouter تأیید کن. از مقاله‌ی واقعی، secret یا داده‌ی دانشگاه استفاده نکن.</p>
+  <ol>
+    <li>خروجی امن و بدون secret این فرمان‌ها را یادداشت کن: <code>node --version</code> · <code>claude --version</code> · <code>gh api user --jq .login</code>. برای clone، `git rev-parse --show-toplevel`, `git remote -v`, `git branch --show-current` و `git status --short --branch` را ثبت کن.</li>
+    <li>در حساب AgentRouter، شناسه‌ی دقیق مدل، endpoint سازگار با Claude Code، قیمت/اعتبار و مجوز استفاده را بررسی کن. اگر هزینه‌ی واقعی صفر یا پوشش رایگان قابل‌تأیید نیست، درخواست مدل نفرست. token/API key را در گزارش ننویس.</li>
+    <li>پس از تأیید هزینه‌ی صفر، Claude Code را با اتصال مستقیم AgentRouter اجرا کن. داخل Claude Code دستور <code>/status</code> را بزن و provider/model را بدون credential یادداشت کن. هشدار هم‌زمانی `ANTHROPIC_AUTH_TOKEN` و `ANTHROPIC_API_KEY` نباید وجود داشته باشد.</li>
+    <li>در یک پوشه‌ی موقت یا copy امن همین workspace، smoke prompt زیر را اجرا کن؛ فایل آزمایشی را بعداً خودت پاک کن.</li>
+    <li>اگر تست پاس شد، یک task کوچک دوم برای خواندن یک سند فارسی و انگلیسی و ارائه‌ی summary دقیق انجام بده؛ خروجی را با متن اصلی مقایسه کن تا RTK اطلاعات مهم را حذف نکرده باشد.</li>
+  </ol>
+  <pre>SMOKE PROMPT (send to Claude Code in English)
+
+Use only the current disposable test folder. Do not access the network, environment variables,
+credentials, or any real conference/user data.
+1) List the files in the current folder and briefly describe what you found.
+2) Create `agent-smoke.txt` with exactly: first line
+3) Read the file back and verify the exact content.
+4) Edit it so it contains exactly: second line
+5) Run a safe shell check proving the final file contains `second line` and no longer contains `first line`.
+6) Report each tool action, command, and observed result. Do not claim success for an action that failed.
+Do not change or delete any other file.</pre>
+  <div class="callout green"><strong>برای ادامه، این موارد را ثبت کن:</strong> نسخه‌ی Node و Claude Code، ریشه/branch/`origin` مخزن، شناسه‌ی مدل، شاهد رایگان‌بودن یا اعتبار حساب، رفع هشدار احراز هویت و نتیجه‌ی smoke test (pass/fail + خطای خلاصه، بدون credential). اگر هزینه صفر تأیید نشد، smoke test مدل اجرا نمی‌شود.</div>
+</section>
+
+<section>
+  <h2><span class="n">۸</span>وضعیت فعلی و قدم بعدی</h2>
+  <table>
+    <tr><th>کار</th><th>وضعیت</th><th>قدم بعد</th></tr>
+    <tr><td>فاز محصول، ERD، صفحات، طراحی</td><td><span class="status done">مستند شده</span></td><td>در تسک واقعی، اسناد با کد هم‌گام نگه داشته شوند.</td></tr>
+    <tr><td>قواعد مشترک ایجنت</td><td><span class="status done">AGENTS.md / CLAUDE.md ساخته شد</span></td><td>به ریشه‌ی ریپوی محصول منتقل/کپی شوند.</td></tr>
+    <tr><td>Git clone + Repo scaffold</td><td><span class="status done">clone تأیید؛ `main` تمیز و synced با `origin/main`</span></td><td>انتقال اسناد مرجع به clone؛ سپس P0/P1. هنوز کدی commit/push نشده است.</td></tr>
+    <tr><td>AgentRouter direct / tool-use</td><td><span class="status pending">Claude Code بالا می‌آید؛ رایگان‌بودن تأیید نشده</span></td><td>قبل از prompt مدل، قیمت/اعتبار صفر را تأیید کن؛ سپس smoke test ابزار.</td></tr>
+    <tr><td>Prompt pack #1</td><td><span class="status pending">پیش‌نویس با سیاست same-branch push</span></td><td>پس از clone واقعی، مدارک مرجع و گیت هزینه، ابتدا P0/P1 اجرا شود. Auth تا تأیید سند ۰۲، نقش‌ها و شناسه‌ی ورود متوقف است.</td></tr>
+  </table>
+  <p class="small">این workspace فعلاً شامل سندها، فایل‌های قواعد ایجنت و version markerهای Node است؛ اپلیکیشن، Compose و install/update/backup script هنوز ساخته نشده‌اند.</p>
+</section>
+
+<p class="footer">سند ۰۵ · ساختار ریپو و قرارداد ایجنت‌ها · نسخه‌ی فنی برای Claude Code / Cline</p>
+</div>
+</body>
+</html>

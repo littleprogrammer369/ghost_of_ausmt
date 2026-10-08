@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سند ۰۱ — تصمیم‌های معماری و نقشه‌ی ساخت</title>
+<style>
+  :root{
+    --bg:#f5f6fa; --card:#ffffff; --ink:#161a2b; --muted:#5c6478;
+    --line:#e3e6ef; --brand:#3b4fd8; --brand2:#0f9d8f; --violet:#6d28d9;
+    --red:#b91c1c; --green:#15803d; --amber:#b45309; --chip:#eef1fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:Tahoma,"Segoe UI","Iranian Sans",Arial,sans-serif;line-height:1.95;font-size:15px}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 20px 90px}
+  header.hero{background:linear-gradient(135deg,#1f2a6e 0%,#3b4fd8 50%,#0f9d8f 100%);
+    color:#fff;border-radius:18px;padding:28px 26px;margin-bottom:22px}
+  header.hero h1{margin:0 0 8px;font-size:23px;line-height:1.6}
+  header.hero p{margin:0;opacity:.94;font-size:14.5px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .meta span{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);
+    padding:4px 10px;border-radius:999px;font-size:12.5px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px 22px;margin:0 0 18px;box-shadow:0 1px 2px rgba(20,24,60,.04)}
+  h2{font-size:18.5px;margin:0 0 12px;padding-bottom:10px;border-bottom:2px solid var(--chip);color:#22307a}
+  h2 .n{display:inline-block;background:var(--brand);color:#fff;border-radius:8px;font-size:13px;padding:2px 9px;margin-left:8px;vertical-align:2px}
+  h3{font-size:15.5px;margin:20px 0 8px;color:#2b3467}
+  h4{font-size:14.5px;margin:14px 0 6px;color:#3a4272}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0;padding-right:22px}
+  li{margin:5px 0}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.8px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right;vertical-align:top}
+  th{background:#f2f4fc;color:#2b3467;font-weight:700}
+  tr:nth-child(even) td{background:#fafbff}
+  code{background:#f1f3fa;border:1px solid #e3e7f5;border-radius:6px;padding:1px 6px;
+    font-family:Consolas,Monaco,monospace;font-size:12.8px;direction:ltr;display:inline-block}
+  pre{direction:ltr;text-align:left;background:#151a2e;color:#dbe2ff;border-radius:12px;
+    padding:14px 16px;overflow-x:auto;font-family:Consolas,Monaco,monospace;font-size:12.6px;line-height:1.7}
+  pre .c{color:#8fa0d8}
+  pre .k{color:#7ee3c9}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:780px){.grid{grid-template-columns:1fr}}
+  .box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fcfcff}
+  .box h4{margin-top:0}
+  .callout{border-right:5px solid var(--brand);background:#f4f6ff;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .callout.green{border-right-color:var(--brand2);background:#f1fbf9}
+  .callout.warn{border-right-color:var(--amber);background:#fff7ed}
+  .callout.red{border-right-color:var(--red);background:#fef2f2}
+  .callout.violet{border-right-color:var(--violet);background:#faf5ff}
+  .tag{font-size:12px;background:#f2f4fc;border:1px solid #e0e5f6;border-radius:6px;padding:1px 7px;color:#3a4272}
+  .ok{color:var(--green);font-weight:700}
+  .no{color:var(--red);font-weight:700}
+  .small{font-size:13.2px;color:var(--muted)}
+  .pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px;border:1px solid #cfd7f5;background:#eef1fb;color:#3b4fd8;margin:2px}
+  hr{border:none;border-top:1px solid var(--line);margin:16px 0}
+  .stepno{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:7px;
+    background:#eef1fb;color:#3b4fd8;font-size:12.5px;font-weight:700;margin-left:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>سند ۰۱ — تصمیم‌های معماری، استک فنی و نقشه‌ی ساخت</h1>
+  <p>این سند «قانون اساسی» پروژه است: هر چیزی که تصمیم گرفتیم، با دلیل و با قیدهای اجرایی. مرجع مشترک من، تو و ایجنت‌های کدنویس (Claude Code / Cline).</p>
+  <div class="meta">
+    <span>وضعیت: پیش‌نویس برای تأیید</span>
+    <span>مکمل سند ۰۰ (جمع‌بندی و هم‌ترازی)</span>
+    <span>زبان UI: فارسی + انگلیسی</span>
+  </div>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="n">۱</span>تصمیم‌های قطعی‌شده</h2>
+  <table>
+    <tr><th style="width:16%">موضوع</th><th style="width:30%">تصمیم</th><th>دلیل و قید اجرایی</th></tr>
+    <tr>
+      <td><b>مدل استقرار</b></td>
+      <td>یک کدبیس واحد + نصب مستقل روی سرور هر دانشگاه (هر نصب = یک همایش در فاز اول)</td>
+      <td>ساختار و ظاهر یکی برای همه ⇒ تبدیل به برند؛ دیتا و فایل‌ها روی سرور خودِ دانشگاه می‌ماند؛ اما با قیدهای بند ۲.</td>
+    </tr>
+    <tr>
+      <td><b>اسکوپ اولیه</b></td>
+      <td>سامانه‌ی همایش + یک وب‌سایت شرکتی جدا برای معرفی و فروش محصول</td>
+      <td>دو اپ در یک مونوریپو با یک سیستم طراحی مشترک.</td>
+    </tr>
+    <tr>
+      <td><b>استک</b></td>
+      <td>Next.js + NestJS + PostgreSQL + سرویس AI پایتون (مونوریپو، Docker)</td>
+      <td>بهترین ترکیب «کیفیت UI/UX» + «مهندسی بک‌اند» + «قابلیت پیاده‌سازی توسط ایجنت». جزئیات بند ۳.</td>
+    </tr>
+    <tr>
+      <td><b>هوش مصنوعی</b></td>
+      <td>معماری چندلایه با قاعده‌محور به‌عنوان لایه‌ی اول؛ مدل خودمان در ادامه (Fine-tune)؛ API فقط لایه‌ی آخر</td>
+      <td>الزام «هوش مصنوعی هرگز از دسترس خارج نشود» با حالت تنزل (Degraded) تأمین می‌شود، نه با اتکا به یک سرویس. بند ۵.</td>
+    </tr>
+    <tr>
+      <td><b>قواعد بصری</b></td>
+      <td>بدون ایموجی در عناوین و UI؛ فقط آیکون‌های کتابخانه‌ای</td>
+      <td>قاعده‌ی سخت پروژه؛ در سیستم طراحی و در DoD هر تسک قید می‌شود.</td>
+    </tr>
+    <tr>
+      <td><b>پرداخت</b></td>
+      <td>هیچ درگاه پرداختی در MVP پیاده‌سازی نمی‌شود؛ اتصال به درگاه از فاز پس از MVP و تست محصول</td>
+      <td>هم پرداخت هزینه‌های همایش و هم فروش/اشتراک محصول شرکتی خارج از اسکوپ فعلی است. در فاز بعد، اتصال از طریق API و آداپتور درگاه طراحی می‌شود.</td>
+    </tr>
+    <tr>
+      <td><b>حالت داوری</b></td>
+      <td>قابل تنظیم برای هر همایش</td>
+      <td>تنظیم کور یا غیرکور بودن در سطح همایش ذخیره می‌شود؛ مقدار سراسری اجباری نداریم.</td>
+    </tr>
+    <tr>
+      <td><b>تاریخ گواهی</b></td>
+      <td>پشتیبانی از نمایش عددی و نوشتاری</td>
+      <td>هر دو قالب در گواهی‌ساز در دسترس‌اند و ادیتور هنگام طراحی قالب، شکل موردنیاز را انتخاب می‌کند.</td>
+    </tr>
+    <tr>
+      <td><b>سقف ارسال مقاله</b></td>
+      <td>برای هر همایش قابل تنظیم</td>
+      <td>سقف تعداد مقاله‌ی قابل ارسال توسط هر حساب شرکت‌کننده در تنظیمات همایش تعیین می‌شود؛ مقدار خالی یعنی بدون سقف.</td>
+    </tr>
+    <tr>
+      <td><b>سبک بصری</b></td>
+      <td>سایت شرکتی: Neumorphism · سایت عمومی همایش: Glassmorphism کنترل‌شده · پنل‌ها: Claymorphism</td>
+      <td>ترکیب موردنظر مالک محصول؛ سایت همایش با پیشنهاد من روی Glassmorphism سبک می‌رود. یک سیستم توکن مشترک، رنگ قابل تنظیم برای هر دانشگاه، و سطوح ساده و پرکنتراست برای متن/فرم/جدول.</td>
+    </tr>
+    <tr>
+      <td><b>نقش من</b></td>
+      <td>طراح، مهندس، ناظر، تستر و نویسنده‌ی پرامپت‌های ایجنت‌ها</td>
+      <td>تو مالک محصول و زیرساخت؛ من مغز فنی و کنترل کیفیت.</td>
+    </tr>
+  </table>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="n">۲</span>مدل استقرار: «یک نسخه، یک ساختار، نصب مستقل برای هر دانشگاه»</h2>
+
+  <p>با اصل حرف تو موافقم و همان را پیاده می‌کنیم؛ فقط یک تصحیح مهم دارد که کل آینده‌ی محصول به آن بند است:</p>
+
+  <div class="callout red">
+    <b>تصحیح حیاتی:</b> «ساختار یکی برای همه» باید از جنس <b>یک کدبیس با کانفیگ‌محوری</b> باشد، نه «کپی کد برای هر دانشگاه».
+    اگر برای هر مشتری یک کپی مستقل کد بدهیم، سه اتفاق قطعی می‌افتد:
+    <ul>
+      <li>نسخه‌ها از هم دور می‌افتند (دانشگاه الف روی ۱.۲، دانشگاه ب روی ۱.۵) و پشتیبانی شما فلج می‌شود.</li>
+      <li>هر باگ امنیتی باید N بار وصله شود؛ یکی جا می‌ماند و اعتبار برند می‌رود.</li>
+      <li>بروزرسانی قابلیت‌های جدید (مثل همان AI) برای مشتری قدیمی عملاً غیرممکن می‌شود.</li>
+    </ul>
+  </div>
+
+  <h3>مدل نهایی که پیشنهاد می‌کنم</h3>
+  <table>
+    <tr><th style="width:26%">اصل</th><th>توضیح</th></tr>
+    <tr>
+      <td><b>یک کدبیس، یک نسخه</b></td>
+      <td>کد هیچ‌جا تغییر نمی‌کند. همه‌ی تفاوت دانشگاه‌ها در <b>داده و کانفیگ</b> است: لوگو، رنگ، دامنه، محورها، فیلدهای فرم ثبت‌نام، قالب گواهی، متن پیام‌ها، تنظیمات SMTP/پیامک، آدرس سرویس AI.</td>
+    </tr>
+    <tr>
+      <td><b>هر نصب، یک دانشگاه</b></td>
+      <td>مثل ثمین: یک استک Docker روی سرور دانشگاه بالا می‌آید. دیتابیس، فایل مقاله‌ها و مدل AI همان‌جا می‌مانند. (این برای نگرانی محرمانگی مقالات یک مزیت واقعی است.)</td>
+    </tr>
+    <tr>
+      <td><b>آماده‌ی چندهمایشی در سطح داده</b></td>
+      <td>از روز اول <b>همه‌ی جدول‌ها فیلد <code>conference_id</code></b> دارند و تمام کوئری‌ها از لایه‌ی داده اجباراً فیلتر می‌خیزند. در حالت تک‌نصب مقدارش ۱ است. اگر فردا خواستیم SaaS یا چند-دانشگاهی شود، <b>بازنویسی نمی‌خواهیم</b>؛ فقط تشخیص «همایش فعال» از دامنه انجام می‌شود. این هزینه‌اش امروز صفر است و ارزشش بعداً میلیاردی.</td>
+    </tr>
+    <tr>
+      <td><b>نصب و آپدیت خودکار</b></td>
+      <td><code>install.sh</code> برای نصب صفر تا صد (اجرای همه‌ی سرویس‌ها، ساخت دیتابیس، SSL، بکاپ‌گیر) و <code>update.sh</code> برای ارتقای نسخه با مهاجرت دیتابیس. نسخه‌گذاری SemVer و فایل CHANGELOG.</td>
+    </tr>
+    <tr>
+      <td><b>صیانت از حقوق و برند</b></td>
+      <td>فایل لایسنس <b>امضاشده</b> (نام دانشگاه، دامنه، شناسه نصب، اعتبار) با کلید عمومی داخل کد اعتبارسنجی می‌شود؛ حالت آفلاین با مهلت محدود. بسته‌ی آپدیت فقط از کانال شما. <span class="small">(صداقتاً: این کار جلوی کپی ساده را می‌گیرد، نه مهاجم مصمم؛ برای برند تجاری کافی است.)</span></td>
+    </tr>
+    <tr>
+      <td><b>مسیر آینده</b></td>
+      <td>فاز ۳: داشبورد مرکزی «ناوگان نصب‌ها» برای شما: چه نسخه‌ای کجاست، وضعیت سلامت، اعلان نسخه‌ی جدید. تبدیل محصول به برندِ قابل فروش.</td>
+    </tr>
+  </table>
+
+  <div class="callout green">
+    <b>نتیجه:</b> همان چیزی که می‌خواهی (ساختار واحد، تحویل و دیپلوی برای هر دانشگاه، مالکیت داده برای دانشگاه، برند واحد برای شما) حفظ می‌شود؛ فقط به شرط اینکه «تغییرپذیری» در لایه‌ی کانفیگ و دیتابیس باشد، نه در لایه‌ی کد.
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="n">۳</span>استک فنی نهایی</h2>
+  <p>با سه معیار انتخاب شد: (۱) بهترین تجربه‌ی بصری و UX ممکن، (۲) بک‌اند و زیرساخت قابل اتکا و قابل رشد، (۳) الگوهای استاندارد و پرکتابخانه — چون <b>صفر تا صد با ایجنت‌ها ساخته می‌شود</b> و ایجنت روی استک‌های استاندارد و پر-مستند، کم‌خطاترین کد را می‌نویسد.</p>
+  <div class="callout green">
+    <b>تازه‌سازی نسخه‌ها در ۵ اکتبر ۲۰۲۶، پیش از شروع کدنویسی:</b>
+    Next.js 16.3.8 (Active LTS) به‌جای شاخه‌ی Maintenance نسخه‌ی ۱۵ · Node.js 24.21.0 LTS · NestJS 12.1.x · PostgreSQL 18.x با آخرین patch امنیتی.
+    Prisma 7 را فعلاً به‌عنوان نسخه‌ی پایدار نگه می‌داریم؛ Prisma 8 در زمان بررسی هنوز Release Candidate است.
+    نسخه‌ی دقیق در lockfile و image digest قفل می‌شود؛ ارتقا فقط بعد از CI سبز و مرور changelog.
+  </div>
+
+  <h3>ساختار مونوریپو</h3>
+  <pre>
+<span class="c"># hamayesh-platform/</span>
+├─ <span class="k">apps/</span>
+│  ├─ <span class="k">web/</span>          <span class="c"># Next.js 16 App Router — سایت همایش + پنل‌ها (fa/en, RTL/LTR)</span>
+│  ├─ <span class="k">marketing/</span>    <span class="c"># Next.js — وب‌سایت شرکتی و معرفی محصول (SEO متمرکز)</span>
+│  ├─ <span class="k">api/</span>          <span class="c"># NestJS — منطق کسب‌وکار، احراز هویت، RBAC، کارهای پس‌زمینه</span>
+│  ├─ <span class="k">ai/</span>           <span class="c"># FastAPI — استخراج فیلد مقاله، امبدینگ محوریت، آداپتور LLM</span>
+│  └─ <span class="k">renderer/</span>     <span class="c"># Chromium headless — تولید PDF گواهی/کارت/کتابچه + QR</span>
+├─ <span class="k">packages/</span>
+│  ├─ <span class="k">ui/</span>           <span class="c"># سیستم طراحی کیت (shadcn/ui + توکن‌های برند)</span>
+│  ├─ <span class="k">contracts/</span>    <span class="c"># اسکیمای مشترک (zod/OpenAPI) بین web و api و ai</span>
+│  ├─ <span class="k">icons/</span>        <span class="c"># آیکون‌های Lucide به‌صورت واکشی نام‌دار (بدون ایموجی)</span>
+│  └─ <span class="k">config/</span>       <span class="c"># تنظیمات مشترک TS/ESLint/Prettier/Tailwind</span>
+├─ <span class="k">infra/</span>
+│  ├─ docker-compose.yml            <span class="c"># prod</span>
+│  ├─ docker-compose.dev.yml        <span class="c"># dev</span>
+│  ├─ install.sh / update.sh / backup.sh
+│  └─ caddy/  systemd/  monitoring/
+├─ <span class="k">docs/</span>         <span class="c"># همین اسناد + ERD + ADR + راهنماها</span>
+├─ AGENTS.md      <span class="c"># قانون پروژه برای ایجنت‌ها (مهم‌ترین فایل برای کیفیت کد)</span>
+└─ CLAUDE.md      <span class="c"># راهنمای اختصاصی Claude Code</span>
+  </pre>
+
+  <h3>انتخاب‌ها به تفکیک لایه</h3>
+  <table>
+    <tr><th style="width:20%">لایه</th><th style="width:34%">انتخاب</th><th>چرا این</th></tr>
+    <tr>
+      <td>فرانت‌اند</td>
+      <td>
+        Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 ·
+        shadcn/ui (Radix) · Lucide Icons · Framer Motion ·
+        TanStack Table & Query · react-hook-form + zod ·
+        Recharts · next-intl
+      </td>
+      <td>کیفیت UI در سطح جهانی، پشتیبانی کامل RTL/LTR، کامپوننت‌های shadcn با کد در اختیار خودمان (قابل سفارشی‌سازی تا آخرین پیکسل)، اکوسیستم بزرگ = بهترین عملکرد ایجنت. آیکون‌های Lucide جای ایموجی را می‌گیرند.</td>
+    </tr>
+    <tr>
+      <td>بک‌اند</td>
+      <td>NestJS 12 (TypeScript/ESM) · Prisma 7 (نسخه‌ی پایدار) · PostgreSQL 18.x · Redis + BullMQ · CASL (سیاست دسترسی) · Swagger</td>
+      <td>معماری ماژولار با تزریق وابستگی؛ گاردهای نقش‌محور برای ۴ پنل؛ صف کار برای پردازش AI/ایمیل/PDF؛ Postgres برای روابط و جست‌وجوی متنی کافی است (نیاز به Elastic نداریم).</td>
+    </tr>
+    <tr>
+      <td>سرویس AI</td>
+      <td>Python + FastAPI · python-docx / mammoth · hazm (نرمال‌سازی فارسی) · sentence-transformers (مدل امبدینگ چندزبانه، اجرا روی CPU) · آداپتور LLM سازگار با OpenAI + پشتیبانی Ollama</td>
+      <td>پردازش فایل Word در پایتون بالغ‌ترین کتابخانه‌ها را دارد؛ امبدینگ محلی حتی بدون GPU هم جواب می‌دهد؛ آداپتور یعنی هر مدلی را بتوانیم وصل/عوض کنیم.</td>
+    </tr>
+    <tr>
+      <td>تولید PDF</td>
+      <td>Playwright + Chromium headless، فونت‌های فارسی جاسازی‌شده، کتابخانه QR</td>
+      <td>کنترل کامل روی چیدمان و فونت فارسی، پشتیبانی از قالب خام آپلودی، خروجی یکسان در همه‌ی سرورها.</td>
+    </tr>
+    <tr>
+      <td>احراز هویت</td>
+      <td>JWT کوتاه‌عمر + Refresh در کوکی httpOnly · Argon2id · 2FA اختیاری برای ادیتور و ادمین · Rate-limit · Audit Log</td>
+      <td>امنیت جدی برای سامانه‌ای که مقاله و اطلاعات شخصی گروه بزرگی از افراد را نگه می‌دارد.</td>
+    </tr>
+    <tr>
+      <td>ذخیره‌سازی</td>
+      <td>Postgres برای داده · Volume محلی برای فایل‌ها (با لایه‌ی انتزاعی سازگار با S3/MinIO برای آینده)</td>
+      <td>هیچ وابستگی ابری خارجی اجباری نباشد؛ سرور دانشگاه خودکفا باشد.</td>
+    </tr>
+    <tr>
+      <td>اعلان‌ها</td>
+      <td>ایمیل SMTP · پیامک (کاوه‌نگار/فراز/…) با آداپتور قابل تنظیم · پیام داخل پنل</td>
+      <td>مثل ثمین، متن پیام‌ها باید توسط ادیتور قابل ویرایش باشد (قالب‌های پیام).</td>
+    </tr>
+    <tr>
+      <td>زیرساخت</td>
+      <td>Docker + Docker Compose · Caddy (SSL خودکار) · systemd · Uptime-Kuma و GlitchTip (پایش) و پشتیبان‌گیری زمان‌بندی‌شده</td>
+      <td>نصب یک‌دستوری روی اوبونتو؛ قابل تکرار روی هر دانشگاه؛ مانیتورینگ برای اینکه «سرور بدون خبر خواب نرود».</td>
+    </tr>
+  </table>
+
+  <div class="callout">
+    <b>چرا NestJS جدا از Next.js؟</b> چون منطق سامانه سنگین است (RBAC چندپنلی، صف پردازش، تاریخچه‌ی وضعیت‌ها، گزارش‌ها). جدا بودن یعنی بتوانیم پنل‌ها، اپ موبایل یا وب‌سرویس‌های دیگر را بعداً به همان API وصل کنیم — بدون بازنویسی.
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="n">۴</span>زیرساخت: نصب، پشتیبان، امنیت، پایش</h2>
+  <div class="grid">
+    <div class="box">
+      <h4>نقشه‌ی سرویس‌ها روی یک سرور اوبونتو</h4>
+      <pre>
+Caddy <span class="c">(443, SSL خودکار)</span>
+ ├─ /           → web        <span class="c">:3000</span>
+ ├─ /api/*      → api        <span class="c">:4000</span>
+ └─ /ai/* /files → ai, static
+       │
+    api ── postgres <span class="c">:5432</span>
+     └─── redis    <span class="c">:6379</span>
+     └─── renderer <span class="c">(chromium pool)</span>
+     └─── ollama   <span class="c">(اختیاری، در صورت وجود GPU)</span>
+      </pre>
+      <p class="small">همه در یک <code>docker-compose.yml</code>؛ فایروال فقط ۴۴۳ و ۲۲ را باز می‌گذارد.</p>
+    </div>
+    <div class="box">
+      <h4>امنیت (چک‌لیست)</h4>
+      <ul>
+        <li>HTTPS اجباری، هدرهای امنیتی، CSRF، محدودسازی نرخ درخواست</li>
+        <li>اعتبارسنجی و اسکن نوع فایل آپلودی (Word/PDF فقط)، محدودیت حجم</li>
+        <li>رمزنگاری داده‌های حساس در دیتابیس، هش‌سازی Argon2id</li>
+        <li>محدودسازی دانلود فایل: لینک امضاشده و کوتاه‌عمر (فایل مقاله نباید با URL حدس‌زدنی در دسترس باشد)</li>
+        <li>Audit Log کامل: چه کسی، چه زمانی، چه مقاله‌ای را دید/تغییر داد — مهم برای شکایات احتمالی داوری</li>
+        <li>سخت‌سازی SSH، fail2ban، بروزرسانی خودکار سیستم، کاربر غیر root برای سرویس‌ها</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h4>پشتیبان‌گیری</h4>
+      <ul>
+        <li>روزانه: <code>pg_dump</code> + آرشیو فایل‌های مقاله</li>
+        <li>هفتگی و ماهانه: نگهداری چرخشی، رمزنگاری بکاپ</li>
+        <li>تست بازیابی ماهانه (بکاپ بدون تست، بکاپ نیست)</li>
+        <li>مقصد بکاپ: دیسک دوم سرور دانشگاه + یک مقصد خارج از سرور</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h4>پایش و پایداری</h4>
+      <ul>
+        <li>Uptime-Kuma: هشدار قطعی سرویس‌ها (ایمیل/پیامک به شما)</li>
+        <li>GlitchTip (Sentry خودمیزبان): رهگیری خطاهای کد</li>
+        <li>Netdata: مصرف CPU/RAM/دیسک — برای تصمیم‌گیری درباره‌ی سخت‌افزار AI</li>
+        <li>لاگ ساخت‌یافته + صفحه‌ی «وضعیت سلامت سامانه» برای ادیتور</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout warn">
+    <b>نکته‌ی سخت‌افزاری:</b> تشخیص خودکار نیاز GPU با توجه به مدل انتخابی بند ۵. سرویس AI باید طوری نوشته شود که «CPU-only» هم کار کند (کیفیت کمتر اما پایدار)، و اگر GPU بود خودکار ارتقا پیدا کند.
+  </div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="n">۵</span>استراتژی هوش مصنوعی: هیچ‌وقت از دسترس خارج نشود، بدون اتکا به اینترنت</h2>
+
+  <p>درباره‌ی حرف تو («اگر بتوانیم خودمان مدل را train کنیم، بهترین کار است؛ ولی نباید هرگز از دسترس خارج شود») صادقانه بگویم:</p>
+  <div class="callout violet">
+    <b>آموزش مدل از صفر (Pre-train): پیشنهاد نمی‌کنم.</b> میلیون‌ها دلار و تیم پژوهشی لازم دارد و کیفیتش از مدل‌های باز موجود کمتر می‌شود.<br>
+    <b>اما «مدل خودمان» به شکل درست و کاملاً عملی:</b> ۱) یک مدل <b>امبدینگ</b> باز و چندزبانه که <b>روی همین سرور و روی CPU</b> اجرا می‌شود (برای انتخاب محوریت) و عملاً می‌شود «مدل ما» با صفر وابستگی بیرونی؛ ۲) <b>Fine-tune سبک (LoRA)</b> روی یک مدل کوچک باز، با داده‌ی برچسب‌خورده‌ی مقالات خودمان، برای وظیفه‌ی استخراج فیلدها. حمایت GPU در سطح اجاره‌ای یا سرور دانشگاه کافی است و نتیجه‌اش دقت بالاتر از مدل عمومی روی «مقاله‌های فارسی دانشگاهی» می‌شود.
+  </div>
+
+  <h3>معماری چندلایه (اصل: قاعده‌محور اول، هوش مصنوعی برای تکمیل)</h3>
+  <table>
+    <tr><th style="width:14%">لایه</th><th style="width:30%">کار</th><th>اگر اینترنت/سرویس قطع شود</th></tr>
+    <tr>
+      <td><b>لایه ۰</b><br>قاعده‌محور</td>
+      <td>پارس فایل Word، نرمال‌سازی فارسی، تشخیص بخش‌ها («چکیده»، «Abstract»، «کلمات کلیدی»، «منابع»)، استخراج عنوان و نویسندگان با الگو</td>
+      <td class="ok">کاملاً بی‌اثر — همیشه کار می‌کند</td>
+    </tr>
+    <tr>
+      <td><b>لایه ۱</b><br>مدل امبدینگ محلی</td>
+      <td>تبدیل چکیده‌ی مقاله و محورهای همایش به بردار و محاسبه‌ی شباهت ⇒ رتبه‌بندی محورها (۲–۳ کاندید برتر)</td>
+      <td class="ok">کاملاً بی‌اثر — روی CPU سرور اجرا می‌شود، در حد چند صدم ثانیه</td>
+    </tr>
+    <tr>
+      <td><b>لایه ۲</b><br>مدل زبانی محلی</td>
+      <td>پاک‌سازی و تکمیل خروجی، ادغام منابع شکسته، تعیین نویسنده‌ی مسئول، انتخاب محور نهایی از بین کاندیدها با ذکر دلیل و درصد اطمینان</td>
+      <td class="ok">کار می‌کند اگر GPU/رم کافی باشد (مدل کوچک مثل خانواده Qwen/معادل فارسی‌پسند)</td>
+    </tr>
+    <tr>
+      <td><b>لایه ۳</b><br>API بیرونی</td>
+      <td>فقط به‌عنوان ارتقای کیفیت یا جانشین اضطراری لایه ۲</td>
+      <td class="ok">در دسترس نبودنش، سامانه را متوقف نمی‌کند؛ خودکار به لایه‌های پایین برمی‌گردد</td>
+    </tr>
+  </table>
+
+  <h3>زنجیره‌ی جایگزینی (Fallback Chain) خودکار</h3>
+  <pre>
+مدل لوکال اصلی  →  مدل لوکال دوم  →  API (ایرانی/خارجی، قابل تنظیم)  →  حالت تنزل: خروجی لایه ۰ و ۱
+      │                  │                        │                          │
+      └── health-check هر ۶۰ ثانیه ───────────────┴── سوئیچ خودکار + ثبت در لاگ + اعلان به ادمین
+  </pre>
+  <p class="small">هیچ‌کدام از این ۴ حالت، کاربر را با صفحه‌ی خطا تنها نمی‌گذارد: همیشه یک خروجی معنا‌دار تولید می‌شود و پیام «این نتیجه استخراج خودکار است، لطفاً بازبینی کنید» نمایش داده می‌شود.</p>
+
+  <h3>مسیر ساختن «مدل خودمان» (فاز ۲ به بعد)</h3>
+  <ol>
+    <li><span class="stepno">۱</span>از همین فاز ۱، هر بار که نویسنده فیلدهای پیشنهادی AI را اصلاح می‌کند، آن «جفت: خروجی ماشین ← خروجی درست انسانی» ذخیره می‌شود. این می‌شود دیتاست اختصاصی ما (با رضایت ادیتور، بدون داده‌ی هویتی).</li>
+    <li><span class="stepno">۲</span>مجموعه‌ی تست طلایی: ۱۰۰ تا ۲۰۰ مقاله‌ی واقعی با فیلدهای برچسب‌خورده ⇒ خط پایه‌ی دقت هر لایه.</li>
+    <li><span class="stepno">۳</span>Fine-tune با LoRA روی مدل کوچک باز، ارزیابی، و اگر از لایه‌ی عمومی بهتر بود، آن را به‌عنوان «موتور استخراج اختصاصی» جایگزین می‌کنیم.</li>
+    <li><span class="stepno">۴</span>همین مسیر برای «طبقه‌بند محوریت» هم قابل تکرار است (آموزش یک مدل روی مقالات برچسب‌خورده‌ی هر دانشگاه ⇒ دقت بومی بالاتر).</li>
+  </ol>
+
+  <div class="callout green">
+    <b>محصول جانبی ارزشمند:</b> این موتور استخراج مقالات فارسی دانشگاهی، به‌تنهایی یک دارایی قابل فروش است (سرویس API برای دبیرخانه‌ها و نشریات علمی).
+  </div>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2><span class="n">۶</span>سیستم طراحی و قواعد بصری</h2>
+  <table>
+    <tr><th style="width:22%">موضوع</th><th>قاعده</th></tr>
+    <tr>
+      <td><b>ایموجی</b></td>
+      <td class="no">ممنوع — در هیچ‌جای UI و عناوین. جایگزین: آیکون کتابخانه‌ای (Lucide) با اندازه و رنگ کنترل‌شده.</td>
+    </tr>
+    <tr>
+      <td>فونت</td>
+      <td>فارسی: وزیرمتن (برای UI) و یک فونت مناسب متن گواهی؛ انگلیسی: Inter. همه فونت‌ها داخل پروژه میزبانی می‌شوند (بدون CDN خارجی — هم سرعت، هم استقلال).</td>
+    </tr>
+    <tr>
+      <td>توکن‌های طراحی</td>
+      <td>رنگ، فاصله، شعاع گوشه، سایه و تایپوگرافی به‌صورت توکن تعریف می‌شوند؛ هر دانشگاه فقط <b>پالت برند</b> را عوض می‌کند (سه رنگ اصلی + لوگو).</td>
+    </tr>
+    <tr>
+      <td>سبک سطح‌ها</td>
+      <td>پوسته‌ها براساس نوع اپ انتخاب می‌شوند: <b>سایت شرکتی = Neumorphism نرم</b>، <b>سایت عمومی همایش = Glassmorphism کنترل‌شده</b>، <b>پنل‌های همایش = Claymorphism</b>. متن، جدول و فرم در همه‌ی پوسته‌ها سطح پایدار و کنتراست بالا دارند؛ سایه/شفافیت روی محتوای اصلی غلبه نمی‌کند.</td>
+    </tr>
+    <tr>
+      <td>کیفیت تعامل</td>
+      <td>حالت تاریک/روشن · اسکلتون لودینگ به‌جای اسپینر خالی · انیمیشن‌های ملایم و هدفمند (Framer Motion) · پیام‌های خطای دقیق و انسانی · فرم‌های با ذخیره‌ی خودکار پیش‌نویس</td>
+    </tr>
+    <tr>
+      <td>دوزبانه</td>
+      <td>از روز اول fa + en؛ هر رشته در فایل ترجمه، هر کامپوننت جهت‌آگاه (RTL/LTR)؛ محتوای همایش (محورها، خبرها) هم دو‌زبانه قابل ورود.</td>
+    </tr>
+    <tr>
+      <td>تقویم</td>
+      <td>نمایش شمسی در همه‌ی رابط‌ها و خروجی‌ها، ذخیره‌سازی استاندارد؛ مبدل یکجا پیاده می‌شود تا تکرار نشود.</td>
+    </tr>
+    <tr>
+      <td>دسترس‌پذیری</td>
+      <td>کنتراست AA، پیمایش با کیبورد، aria درست. (مخاطب ما استاد و دانشجوست؛ درصد قابل توجهی روی موبایل کار می‌کنند.)</td>
+    </tr>
+  </table>
+
+  <h3>دو وب‌سایت، یک زبان طراحی</h3>
+  <div class="grid">
+    <div class="box">
+      <h4>سایت همایش (هر دانشگاه)</h4>
+      <p class="small">صفحه اصلی پویا، محورها، تاریخ‌های مهم، اخبار، مقالات پذیرفته‌شده، کمیته علمی، FAQ، تماس، پنل‌ها. رنگ و لوگو از کانفیگ دانشگاه.</p>
+    </div>
+    <div class="box">
+      <h4>سایت شرکتی شما</h4>
+      <p class="small">معرفی محصول، دموی تعاملی، مقایسه با رقبا، تعرفه، نمونه‌کار دانشگاه‌ها، فرم درخواست جلسه، بلاگ تخصصی (برای SEO)، دو‌زبانه. این سایت «برند» می‌سازد؛ ثمین هم عملاً همین را دارد.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2><span class="n">۷</span>معماری داده و وضعیت‌ها (خلاصه — سند کامل ERD جداگانه می‌آید)</h2>
+  <p>
+    <span class="pill">Conference</span><span class="pill">User / Role / Permission</span>
+    <span class="pill">ConferenceMember</span><span class="pill">RegistrationFormField</span>
+    <span class="pill">RegistrationGroup</span><span class="pill">Registration</span>
+    <span class="pill">TopicGroup / Topic (+ کلیدواژه و توضیح)</span><span class="pill">Paper</span>
+    <span class="pill">PaperAuthor (+ وابستگی و نویسنده‌ی مسئول)</span><span class="pill">PaperFile</span>
+    <span class="pill">AiExtractionJob (+ دیتاست اصلاحات انسانی)</span><span class="pill">TopicMatchScore</span>
+    <span class="pill">ReviewAssignment</span><span class="pill">ReviewForm / ReviewFormItem</span>
+    <span class="pill">Review</span><span class="pill">EditorialDecision</span>
+    <span class="pill">StatusHistory</span><span class="pill">MessageTemplate / Notification</span>
+    <span class="pill">CertificateTemplate / CertificatePlacement</span><span class="pill">IssuedCertificate (+ کد رهگیری و QR)</span>
+    <span class="pill">AuditLog</span><span class="pill">License</span><span class="pill">Setting</span>
+  </p>
+  <p class="small">قاعده‌ی اجبار: هر جدول دارای <code>conference_id</code> و هر تغییر وضعیت، یک رکورد در <code>StatusHistory</code> با «چه کسی / چه زمانی / چه دلیلی» دارد. فایل‌ها هرگز با مسیر حدس‌زدنی سرو نمی‌شوند.</p>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2><span class="n">۸</span>قواعد «ایجنت‌پذیری» پروژه (چرا کد ما تمیز می‌ماند)</h2>
+  <p>چون ساخت پروژه با Claude Code / Cline انجام می‌شود، کیفیت خروجی مستقیماً تابع «قانون‌گذاری ما» است. سه ابزار اصلی:</p>
+
+  <h3>۸.۱ فایل <code>AGENTS.md</code> در ریشه‌ی پروژه</h3>
+  <p>هر ایجنتی قبل از هر کار این را می‌خواند. محتوایش: معماری، قواعد نام‌گذاری، ممنوعیت‌ها (مثلاً «ایموجی در UI ممنوع»، «هیچ کوئری بدون conference_id»، «هیچ متن ثابت فارسی داخل کامپوننت — همه از i18n»)، نحوه‌ی تست، و چک‌لیست پایان کار.</p>
+
+  <h3>۸.۲ قالب استاندارد پرامپت (هر تسک یکی از این‌ها را می‌گیرد)</h3>
+  <pre>
+<span class="c">## ROLE</span>      You are implementing &lt;module&gt; in this repository.
+<span class="c">## CONTEXT</span>   Relevant docs: docs/01-architecture... , docs/02-erd...
+             Existing files to extend: &lt;paths&gt;
+<span class="c">## GOAL</span>      &lt;one paragraph, outcome only&gt;
+<span class="c">## NON-GOALS</span> &lt;what NOT to touch — prevents agent wandering&gt;
+<span class="c">## CONSTRAINTS</span>
+ - Stack/versions fixed. Follow existing patterns in &lt;example file&gt;.
+ - i18n: all strings via messages/fa.json + en.json. No hard-coded text.
+ - UI: shadcn/ui + Lucide icons only. NO emoji anywhere.
+ - Every DB query scoped by conference_id. No exceptions.
+ - Add unit tests (Vitest) + one e2e flow (Playwright) for this feature.
+<span class="c">## DELIVERABLES</span> exact file list, expected structure
+<span class="c">## ACCEPTANCE</span>  `pnpm lint && pnpm test && pnpm build` must pass.
+             Manual check: &lt;steps&gt;
+<span class="c">## OUTPUT</span>      Diff only. Then a short report: what changed, what you assumed.</pre>
+  <p class="small">پیشنهاد عملی: متن پرامپت‌ها <b>انگلیسی</b> نوشته شود (دقت بالاتر برای مدل و صرفه‌جویی توکن — متن فارسی حدوداً دو تا سه برابر توکن می‌خورد)، ولی خلاصه‌ی هر پرامپت به فارسی برای تو ثبت می‌شود تا همیشه بدانی چه داریم سفارش می‌دهیم.</p>
+
+  <h3>۸.۳ Definition of Done برای هر تسک</h3>
+  <ul>
+    <li>تست‌های واحد سبز + یک تست e2e مسیر اصلی</li>
+    <li>بدون متن سخت‌کدشده (fa/en کامل)، بدون ایموجی، بدون <code>any</code> سرگردان</li>
+    <li>مهاجرت دیتابیس برای هر تغییر مدل (قابل بازگشت)</li>
+    <li>ثبت رویداد در Audit Log برای کارهای حساس (تصمیم، تغییر نقش، دانلود فایل)</li>
+    <li>بروزرسانی مستندات همان بخش (ERD و راهنمای API) در همان تسک</li>
+    <li>بررسی توسط من (نقش ناظر): انطباق با معماری، امنیت، UX</li>
+  </ul>
+</section>
+
+<!-- 9 -->
+<section>
+  <h2><span class="n">۹</span>نقشه‌ی فاز ۰ — کارهایی که همین حالا شروع می‌کنیم</h2>
+  <table>
+    <tr><th style="width:8%">#</th><th style="width:34%">خروجی</th><th>توضیح</th></tr>
+    <tr><td>۰.۱</td><td>ثبت تصمیم‌های محصول</td><td>مدل استقرار و استک تأیید شدند؛ پرداخت خارج از MVP، حالت داوری و سقف مقاله در سطح هر همایش قابل تنظیم و تاریخ گواهی هم عددی و هم نوشتاری است.</td></tr>
+    <tr><td>۰.۲</td><td>سند ERD کامل + دیکشنری داده</td><td>پیش‌نویس آماده: جدول‌ها، روابط، ایندکس‌ها، قواعد حذف/آرشیو و چرخه‌ی وضعیت مقاله؛ پایه‌ی مهاجرت‌های Prisma.</td></tr>
+    <tr><td>۰.۳</td><td>نقشه‌ی صفحات و وایرفریم ۴ پنل</td><td>پیش‌نویس آماده: ادیتور، داور، شرکت‌کننده، ادمین + سایت عمومی؛ مسیرها و مجوزهای هر صفحه.</td></tr>
+    <tr><td>۰.۴</td><td>سیستم طراحی + پیش‌نمایش تعاملی</td><td>پیش‌نویس سند ۰۴ آماده: سه پوسته‌ی متناسب با نوع اپ، پالت اولیه، توکن‌ها، کنتراست، تایپوگرافی و قواعد کامپوننت.</td></tr>
+    <tr><td>۰.۵</td><td>اسکلت مونوریپو + docker-compose + CI</td><td>ساختار پوشه‌ها، AGENTS.md، اسکریپت‌های نصب/آپدیت/بکاپ، اسکلت خالی ولی اجراشدنی روی سرور اوبونتو.</td></tr>
+    <tr><td>۰.۶</td><td>بسته‌ی پرامپت شماره ۱</td><td>اولین پرامپت‌های آماده برای Claude Code: احراز هویت + نقش‌ها + ساختار پایه.</td></tr>
+    <tr><td>۰.۷</td><td>تست عملی 9Router/Claude Code</td><td>با هم چک‌لیست بند ۸ سند ۰۰ را رد می‌کنیم؛ اگر مدل‌ها ضعیف بودند، قبل از شروع سنگین، سوییچ می‌کنیم.</td></tr>
+  </table>
+  <p class="small">وضعیت: ۰.۱ ثبت شد؛ ۰.۲ تا ۰.۴ پیش‌نویس و وایرفریم آماده‌اند. قدم اجرایی بعدی ۰.۵ (اسکلت ریپو) و ۰.۷ (تست 9Router) است؛ سپس بسته‌ی پرامپت ۰.۶ و شروع فاز ۱.</p>
+</section>
+
+<!-- 10 -->
+<section>
+  <h2><span class="n">۱۰</span>ریسک‌های شناخته‌شده و تصمیم‌های باقی‌مانده</h2>
+  <div class="grid">
+    <div class="box">
+      <h4>ریسک‌ها</h4>
+      <ul>
+        <li><b>کیفیت مدل‌های رایگان برای کدنویسی سنگین:</b> راه‌حل‌مان «تسک‌های کوچک و پرامپت دقیق» است؛ در بند ۰.۷ آزمایش می‌کنیم.</li>
+        <li><b>سخت‌افزار سرورهای دانشگاه:</b> سرویس AI را طوری می‌سازیم که روی CPU هم کار کند؛ GPU یک «ارتقا» باشد نه «الزام».</li>
+        <li><b>انتظارات ادیتور:</b> ادیتور غیرفنی است؛ هر قابلیت باید با راهنمای درون‌برنامه‌ای همراه باشد، وگرنه استفاده نمی‌شود.</li>
+        <li><b>سوءاستفاده‌ی احتمالی از داوری:</b> Audit Log و تاریخچه‌ی کامل تصمیم‌ها از روز اول.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h4>تصمیم‌های کوچک باقی‌مانده</h4>
+      <ul>
+        <li>نام برند و دامنه‌ی محصول و سایت شرکتی</li>
+        <li>نمونه‌ی واقعی فایل گواهینامه‌ی یک دانشگاه (برای شروع کافیست یک نمونه‌ی فرضی)</li>
+        <li>سرویس پیامک و ایمیل پیش‌فرض (کاوه‌نگار؟ SMTP دانشگاه؟)</li>
+        <li>درگاه پشتیبانی «زنده» یا سیستم تیکت داخلی برای دانشگاه‌ها</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout">
+    <b>قدم بعدی:</b> جهت بصری تثبیت و پیش‌نویس سند ۰۴ آماده شد؛ گام بعدی تهیه‌ی اسکلت مونوریپو و قواعد ایجنت‌هاست، هم‌زمان با اجرای چک‌لیست عملی 9Router پیش از تسک‌های کدنویسی سنگین. اسناد ۰۲ و ۰۳ آماده‌ی بازبینی‌اند.
+  </div>
+</section>
+
+</div>
+</body>
+</html>
+ند.
+  </div>
+</section>
+
+</div>
+</body>
+</html>

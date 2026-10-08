@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سند ۰۲ — ERD، دیکشنری داده و ماشین وضعیت‌ها</title>
+<style>
+  :root{--bg:#f5f6fa;--card:#fff;--ink:#161a2b;--muted:#5c6478;--line:#e3e6ef;
+    --brand:#3b4fd8;--brand2:#0f9d8f;--violet:#6d28d9;--amber:#b45309;--red:#b91c1c;--green:#15803d}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.9;font-size:14.6px}
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 90px}
+  header.hero{background:linear-gradient(135deg,#1f2a6e,#3b4fd8 55%,#0f9d8f);color:#fff;border-radius:18px;padding:26px;margin-bottom:22px}
+  header.hero h1{margin:0 0 8px;font-size:22px;line-height:1.6}
+  header.hero p{margin:0;opacity:.94;font-size:14.2px}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .meta span{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);padding:4px 10px;border-radius:999px;font-size:12.5px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:0 0 18px}
+  h2{font-size:18px;margin:0 0 12px;padding-bottom:10px;border-bottom:2px solid #eef1fb;color:#22307a}
+  h2 .n{display:inline-block;background:var(--brand);color:#fff;border-radius:8px;font-size:12.5px;padding:2px 9px;margin-left:8px;vertical-align:2px}
+  h3{font-size:15.5px;margin:20px 0 8px;color:#2b3467}
+  h4{font-size:14.2px;margin:14px 0 6px;color:#3a4272}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0;padding-right:22px}
+  li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.4px}
+  th,td{border:1px solid var(--line);padding:7px 9px;text-align:right;vertical-align:top}
+  th{background:#f2f4fc;color:#2b3467;font-weight:700}
+  tr:nth-child(even) td{background:#fafbff}
+  code{background:#f1f3fa;border:1px solid #e3e7f5;border-radius:6px;padding:0 5px;font-family:Consolas,Monaco,monospace;font-size:12.4px;direction:ltr;display:inline-block}
+  pre{direction:ltr;text-align:left;background:#151a2e;color:#dbe2ff;border-radius:12px;padding:14px 16px;overflow-x:auto;font-family:Consolas,Monaco,monospace;font-size:12.4px;line-height:1.7}
+  pre .c{color:#8fa0d8}.k{color:#7ee3c9}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:640px){.grid,.grid2{grid-template-columns:1fr}}
+  .dom{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fcfcff}
+  .dom h4{margin:0;padding:10px 13px;background:#f2f4fc;font-size:14px;color:#22307a;border-bottom:1px solid var(--line)}
+  .dom ul{margin:0;padding:10px 26px 12px 12px}
+  .dom li{font-size:13.2px}
+  .ent{border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin:12px 0;background:#fdfdff}
+  .ent h4{margin:0 0 6px;font-size:14.6px;color:#22307a}
+  .ent h4 code{font-size:13px;background:#eef1fb;border-color:#dde3f7}
+  .ent .purpose{color:var(--muted);font-size:13px;margin:0 0 8px}
+  .fl{margin:0;padding:0;list-style:none}
+  .fl li{font-size:13.1px;margin:2px 0;padding-right:2px}
+  .ty{color:#8a6a3a;font-size:12.2px}
+  .badge{display:inline-block;font-size:10.6px;border-radius:5px;padding:0 5px;margin-right:3px;vertical-align:1px;font-weight:700;line-height:1.7}
+  .b-pk{background:#fde8e8;color:#b91c1c;border:1px solid #f4c7c7}
+  .b-fk{background:#e8f0fe;color:#1d4ed8;border:1px solid #c9dafc}
+  .b-uq{background:#eaf7ef;color:#15803d;border:1px solid #c7e6d3}
+  .b-idx{background:#fff5e6;color:#b45309;border:1px solid #f3ddb6}
+  .b-en{background:#f3e9ff;color:#6d28d9;border:1px solid #e0d2fa}
+  .callout{border-right:5px solid var(--brand);background:#f4f6ff;border-radius:10px;padding:12px 16px;margin:12px 0}
+  .callout.green{border-right-color:var(--brand2);background:#f1fbf9}
+  .callout.warn{border-right-color:var(--amber);background:#fff7ed}
+  .callout.red{border-right-color:var(--red);background:#fef2f2}
+  .small{font-size:12.9px;color:var(--muted)}
+  .en{font-family:Consolas,Monaco,monospace;direction:ltr;display:inline-block}
+  hr{border:none;border-top:1px solid var(--line);margin:16px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>سند ۰۲ — مدل داده: نقشه‌ی دامنه‌ها، دیکشنری داده، ماشین وضعیت‌ها</h1>
+  <p>این سند، «قانون داده»ی سامانه است. از روی آن، <code>schema.prisma</code> و مهاجرت‌ها نوشته می‌شود و پرامپت‌های ایجنت‌ها به آن ارجاع می‌دهند.</p>
+  <div class="meta">
+    <span>وضعیت: پیش‌نویس برای تأیید</span>
+    <span>مکمل اسناد ۰۰ و ۰۱</span>
+    <span>قاعده‌ی طلایی: هر جدول دارای conference_id</span>
+  </div>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="n">۱</span>اصول و قراردادهای مدل داده</h2>
+  <table>
+    <tr><th style="width:24%">موضوع</th><th>قرارداد</th></tr>
+    <tr><td>نام‌گذاری</td><td>دیتابیس: <code>snake_case</code> و جمع (مثل <code>papers</code>، <code>review_assignments</code>) · در Prisma: مدل <code>PascalCase</code> و فیلد <code>camelCase</code> با <code>@@map</code> و <code>@map</code>.</td></tr>
+    <tr><td>کلید اصلی</td><td><code>uuid</code> نسخه ۷ (مرتب بر اساس زمان ⇒ ایندکس‌پذیری بهتر) برای همه‌ی جدول‌ها. هیچ کلید عددی در API لو نمی‌رود ⇒ جلوی حدس‌زدن شناسه‌ها گرفته می‌شود.</td></tr>
+    <tr><td>زمان</td><td>ذخیره: <code>timestamptz</code> (UTC). نمایش: تبدیل به تاریخ شمسی در لایه‌ی ارائه. هر رکورد <code>created_at</code> و <code>updated_at</code> دارد.</td></tr>
+    <tr><td>حذف</td><td>کاربران و مقاله‌ها هرگز سخت‌حذف نمی‌شوند: <code>deleted_at</code> + <code>status</code>. دلایل: شکایت داوری، ممیزی، سابقه‌ی گواهی صادرشده. فایل‌ها هم آرشیو می‌شوند نه پاک.</td></tr>
+    <tr><td>چندهمایشی</td><td>هر جدول دامنه‌ای <code>conference_id</code> دارد (حتی اگر از والد قابل استنتاج باشد) و لایه‌ی داده <b>اجباراً</b> فیلتر می‌زند. یک تست خودکار بررسی می‌کند هیچ کوئر ی بدون فیلتر همایش وجود نداشته باشد.</td></tr>
+    <tr><td>زبان و دو‌زبانگی</td><td>محتوا: جفت فیلد <code>*_fa</code> و <code>*_en</code>. ترجمه‌ی ناقص مجاز است (اگر en خالی بود، fa نمایش داده می‌شود).</td></tr>
+    <tr><td>اسنپ‌شات</td><td>هر چیزی که «سند صادرشده» است (گواهی، فاکتور، نامه) باید <b>کپی داده در زمان صدور</b> را نگه دارد؛ چون ممکن است بعداً نام نویسنده یا عنوان مقاله اصلاح شود ولی گواهی قدیمی نبایست عوض شود.</td></tr>
+    <tr><td>JSONB</td><td>فقط برای داده‌ی بدون اسکیمای ثابت (پاسخ‌های فرم پویا، خروجی خام AI، تنظیمات). هر چیزی که رویش فیلتر/گزارش می‌خواهیم ⇒ ستون واقعی.</td></tr>
+    <tr><td>نمودار ERD گرافیکی</td><td>پس از نوشتن اسکیما، با <code>prisma-erd-generator</code> نمودار کامل به‌صورت خودکار تولید و در همین پوشه ذخیره می‌شود تا همیشه با کد هم‌گام باشد.</td></tr>
+  </table>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="n">۲</span>نقشه‌ی دامنه‌ها (۹ دامنه)</h2>
+  <div class="grid">
+    <div class="dom">
+      <h4>۱) هویت و دسترسی</h4>
+      <ul>
+        <li><code>users</code> — یکتای سراسری با موبایل</li>
+        <li><code>conferences</code> — همایش/دانشگاه</li>
+        <li><code>conference_members</code> — نقش هر فرد در هر همایش</li>
+        <li><code>reviewer_profiles</code> — تخصص، دسترس‌پذیری، ظرفیت</li>
+        <li><code>audit_logs</code> — ردپای همه‌ی کارهای حساس</li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۲) محتوا و محورها</h4>
+      <ul>
+        <li><code>pages</code> , <code>news</code> , <code>important_dates</code></li>
+        <li><code>topic_groups</code> , <code>topics</code> (+ کلیدواژه و بردار)</li>
+        <li><code>scientific_committee</code> , <code>sponsors</code></li>
+        <li><code>slider_images</code> , <code>menu_items</code> , <code>faq_items</code></li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۳) ثبت‌نام</h4>
+      <ul>
+        <li><code>registration_groups</code> — گروه‌ها و تعرفه</li>
+        <li><code>registration_form_fields</code> — فرم‌ساز</li>
+        <li><code>registrations</code> — ثبت‌نام + داده‌ی پویا</li>
+        <li><code>registration_documents</code> — مدارک و تأیید</li>
+        <li><code>payments</code> , <code>invoices</code></li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۴) مقاله و هوش مصنوعی</h4>
+      <ul>
+        <li><code>papers</code> — موجودیت مرکزی</li>
+        <li><code>paper_authors</code> , <code>paper_files</code></li>
+        <li><code>ai_extraction_jobs</code> — هر اجرای موتور</li>
+        <li><code>ai_extraction_fields</code> — خروجی + اصلاح انسانی <b>(دیتاست آموزش)</b></li>
+        <li><code>topic_match_scores</code> , <code>similarity_checks</code></li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۵) داوری و تصمیم</h4>
+      <ul>
+        <li><code>review_forms</code> + <code>sections</code> + <code>items</code></li>
+        <li><code>review_assignments</code> — ارجاع، دعوت، وضعیت</li>
+        <li><code>reviews</code> + <code>review_item_answers</code></li>
+        <li><code>editorial_decisions</code> , <code>decision_reasons</code></li>
+        <li><code>checklist_templates</code> + <code>checklist_runs</code> (policyها)</li>
+        <li><code>status_history</code> — تاریخچه‌ی عمومی وضعیت‌ها</li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۶) گواهینامه</h4>
+      <ul>
+        <li><code>certificate_templates</code> — فایل خام آپلودی</li>
+        <li><code>certificate_placements</code> — مختصات فیلدها</li>
+        <li><code>certificate_signatures</code> — امضاها</li>
+        <li><code>certificate_batches</code> — صدور گروهی</li>
+        <li><code>issued_certificates</code> — کد رهگیری، QR، اسنپ‌شات</li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۷) ارتباطات</h4>
+      <ul>
+        <li><code>message_templates</code> — متن‌های قابل ویرایش ادیتور</li>
+        <li><code>messages</code> — گفت‌وگوی داخلی (ترد)</li>
+        <li><code>notifications</code> — صف ارسال ایمیل/پیامک/درون‌برنامه</li>
+        <li><code>contact_messages</code> — فرم تماس سایت</li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۸) زیرساخت و تنظیمات</h4>
+      <ul>
+        <li><code>files</code> — رجیستری مرکزی فایل‌ها</li>
+        <li><code>settings</code> — کانفیگ هر همایش</li>
+        <li><code>ai_provider_configs</code> — پروایدرها و اولویت و سلامت</li>
+        <li><code>notification_providers</code> — SMTP/پیامک</li>
+        <li><code>licenses</code> , <code>system_health</code></li>
+      </ul>
+    </div>
+    <div class="dom">
+      <h4>۹) آموزش مدل (فاز ۲)</h4>
+      <ul>
+        <li><code>training_examples</code> — جفت «خروجی ماشین ← اصلاح انسانی»</li>
+        <li><code>model_versions</code> — نسخه‌ی موتورهای استخراج/طبقه‌بندی</li>
+        <li><code>evaluation_runs</code> — ارزیابی دقت روی مجموعه‌ی طلایی</li>
+      </ul>
+    </div>
+  </div>
+  <p class="small">سالن اصلی روابط: <b>Conference</b> ⇒ همه؛ <b>User</b> ⇒ مقالات/ثبت‌نام‌ها/ارجاع‌ها؛ <b>Paper</b> ⇒ فایل‌ها/نویسندگان/اجراهای AI/ارجاع‌ها/تصمیم‌ها؛ <b>EditorialDecision</b> ⇒ گواهی‌های قابل صدور.</p>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="n">۳</span>دیکشنری داده — موجودیت‌های اصلی</h2>
+  <p class="small">نمادها: <span class="badge b-pk">PK</span> کلید اصلی · <span class="badge b-fk">FK</span> کلید خارجی · <span class="badge b-uq">UQ</span> یکتا · <span class="badge b-idx">IDX</span> ایندکس · <span class="badge b-en">EN</span> مقدار enum. همه‌ی جدول‌ها <code>id</code>، <code>created_at</code>، <code>updated_at</code> دارند و این‌ها تکرار نمی‌شود.</p>
+
+  <h3>۳.۱ هویت و دسترسی</h3>
+
+  <div class="ent">
+    <h4><code>conferences</code> — همایش</h4>
+    <p class="purpose">هر نصب در فاز اول یک رکورد همایش دارد؛ ساختار از روز اول چندهمایشی است تا آینده‌ی SaaS/SaaS-like بسته نباشد.</p>
+    <ul class="fl">
+      <li><code>slug</code> <span class="ty">text</span> <span class="badge b-uq">UQ</span> — شناسه‌ی خوانا (مثل <code>it-conf-2027</code>)</li>
+      <li><code>name_fa</code>/<code>name_en</code>، <code>short_name_fa</code>/<code>short_name_en</code>، <code>edition</code> (دوره‌ی برگزاری)</li>
+      <li><code>host_organization_fa</code>/<code>_en</code>، <code>logo_file_id</code> <span class="badge b-fk">FK</span>، <code>favicon_file_id</code></li>
+      <li><code>domain</code> <span class="badge b-uq">UQ</span>، <code>default_locale</code>، <code>timezone</code>، <code>brand_tokens</code> <span class="ty">jsonb</span> (رنگ‌ها، شعاع، فونت)</li>
+      <li><code>status</code> <span class="badge b-en">EN</span> draft|live|archived · <code>is_indexable</code> (اجازه‌ی ایندکس موتور جست‌وجو)</li>
+      <li><code>review_mode</code> <span class="badge b-en">EN</span> open|single_blind|double_blind — در تنظیمات هر همایش انتخاب می‌شود؛ حالت سراسری اجباری نداریم.</li>
+      <li><code>max_papers_per_submitter</code> <span class="ty">smallint nullable</span> — سقف ارسال مقاله برای هر حساب در این همایش؛ <code>NULL</code> یعنی بدون سقف.</li>
+      <li><code>starts_at</code>/<code>ends_at</code>، <code>submission_open_at</code>/<code>close_at</code>، <code>review_due_at</code>، <code>results_announce_at</code></li>
+      <li><code>owner_editor_user_id</code> <span class="badge b-fk">FK</span> — ادیتور اصلی</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>users</code> — کاربر</h4>
+    <p class="purpose">یک حساب برای همه‌ی نقش‌ها؛ نقش‌ها در «عضویت همایش» تعریف می‌شوند نه اینجا. یک نفر می‌تواند در یک همایش ادیتور و در همایش دیگر داور باشد.</p>
+    <ul class="fl">
+      <li><code>mobile</code> <span class="badge b-uq">UQ</span> · <code>email</code> <span class="badge b-uq">UQ</span> (nullable) · <code>national_code</code> <span class="badge b-uq">UQ</span> (nullable)</li>
+      <li><code>password_hash</code> (Argon2id) · <code>password_changed_at</code> · <code>must_change_password</code></li>
+      <li><code>first_name_fa</code>/<code>last_name_fa</code>/<code>first_name_en</code>/<code>last_name_en</code> · <code>gender</code> · <code>birth_date</code></li>
+      <li><code>degree</code> <span class="badge b-en">EN</span> · <code>academic_rank</code> · <code>field_of_study</code> · <code>affiliation_fa</code>/<code>_en</code></li>
+      <li><code>country</code>/<code>province</code>/<code>city</code>/<code>address</code>/<code>postal_code</code> · <code>phone</code> · <code>card_number_enc</code> <span class="ty">(رمزنگاری‌شده)</span></li>
+      <li><code>avatar_file_id</code> <span class="badge b-fk">FK</span> · <code>orcid</code> · <code>google_scholar_url</code></li>
+      <li><code>is_active</code> · <code>email_verified_at</code> · <code>mobile_verified_at</code> · <code>two_factor_secret_enc</code></li>
+      <li><code>last_login_at</code> · <code>failed_login_count</code> · <code>locked_until</code> <span class="badge b-idx">IDX</span></li>
+      <li><code>deleted_at</code> — حذف نرم (کاربر حذف نمی‌شود، فقط غیرفعال)</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>conference_members</code> — عضویت و نقش</h4>
+    <p class="purpose">جدول واسط نقش‌ها. ادیتور داور را از اینجا می‌سازد و اکانتش را تحویل می‌دهد.</p>
+    <ul class="fl">
+      <li><code>conference_id</code> <span class="badge b-fk">FK</span> + <code>user_id</code> <span class="badge b-fk">FK</span> + <code>role</code> <span class="badge b-uq">UQ(سه‌گانه)</span></li>
+      <li><code>role</code> <span class="badge b-en">EN</span> super_admin|editor|support|reviewer|committee|author</li>
+      <li><code>status</code> <span class="badge b-en">EN</span> invited|active|suspended</li>
+      <li><code>invited_by</code> <span class="badge b-fk">FK</span> · <code>invited_at</code> · <code>activated_at</code> · <code>invitation_token</code> <span class="badge b-uq">UQ</span> <span class="ty">(کوتاه‌عمر)</span></li>
+      <li><code>permissions_override</code> <span class="ty">jsonb</span> — برای اعطای دسترسی خاص بدون ساختن نقش جدید</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>reviewer_profiles</code> — پروفایل داور</h4>
+    <ul class="fl">
+      <li><code>user_id</code> <span class="badge b-uq">UQ</span> · <code>conference_id</code> <span class="badge b-fk">FK</span></li>
+      <li><code>expertise_keywords</code> <span class="ty">text[]</span> · <code>expertise_topic_ids</code> <span class="ty">uuid[]</span> — برای پیشنهاد هوشمند داور</li>
+      <li><code>max_active_assignments</code> · <code>max_total_assignments</code> · <code>is_available</code> · <code>unavailable_until</code></li>
+      <li><code>bio_fa</code>/<code>_en</code> · <code>bank_iban_enc</code> <span class="ty">(برای حق‌الداوری)</span></li>
+      <li><code>stats</code> <span class="ty">jsonb</span> — تعداد داوری، میانگین زمان پاسخ (به‌روزرسانی شبانه)</li>
+    </ul>
+  </div>
+
+  <!-- papers -->
+  <h3>۳.۲ مقاله و هوش مصنوعی</h3>
+
+  <div class="ent">
+    <h4><code>papers</code> — مقاله (موجودیت مرکزی)</h4>
+    <p class="purpose">هر چیزی در سامانه حول این جدول می‌چرخد: AI، داوری، تصمیم، گواهی.</p>
+    <ul class="fl">
+      <li><code>conference_id</code> <span class="badge b-fk">FK</span> · <code>code</code> <span class="badge b-uq">UQ(همایش+کد)</span> — مثل <code>ITC-0007</code></li>
+      <li><code>submitter_id</code> <span class="badge b-fk">FK</span> — حسابی که مقاله را در سامانه ثبت کرده</li>
+      <li><b>کنترل سقف مقاله:</b> شمارش به‌ازای <code>conference_id + submitter_id</code> و در تراکنش امن انجام می‌شود؛ نویسندگان همکارِ ثبت‌شده در <code>paper_authors</code> به‌تنهایی سهمیه‌ی فرستنده را مصرف نمی‌کنند.</li>
+      <li><code>title_fa</code>/<code>title_en</code> · <code>abstract_fa</code>/<code>abstract_en</code> · <code>keywords</code> <span class="ty">text[]</span></li>
+      <li><code>language</code> <span class="badge b-en">EN</span> fa|en · <code>pages_count</code> · <code>word_count</code></li>
+      <li><code>topic_id</code> <span class="badge b-fk">FK</span> — محور نهایی (انتخاب‌شده یا پیشنهاد AI تأییدشده)</li>
+      <li><code>topic_confidence</code> <span class="ty">numeric</span> · <code>topic_chosen_by</code> <span class="badge b-en">EN</span> ai|author|editor</li>
+      <li><code>status</code> <span class="badge b-en">EN</span> <span class="badge b-idx">IDX</span> (فهرست کامل در بند ۵)</li>
+      <li><code>round</code> (دور داوری) · <code>version</code> · <code>is_locked</code> (قفل بعد از مهلت)</li>
+      <li><code>presentation_preference</code> <span class="badge b-en">EN</span> · <code>presentation_type</code> <span class="badge b-en">EN</span> (تصمیم نهایی ادیتور)</li>
+      <li><code>similarity_score</code> · <code>ai_summary_for_editor</code> <span class="ty">text</span></li>
+      <li><code>submitted_at</code> · <code>last_status_change_at</code> · <code>published_at</code> (زمان انتشار در لیست پذیرفته‌شده‌ها)</li>
+      <li><code>search_vector</code> <span class="ty">tsvector</span> <span class="badge b-idx">IDX(GIN)</span> — جست‌وجوی سریع عنوان/چکیده/کلیدواژه</li>
+      <li><code>deleted_at</code> — حذف نرم با دلیل در <code>status_history</code></li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>paper_authors</code> — نویسندگان</h4>
+    <ul class="fl">
+      <li><code>paper_id</code> <span class="badge b-fk">FK</span> · <code>order</code> <span class="badge b-uq">UQ(مقاله+ترتیب)</span> · <code>user_id</code> <span class="badge b-fk">FK</span> (nullable — نویسنده‌ی خارجی حساب ندارد)</li>
+      <li><code>first_name_fa</code>/<code>last_name_fa</code>/<code>first_name_en</code>/<code>last_name_en</code></li>
+      <li><code>affiliation_fa</code>/<code>_en</code> · <code>country</code> · <code>email</code> · <code>mobile</code> · <code>orcid</code></li>
+      <li><code>is_corresponding</code> <span class="badge b-uq">UQ(مقاله+یک مسئول)</span> · <code>role</code> <span class="badge b-en">EN</span> author|presenter|both</li>
+      <li><code>is_attending</code> · <code>certificate_eligible</code> (خروجی مرحله‌ی تأیید حضور)</li>
+      <li><code>source</code> <span class="badge b-en">EN</span> manual|ai_extracted (از کجا آمده)</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>paper_files</code> + <code>files</code> — فایل‌های مقاله</h4>
+    <ul class="fl">
+      <li><code>paper_id</code> <span class="badge b-fk">FK</span> · <code>kind</code> <span class="badge b-en">EN</span> manuscript|abstract|figures|copyright|revision_response|final_fulltext|presentation_file</li>
+      <li><code>version</code> · <code>is_current</code> · <code>file_id</code> <span class="badge b-fk">FK</span> · <code>uploaded_by</code> <span class="badge b-fk">FK</span> · <code>note</code></li>
+      <li>در <code>files</code>: <code>storage_key</code> <span class="badge b-uq">UQ</span> (مسیر تصادفی، غیرقابل حدس)، <code>original_name</code>، <code>mime</code>، <code>size_bytes</code>، <code>checksum_sha256</code>، <code>access_level</code> <span class="badge b-en">EN</span> public|authenticated|restricted، <code>scan_status</code></li>
+      <li><b>قاعده:</b> هیچ فایلی با URL مستقیم سرو نمی‌شود؛ فقط با لینک امضاشده و منقضی‌شونده.</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>ai_extraction_jobs</code> — هر اجرای موتور هوش مصنوعی <span class="badge b-en">EN</span></h4>
+    <p class="purpose">هر بار آپلود مقاله یا هر بار اجرای دستی، یک رکورد. این جدول، تاریخچه‌ی فنی و پاسخ‌گویی است.</p>
+    <ul class="fl">
+      <li><code>conference_id</code>, <code>paper_id</code> <span class="badge b-fk">FK</span> (nullable — پیش از ساخت مقاله هم اجرا می‌شود), <code>file_id</code> <span class="badge b-fk">FK</span></li>
+      <li><code>engine</code> <span class="badge b-en">EN</span> rules|embedding|local_llm|api_llm (لایه‌ی ۰ تا ۳ سند ۰۱)</li>
+      <li><code>provider</code> · <code>model_name</code> · <code>model_version</code> <span class="badge b-fk">FK</span> (به <code>model_versions</code>)</li>
+      <li><code>status</code> <span class="badge b-en">EN</span> queued|running|succeeded|partial|failed · <code>fallback_level</code> <span class="ty">smallint</span></li>
+      <li><code>started_at</code> · <code>finished_at</code> · <code>duration_ms</code> · <code>tokens_in</code>/<code>tokens_out</code> · <code>cost</code></li>
+      <li><code>raw_output</code> <span class="ty">jsonb</span> · <code>warnings</code> <span class="ty">jsonb</span> (مثل «فرمول ریاضی استخراج نشد») · <code>error_code</code>/<code>error_message</code></li>
+      <li><code>triggered_by</code> <span class="badge b-fk">FK</span> — نویسنده یا ادیتور</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>ai_extraction_fields</code> — خروجی هر فیلد <span class="badge b-en">EN</span></h4>
+    <p class="purpose"><b>مهم‌ترین جدول برای آینده‌ی مدل خودمان:</b> هم خروجی ماشین را نگه می‌دارد، هم اصلاح انسانی را. از دل همین، دیتاست Fine-tune بیرون می‌آید.</p>
+    <ul class="fl">
+      <li><code>job_id</code> <span class="badge b-fk">FK</span> · <code>field_key</code> <span class="badge b-en">EN</span> title|abstract|keywords|references|authors|topic|language|pages</li>
+      <li><code>machine_value</code> <span class="ty">jsonb</span> · <code>confidence</code> <span class="ty">numeric</span> · <code>method</code> · <code>source_excerpt</code> <span class="ty">text</span> (تکه‌ی متنی که مبنای استخراج بود ⇒ برای توضیح‌پذیری)</li>
+      <li><code>human_value</code> <span class="ty">jsonb</span> · <code>edited_by</code> <span class="badge b-fk">FK</span> · <code>edited_at</code> · <code>is_accepted</code> <span class="ty">bool</span></li>
+      <li><code>training_eligible</code> <span class="ty">bool</span> — با رضایت و بدون داده هویتی</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>topic_match_scores</code> — امتیاز تطبیق محوریت</h4>
+    <ul class="fl">
+      <li><code>paper_id</code> <span class="badge b-fk">FK</span> (nullable) · <code>job_id</code> <span class="badge b-fk">FK</span> · <code>topic_id</code> <span class="badge b-fk">FK</span></li>
+      <li><code>method</code> <span class="badge b-en">EN</span> embedding|llm|hybrid · <code>score</code> <span class="ty">numeric</span> · <code>rank</code></li>
+      <li><code>selected_by_ai</code> · <code>selected_by_user</code> — برای سنجش دقت مدل در گذر زمان</li>
+    </ul>
+  </div>
+
+  <!-- review -->
+  <h3>۳.۳ داوری و تصمیم</h3>
+
+  <div class="ent">
+    <h4><code>review_forms</code> + <code>review_form_sections</code> + <code>review_form_items</code></h4>
+    <p class="purpose">ادیتور فرم داوری را می‌سازد/ویرایش می‌کند؛ سامانه‌های رقیب هم این را دارند و باید دقیق پیاده شود.</p>
+    <ul class="fl">
+      <li>فرم: <code>name</code> · <code>round</code> · <code>is_active</code> · <code>instructions_fa</code>/<code>_en</code> · <code>total_weight</code></li>
+      <li>بخش: <code>title_fa</code>/<code>_en</code> · <code>order</code></li>
+      <li>آیتم: <code>type</code> <span class="badge b-en">EN</span> score|select|radio|checkbox|text|textarea|file_by_reviewer · <code>min_score</code>/<code>max_score</code> · <code>weight</code> · <code>options</code> <span class="ty">jsonb</span> · <code>is_required</code> · <code>order</code> · <code>feeds_summary</code></li>
+      <li><b>قاعده:</b> فرم‌های استفاده‌شده نسخه‌بندی می‌شوند؛ ویرایش فرمِ گذشته، نظرهای ثبت‌شده را خراب نمی‌کند (Review به نسخه‌ی فرم قفل می‌شود).</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>review_assignments</code> — ارجاع به داور</h4>
+    <ul class="fl">
+      <li><code>paper_id</code> <span class="badge b-fk">FK</span> · <code>reviewer_id</code> <span class="badge b-fk">FK</span> · <code>assigned_by</code> <span class="badge b-fk">FK</span> · <code>round</code> <span class="badge b-uq">UQ(مقاله+داور+دور)</span></li>
+      <li><code>status</code> <span class="badge b-en">EN</span> pending|invited|accepted|declined|in_progress|submitted|expired|cancelled</li>
+      <li><code>due_at</code> <span class="badge b-idx">IDX</span> · <code>invited_at</code> · <code>responded_at</code> · <code>submitted_at</code> · <code>reminders_sent</code></li>
+      <li><code>decline_reason</code> · <code>decline_category</code> <span class="badge b-en">EN</span> conflict_of_interest|out_of_scope|no_time|other</li>
+      <li><code>review_mode_snapshot</code> <span class="badge b-en">EN</span> — snapshot از حالت داوری همایش هنگام ارجاع: open|single_blind|double_blind؛ حفظ رفتار هر ارجاع حتی اگر تنظیم همایش بعداً تغییر کند.</li>
+      <li><code>recommendation</code> <span class="badge b-en">EN</span> — خلاصه‌ی نظر داور برای نمایش سریع در جدول ادیتور</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>reviews</code> + <code>review_item_answers</code></h4>
+    <ul class="fl">
+      <li><code>assignment_id</code> <span class="badge b-uq">UQ</span> · <code>form_version_id</code> <span class="badge b-fk">FK</span> · <code>submitted_at</code> · <code>is_submitted</code></li>
+      <li><code>total_score</code> <span class="ty">numeric</span> · <code>score_breakdown</code> <span class="ty">jsonb</span> · <code>confidence_level</code> <span class="badge b-en">EN</span> low|medium|high</li>
+      <li><code>recommendation</code> <span class="badge b-en">EN</span> accept|minor_revision|major_revision|reject</li>
+      <li><code>comments_to_author</code> (متنی که به نویسنده نشان داده می‌شود) · <code>comments_to_editor</code> (محرمانه)</li>
+      <li><code>time_spent_minutes</code> — برای گزارش کارکرد داوران و آینده‌ی حق‌الداوری</li>
+      <li>پاسخ‌ها: <code>review_id</code> + <code>item_id</code> + <code>value_number</code>/<code>value_text</code>/<code>value_option</code>/<code>value_json</code></li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>editorial_decisions</code> — تصمیم ادیتور</h4>
+    <ul class="fl">
+      <li><code>paper_id</code> <span class="badge b-fk">FK</span> · <code>round</code> · <code>decided_by</code> <span class="badge b-fk">FK</span> · <code>decided_at</code></li>
+      <li><code>outcome</code> <span class="badge b-en">EN</span> return_to_author|assign_to_review|desk_reject|accept|accept_with_revision|reject</li>
+      <li><code>reason_id</code> <span class="badge b-fk">FK</span> (از فهرست دلایل آماده) · <code>reason_text_author</code> · <code>internal_note</code></li>
+      <li><code>presentation_type</code> <span class="badge b-en">EN</span> — در تصمیم پذیرش تعیین می‌شود</li>
+      <li><code>revision_deadline</code> · <code>message_template_id</code> <span class="badge b-fk">FK</span> — پیامی که به نویسنده رفت</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>decision_reasons</code> — دلایل آماده‌ی بازگشت/رد</h4>
+    <p class="purpose">دقیقاً همان «به دلایل مشخص ریجکت بشه» در حرف تو: ادیتور از فهرست آماده انتخاب می‌کند و متن استاندارد برای نویسنده تولید می‌شود.</p>
+    <ul class="fl">
+      <li><code>conference_id</code> · <code>code</code> · <code>title_fa</code>/<code>_en</code> · <code>body_fa</code>/<code>_en</code> (متن آماده) · <code>stage</code> <span class="badge b-en">EN</span> desk_review|post_review|any · <code>is_active</code> · <code>order</code></li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>checklist_templates</code> + <code>checklist_runs</code> — بررسی policy ادیتور</h4>
+    <p class="purpose">سیاست‌های همایش (تعداد صفحات، طول چکیده، قالب‌بندی، اجازه‌ی چند مقاله از یک نویسنده…) به‌صورت چک‌لیست قابل تنظیم. بیشتر آیتم‌ها را سامانه خودکار چک می‌کند و ادیتور فقط نتیجه را تأیید می‌کند.</p>
+    <ul class="fl">
+      <li>قالب: <code>name</code> · <code>stage</code> · آیتم‌ها: <code>label_fa</code>/<code>_en</code> · <code>type</code> manual|auto_rule · <code>rule_key</code> (مثل <code>min_abstract_words</code>) · <code>is_blocking</code> · <code>order</code></li>
+      <li>اجرا: <code>paper_id</code> · <code>template_version</code> · <code>completed_by</code> · <code>result</code> <span class="badge b-en">EN</span> passed|returned|rejected · <code>answers</code> <span class="ty">jsonb</span></li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>status_history</code> — تاریخچه‌ی وضعیت (عمومی)</h4>
+    <ul class="fl">
+      <li><code>conference_id</code> · <code>entity_type</code> <span class="badge b-en">EN</span> paper|registration|assignment|certificate · <code>entity_id</code> <span class="badge b-idx">IDX(نوع+شناسه+زمان)</span></li>
+      <li><code>from_status</code>/<code>to_status</code> · <code>actor_id</code> <span class="badge b-fk">FK</span> · <code>actor_role</code> · <code>reason</code> · <code>meta</code> <span class="ty">jsonb</span></li>
+    </ul>
+  </div>
+
+  <!-- cert -->
+  <h3>۳.۴ گواهینامه (تمایز اصلی شما)</h3>
+
+  <div class="ent">
+    <h4><code>certificate_templates</code> — قالب گواهینامه</h4>
+    <p class="purpose">ادیتور «فایل خام» گواهی دانشگاه را آپلود می‌کند؛ این جدول و دو جدول بعدی، سازوکار جای‌گذاری فیلدها روی همان فایل است.</p>
+    <ul class="fl">
+      <li><code>conference_id</code> · <code>name</code> · <code>kind</code> <span class="badge b-en">EN</span> attendance|presentation|review|workshop|committee|custom</li>
+      <li><code>background_file_id</code> <span class="badge b-fk">FK</span> — تصویر/PDF خام آپلودی</li>
+      <li><code>page_width_mm</code>/<code>page_height_mm</code>/<code>orientation</code> — اگر A4 تشخیص داده شد، خودکار پر می‌شود</li>
+      <li><code>background_fit</code> <span class="badge b-en">EN</span> cover|contain · <code>bleed</code> — تنظیم دقیق چاپ</li>
+      <li><code>version</code> · <code>is_active</code> · <code>created_by</code> <span class="badge b-fk">FK</span></li>
+      <li><b>قاعده:</b> قالب استفاده‌شده غیرقابل ویرایش مستقیم است؛ ویرایش = ساخت نسخه‌ی جدید (گواهی‌های صادرشده معتبر می‌مانند).</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>certificate_placements</code> — مختصات فیلدها روی قالب</h4>
+    <ul class="fl">
+      <li><code>template_id</code> <span class="badge b-fk">FK</span> · <code>field_key</code> <span class="badge b-en">EN</span> full_name|paper_title|role_title|conference_name|jalali_date|serial_no|verify_qr|verify_code|signature|custom_text</li>
+      <li>موقعیت: <code>x_mm</code>/<code>y_mm</code>/<code>width_mm</code>/<code>height_mm</code> (دقت میلی‌متری، مستقل از رزولوشن تصویر)</li>
+      <li>تایپوگرافی: <code>font_family</code> · <code>font_size_pt</code> · <code>color</code> · <code>align</code> · <code>line_height</code> · <code>is_bold</code> · <code>direction</code></li>
+      <li>قالب‌بندی داده: <code>date_format</code> <span class="badge b-en">EN</span> jalali_numeric|jalali_words|gregorian · <code>text_transform</code> · <code>fallback_text</code></li>
+      <li><code>sample_value</code> — برای پیش‌نمایش زنده در ویرایشگر قالب</li>
+      <li><code>auto_shrink</code> — اگر عنوان مقاله طولانی بود، سامانه فونت را تا حد تعیین‌شده کوچک کند تا از کادر بیرون نزند</li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>certificate_signatures</code> — امضا و مهر روی گواهی</h4>
+    <ul class="fl">
+      <li><code>template_id</code> <span class="badge b-fk">FK</span> · <code>image_file_id</code> <span class="badge b-fk">FK</span> · مختصات <code>x_mm</code>/<code>y_mm</code>/<code>w_mm</code>/<code>h_mm</code></li>
+      <li><code>signer_name</code> · <code>signer_title_fa</code>/<code>_en</code> · <code>order</code></li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>certificate_batches</code> — صدور گروهی</h4>
+    <ul class="fl">
+      <li><code>conference_id</code> · <code>template_id</code> <span class="badge b-fk">FK</span> · <code>kind</code> · <code>audience</code> <span class="badge b-en">EN</span> presenters|all_confirmed_attendees|reviewers|committee|custom_selection</li>
+      <li><code>filters</code> <span class="ty">jsonb</span> — (مثلاً فقط کسانی که مقاله‌شان پذیرش نهایی گرفته و حضورشان تأیید شده)</li>
+      <li><code>total_count</code> · <code>success_count</code> · <code>failed_count</code> · <code>status</code> <span class="badge b-en">EN</span> queued|generating|completed|partial|failed</li>
+      <li><code>zip_file_id</code> <span class="badge b-fk">FK</span> — خروجی یکجا · <code>errors</code> <span class="ty">jsonb</span> · <code>created_by</code> · <code>finished_at</code></li>
+    </ul>
+  </div>
+
+  <div class="ent">
+    <h4><code>issued_certificates</code> — گواهی صادرشده</h4>
+    <ul class="fl">
+      <li><code>conference_id</code> · <code>template_id</code> <span class="badge b-fk">FK</span> · <code>batch_id</code> <span class="badge b-fk">FK</span> · <code>kind</code></li>
+      <li><code>recipient_user_id</code> <span class="badge b-fk">FK</span> (nullable — ممکن است گیرنده حساب کاربری نداشته باشد) · <code>paper_id</code> <span class="badge b-fk">FK</span> (برای گواهی مقاله)</li>
+      <li><b><code>recipient_snapshot</code> <span class="ty">jsonb</span></b> — نام، عنوان مقاله، وابستگی، نقش، در لحظه‌ی صدور (تغییرات بعدی، گواهی قدیمی را عوض نمی‌کند)</li>
+      <li><code>serial_no</code> <span class="badge b-uq">UQ(همایش+سری)</span> · <code>verify_code</code> <span class="badge b-uq">UQ</span> — کد کوتاه تصادفی برای صفحه‌ی اعتبارسنجی</li>
+      <li><code>issued_at</code> · <code>issue_date_jalali</code> · <code>pdf_file_id</code> <span class="badge b-fk">FK</span> · <code>png_preview_file_id</code></li>
+      <li><code>emailed_at</code> · <code>first_downloaded_at</code> · <code>download_count</code> · <code>sms_sent_at</code></li>
+      <li><code>status</code> <span class="badge b-en">EN</span> valid|revoked · <code>revoked_reason</code> · <code>revoked_by</code> — برای لغو گواهی صادرشده به‌اشتباه (بدون حذف رکورد)</li>
+    </ul>
+  </div>
+
+  <!-- others -->
+  <h3>۳.۵ دیکشنری فشرده — سایر موجودیت‌ها</h3>
+  <table>
+    <tr><th style="width:22%">موجودیت</th><th>فیلدهای کلیدی</th></tr>
+    <tr><td><code>topic_groups</code></td><td><code>conference_id</code> · <code>title_fa</code>/<code>_en</code> · <code>order</code> · <code>is_visible</code></td></tr>
+    <tr><td><code>topics</code></td><td><code>topic_group_id</code> <span class="badge b-fk">FK</span> · <code>conference_id</code> · <code>code</code> · <code>title_fa</code>/<code>_en</code> · <code>description_fa</code>/<code>_en</code> · <code>keywords</code> <span class="ty">text[]</span> · <code>embedding</code> <span class="ty">vector</span> <span class="badge b-en">EN</span> (برای تطبیق) · <code>is_active</code> · <code>order</code> · <code>capacity</code></td></tr>
+    <tr><td><code>registration_groups</code></td><td><code>conference_id</code> · <code>title_fa</code>/<code>_en</code> · <code>fee_amount</code> · <code>discount_percent</code> · <code>requires_document_kinds</code> · <code>allowed_degree_levels</code> · <code>capacity</code> · <code>is_active</code></td></tr>
+    <tr><td><code>registration_form_fields</code></td><td><code>conference_id</code> · <code>key</code> <span class="badge b-uq">UQ(همایش+کلید)</span> · <code>label_fa</code>/<code>_en</code> · <code>type</code> · <code>options</code> <span class="ty">jsonb</span> · <code>is_required</code> · <code>is_visible</code> · <code>visible_if</code> <span class="ty">jsonb</span> (نمایش شرطی بر اساس گروه) · <code>validation</code> <span class="ty">jsonb</span> · <code>order</code></td></tr>
+    <tr><td><code>registrations</code></td><td><code>conference_id</code> · <code>user_id</code> · <code>group_id</code> <span class="badge b-fk">FK</span> · <code>status</code> <span class="badge b-en">EN</span> draft|awaiting_documents|pending_payment|confirmed|cancelled · <code>attendance_mode</code> <span class="badge b-en">EN</span> in_person|virtual · <code>dynamic_data</code> <span class="ty">jsonb</span> · <code>invoice_total</code> · <code>discount_applied</code> · <code>confirmed_at</code> · <code>confirmed_by</code> · <code>companion_count</code></td></tr>
+    <tr><td><code>registration_documents</code></td><td><code>registration_id</code> · <code>file_id</code> · <code>kind</code> · <code>status</code> <span class="badge b-en">EN</span> pending|approved|rejected · <code>reviewed_by</code> · <code>review_note</code></td></tr>
+    <tr><td><code>invoices</code> / <code>payments</code></td><td><code>registration_id</code> · <code>amount</code> · <code>items</code> <span class="ty">jsonb</span> · <code>status</code> · <code>gateway</code>/<code>ref_id</code>/<code>paid_at</code>. <b>دامنه‌ی فاز بعد:</b> در MVP هیچ درگاه یا جریان پرداختی فعال نمی‌شود؛ پس از MVP، اتصال از طریق API و آداپتور قابل‌تعویض انجام خواهد شد.</td></tr>
+    <tr><td><code>pages</code> / <code>news</code></td><td>صفحات ثابت و اخبار: <code>slug</code> · <code>title_fa</code>/<code>_en</code> · <code>body_fa</code>/<code>_en</code> · <code>cover_file_id</code> · <code>seo</code> <span class="ty">jsonb</span> · <code>is_published</code> · <code>published_at</code> · <code>view_count</code></td></tr>
+    <tr><td><code>important_dates</code></td><td><code>title_fa</code>/<code>_en</code> · <code>date_gregorian</code> · <code>date_jalali_text</code> · <code>is_deadline</code> · <code>order</code></td></tr>
+    <tr><td><code>scientific_committee</code></td><td><code>name_fa</code>/<code>_en</code> · <code>role_title_fa</code>/<code>_en</code> · <code>affiliation</code> · <code>photo_file_id</code> · <code>order</code> · <code>is_visible</code></td></tr>
+    <tr><td><code>sponsors</code> / <code>slider_images</code> / <code>menu_items</code> / <code>faq_items</code></td><td>همه با <code>conference_id</code>، جفت fa/en، <code>file_id</code>/<code>url</code>، <code>order</code>، <code>is_visible</code></td></tr>
+    <tr><td><code>message_templates</code></td><td><code>event_key</code> <span class="badge b-uq">UQ(همایش+رویداد+کانال)</span> · <code>channel</code> <span class="badge b-en">EN</span> email|sms|in_app · <code>subject_fa</code>/<code>_en</code> · <code>body_fa</code>/<code>_en</code> · <code>variables</code> <span class="ty">jsonb</span> · <code>is_active</code></td></tr>
+    <tr><td><code>messages</code></td><td>گفت‌وگوی داخلی: <code>paper_id</code> · <code>thread_key</code> · <code>sender_id</code> · <code>recipient_id</code> · <code>body</code> · <code>attachment_file_id</code> · <code>read_at</code></td></tr>
+    <tr><td><code>notifications</code></td><td><code>user_id</code> · <code>channel</code> · <code>template_id</code> · <code>payload</code> <span class="ty">jsonb</span> · <code>status</code> <span class="badge b-en">EN</span> queued|sent|failed|delivered|read · <code>provider_message_id</code> · <code>retries</code> · <code>error</code> · <code>sent_at</code> · <code>read_at</code></td></tr>
+    <tr><td><code>contact_messages</code></td><td><code>name</code> · <code>email</code> · <code>mobile</code> · <code>subject</code> · <code>body</code> · <code>status</code> · <code>handled_by</code></td></tr>
+    <tr><td><code>settings</code></td><td><code>conference_id</code> · <code>key</code> <span class="badge b-uq">UQ(همایش+کلید)</span> · <code>value</code> <span class="ty">jsonb</span> · <code>group</code> · <code>is_public</code> (اگر true، در API عمومی سایت هم می‌آید)</td></tr>
+    <tr><td><code>ai_provider_configs</code></td><td><code>name</code> · <code>kind</code> <span class="badge b-en">EN</span> openai_compatible|ollama|local_engine · <code>base_url</code> · <code>api_key_enc</code> · <code>model</code> · <code>tier</code> <span class="badge b-en">EN</span> primary|secondary|api|fallback · <code>priority</code> · <code>is_enabled</code> · <code>health_status</code> · <code>last_check_at</code> · <code>avg_latency_ms</code> · <code>monthly_budget</code>/<code>used_this_month</code></td></tr>
+    <tr><td><code>notification_providers</code></td><td>SMTP و پیامک: <code>kind</code> · <code>config_enc</code> <span class="ty">jsonb</span> · <code>from_address</code> · <code>is_default</code> · <code>daily_quota</code>/<code>used_today</code></td></tr>
+    <tr><td><code>audit_logs</code></td><td><code>conference_id</code> · <code>actor_id</code> · <code>actor_role</code> · <code>action</code> <span class="badge b-idx">IDX</span> · <code>entity_type</code>/<code>entity_id</code> · <code>before</code>/<code>after</code> <span class="ty">jsonb</span> · <code>ip</code> · <code>user_agent</code> · <code>request_id</code></td></tr>
+    <tr><td><code>licenses</code></td><td><code>installation_id</code> <span class="badge b-uq">UQ</span> · <code>customer_name</code> · <code>domain</code> · <code>plan</code> · <code>seats</code> · <code>features</code> <span class="ty">jsonb</span> · <code>issued_at</code> · <code>expires_at</code> · <code>signed_payload</code> · <code>status</code></td></tr>
+    <tr><td><code>system_health</code></td><td><code>checked_at</code> · <code>service</code> · <code>status</code> · <code>latency_ms</code> · <code>details</code> <span class="ty">jsonb</span> — لاگ پایش سرویس‌های AI/DB/Storage</td></tr>
+    <tr><td><code>training_examples</code> <span class="small">(فاز ۲)</span></td><td><code>job_field_id</code> <span class="badge b-fk">FK</span> · <code>input_snippet</code> · <code>machine_output</code> · <code>gold_output</code> · <code>reviewed_by</code> · <code>split</code> train|val|test · <code>is_eligible</code></td></tr>
+    <tr><td><code>model_versions</code> <span class="small">(فاز ۲)</span></td><td><code>task</code> extraction|topic_classification|embedding · <code>base_model</code> · <code>version</code> · <code>artifact_path</code> · <code>metrics</code> <span class="ty">jsonb</span> · <code>is_active</code> · <code>deployed_at</code></td></tr>
+  </table>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="n">۴</span>فهرست کامل Enumها (نام‌گذاری کد)</h2>
+  <table>
+    <tr><th style="width:22%">Enum</th><th>مقادیر</th></tr>
+    <tr><td><code>PaperStatus</code></td><td><span class="en">draft, submitted, desk_review, returned_to_author, revised, assigned_to_reviewers, under_review, awaiting_decision, accepted, accepted_with_revision, rejected, withdrawn, published</span></td></tr>
+    <tr><td><code>RegistrationStatus</code></td><td><span class="en">draft, awaiting_documents, pending_payment, confirmed, cancelled</span></td></tr>
+    <tr><td><code>ReviewMode</code></td><td><span class="en">open, single_blind, double_blind</span></td></tr>
+    <tr><td><code>AssignmentStatus</code></td><td><span class="en">pending, invited, accepted, declined, in_progress, submitted, expired, cancelled</span></td></tr>
+    <tr><td><code>ReviewRecommendation</code></td><td><span class="en">accept, minor_revision, major_revision, reject</span></td></tr>
+    <tr><td><code>DecisionOutcome</code></td><td><span class="en">return_to_author, assign_to_review, desk_reject, accept, accept_with_revision, reject</span></td></tr>
+    <tr><td><code>ExtractionStatus</code></td><td><span class="en">queued, running, succeeded, partial, failed</span></td></tr>
+    <tr><td><code>ExtractionEngine</code></td><td><span class="en">rules, embedding, local_llm, api_llm</span></td></tr>
+    <tr><td><code>CertificateKind</code></td><td><span class="en">attendance, presentation, review, workshop, committee, custom</span></td></tr>
+    <tr><td><code>BatchStatus</code></td><td><span class="en">queued, generating, completed, partial, failed</span></td></tr>
+    <tr><td><code>MemberRole</code></td><td><span class="en">super_admin, editor, support, reviewer, committee, author</span></td></tr>
+    <tr><td><code>PresentationType</code></td><td><span class="en">oral, poster, virtual, multimedia, workshop</span></td></tr>
+    <tr><td><code>NotificationChannel</code> / <code>NotificationStatus</code></td><td><span class="en">email, sms, in_app</span> / <span class="en">queued, sent, failed, delivered, read</span></td></tr>
+    <tr><td><code>FileAccessLevel</code></td><td><span class="en">public, authenticated, restricted</span></td></tr>
+  </table>
+  <p class="small">قاعده: هیچ‌جا «رشته‌ی وضعیت» به‌صورت آزاد ذخیره نمی‌شود؛ همه از enum می‌آید تا گزارش‌گیری و ماشین وضعیت قابل اتکا باشد.</p>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="n">۵</span>ماشین وضعیت مقاله و قواعد گذار</h2>
+  <div class="grid2">
+    <div>
+      <table>
+        <tr><th style="width:30%">از وضعیت</th><th style="width:26%">رویداد</th><th>به وضعیت</th><th style="width:16%">مجاز برای</th></tr>
+        <tr><td>—</td><td>ثبت پیش‌نویس</td><td><code>draft</code></td><td>نویسنده</td></tr>
+        <tr><td><code>draft</code></td><td>ارسال نهایی</td><td><code>submitted</code></td><td>نویسنده</td></tr>
+        <tr><td><code>submitted</code></td><td>شروع بررسی</td><td><code>desk_review</code></td><td>ادیتور (خودکار)</td></tr>
+        <tr><td><code>desk_review</code></td><td>ایراد شکلی</td><td><code>returned_to_author</code></td><td>ادیتور</td></tr>
+        <tr><td><code>desk_review</code></td><td>رد بدون داوری</td><td><code>rejected</code></td><td>ادیتور</td></tr>
+        <tr><td><code>desk_review</code></td><td>تأیید و ارجاع</td><td><code>assigned_to_reviewers</code></td><td>ادیتور</td></tr>
+        <tr><td><code>returned_to_author</code></td><td>اصلاح و ارسال مجدد</td><td><code>revised</code></td><td>نویسنده</td></tr>
+        <tr><td><code>revised</code></td><td>بررسی نسخه‌ی جدید</td><td><code>desk_review</code></td><td>ادیتور</td></tr>
+        <tr><td><code>assigned_to_reviewers</code></td><td>شروع داوری</td><td><code>under_review</code></td><td>داور (خودکار)</td></tr>
+        <tr><td><code>under_review</code></td><td>همه‌ی نظرات رسید</td><td><code>awaiting_decision</code></td><td>سیستم</td></tr>
+        <tr><td><code>awaiting_decision</code></td><td>پذیرش</td><td><code>accepted</code></td><td>ادیتور</td></tr>
+        <tr><td><code>awaiting_decision</code></td><td>پذیرش مشروط</td><td><code>accepted_with_revision</code></td><td>ادیتور</td></tr>
+        <tr><td><code>awaiting_decision</code></td><td>رد پس از داوری</td><td><code>rejected</code></td><td>ادیتور</td></tr>
+        <tr><td><code>accepted_with_revision</code></td><td>ارسال نسخه‌ی نهایی</td><td><code>accepted</code></td><td>نویسنده + تأیید ادیتور</td></tr>
+        <tr><td><code>accepted</code></td><td>انتشار در سایت</td><td><code>published</code></td><td>ادیتور</td></tr>
+        <tr><td>هر وضعیت قبل از accepted</td><td>انصراف نویسنده</td><td><code>withdrawn</code></td><td>نویسنده</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="callout">
+        <b>قواعد سخت ماشین وضعیت</b>
+        <ul>
+          <li>هر گذار <b>یک رکورد در <code>status_history</code></b> می‌سازد: چه کسی، چه زمانی، با چه دلیلی.</li>
+          <li>گذارهای غیرمجاز در لایه‌ی سرویس رد می‌شوند (نه در UI) — یعنی API هم نمی‌تواند وضعیت را بپرد.</li>
+          <li>هر گذار می‌تواند یک <b>قالب پیام</b> و یک <b>اعلان</b> را فعال کند (مپ رویداد ← قالب).</li>
+          <li>پس از <code>accepted</code>: نویسنده اجازه‌ی تغییر محتوا ندارد؛ فقط فایل نهایی و رضایت‌نامه.</li>
+          <li><code>rejected</code> و <code>withdrawn</code> فقط با دلیل ثبت‌شده ممکن است.</li>
+          <li>تغییر دستی وضعیت توسط ادمین مجاز است اما با پرچم <code>forced: true</code> در تاریخچه و لاگ ممیزی ثبت می‌شود.</li>
+        </ul>
+      </div>
+      <div class="callout green">
+        <b>محوریت (تطبیق AI) در چرخه:</b> هنگام ارسال مقاله، لایه‌های ۰ و ۱ و (در صورت وجود) ۲ اجرا و ۲–۳ محور کاندید با امتیاز ذخیره می‌شوند. نویسنده یکی را تأیید یا تغییر می‌دهد. ادیتور در مرحله‌ی بررسی می‌تواند محور را نهایی کند. هر دو انتخاب در <code>topic_match_scores</code> ثبت می‌شود ⇒ معیار سنجش دقت مدل در گذر زمان.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2><span class="n">۶</span>ایندکس‌ها و کوئری‌های پرتکرار</h2>
+  <table>
+    <tr><th style="width:34%">کوئری پرتکرار</th><th>ایندکس پیشنهادی</th></tr>
+    <tr><td>صف مقالات ادیتور با فیلتر وضعیت و محور</td><td><code>(conference_id, status, submitted_at desc)</code> + <code>(conference_id, topic_id)</code></td></tr>
+    <tr><td>مقاله‌های یک نویسنده</td><td><code>papers(submitter_id, created_at desc)</code></td></tr>
+    <tr><td>کارتابل داور</td><td><code>review_assignments(reviewer_id, status, due_at)</code></td></tr>
+    <tr><td>داروران عقب‌مانده (یادآوری خودکار)</td><td><code>review_assignments(status, due_at)</code> با شرط وضعیت‌های باز</td></tr>
+    <tr><td>جست‌وجو در عنوان/چکیده/کلیدواژه</td><td><code>papers.search_vector</code> GIN + <code>pg_trgm</code> برای تطبیق فازی نام‌ها</td></tr>
+    <tr><td>اعتبارسنجی گواهی</td><td><code>issued_certificates(verify_code)</code> یکتا</td></tr>
+    <tr><td>گزارش مالی همایش</td><td><code>payments(status, paid_at)</code> + <code>registrations(group_id, status)</code></td></tr>
+    <tr><td>هزینه و سلامت موتورهای AI</td><td><code>ai_extraction_jobs(created_at desc, status)</code> + <code>(provider, created_at)</code></td></tr>
+    <tr><td>ممیزی</td><td><code>audit_logs(conference_id, created_at desc)</code> + <code>(entity_type, entity_id)</code></td></tr>
+  </table>
+  <p class="small">در Postgres از <code>pg_trgm</code> برای جست‌وجوی نام‌ها و <code>unaccent</code> برای نرمال‌سازی استفاده می‌کنیم. نرمال‌سازی فارسی (ی/ک، نیم‌فاصله) در لایه‌ی اپلیکیشن انجام و نسخه‌ی نرمال‌شده در ستون کمکی ذخیره می‌شود تا جست‌وجو دقیق باشد.</p>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2><span class="n">۷</span>حاکمیت داده و امنیت</h2>
+  <div class="grid2">
+    <div class="callout warn">
+      <b>داده‌های حساس (رمزنگاری‌شده در ستون)</b>
+      <p class="small">کد ملی، شماره کارت، IBAN داوران، رمز دوم پروایدرها/کلید API، تنظیمات SMTP. کلید رمزنگاری در محیط (env) و خارج از دیتابیس نگه داشته می‌شود؛ چرخش کلید و بازرمزنگاری در فاز ۲.</p>
+    </div>
+    <div class="callout warn">
+      <b>دسترسی به فایل‌ها</b>
+      <p class="small">لینک امضاشده با عمر ۵ دقیقه برای دانلود مقاله؛ هیچ مسیر ثابتی برای فایل‌های مقالات عمومی نیست. دانلود هر فایل مقاله در <code>audit_logs</code> ثبت می‌شود (چه داور، چه ادیتور) — پشتوانه‌ی حقوقی مهم در اختلافات داوری.</p>
+    </div>
+    <div class="callout green">
+      <b>سیاست نگهداشت</b>
+      <p class="small">پس از پایان همایش و بسته‌شدن پرونده‌ها، فایل‌های مقاله بعد از N سال به آرشیو سرد منتقل می‌شوند. حذف کامل فقط با درخواست کتبی دانشگاه و با تأیید ادمین کل. گواهی‌ها برای همیشه (چون باید اعتبارسنجی شوند).</p>
+    </div>
+    <div class="callout green">
+      <b>داده‌ی آموزش مدل</b>
+      <p class="small">فقط «متن مقاله» استفاده می‌شود، نه داده هویتی نویسنده؛ و فقط اگر ادیتور/دانشگاه این را در تنظیمات فعال کرده باشد. پرچم <code>training_eligible</code> در سطح هر مثال قابل خاموش‌کردن است.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2><span class="n">۸</span>داده‌ی اولیه (Seed) — برای اینکه دمو از روز اول قابل نمایش باشد</h2>
+  <ol>
+    <li>یک همایش نمونه + برند، یک ادیتور، دو داور، سه نویسنده (با رمز قابل نمایش در دمو).</li>
+    <li>۵ محور در ۲ گروه + کلیدواژه‌ها (تا تطبیق AI قابل نمایش باشد).</li>
+    <li>یک فرم داوری آماده (امتیازدهی به اصالت، نوآوری، روش‌شناسی، نگارش، منابع + نظر متنی).</li>
+    <li>دو قالب گواهی نمونه: یکی «گواهی ارائه مقاله» و یکی «گواهی داوری» با مختصات آماده.</li>
+    <li>سه مقاله‌ی نمونه در وضعیت‌های مختلف + نتایج AI از قبل محاسبه‌شده (تا با اینترنت/مدل هم وابسته نباشد، دمو همیشه کار کند).</li>
+    <li>قالب پیام‌های فارسی/انگلیسی برای همه‌ی رویدادها.</li>
+  </ol>
+  <div class="callout">
+    <b>قدم بعدی:</b> سند ۰۳ — نقشه‌ی صفحات و وایرفریم چهار پنل (ادیتور، داور، شرکت‌کننده، ادمین) + سایت عمومی و سایت شرکتی. با آن، پرامپت‌های شماره‌ی ۱ برای Claude Code نوشته می‌شود.
+  </div>
+</section>
+
+</div>
+</body>
+</html>

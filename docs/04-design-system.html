@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سند ۰۴ — سیستم طراحی و قراردادهای بصری</title>
+<style>
+  :root{--bg:#f5f6fa;--card:#fff;--ink:#202641;--muted:#66708a;--line:#e3e7f0;--brand:#5b57d9;--teal:#139a8a;--violet:#9573e9;--green:#217a62;--amber:#8c600c;--red:#b43c53}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.9 "Vazirmatn","Segoe UI",Tahoma,Arial,sans-serif}
+  .wrap{max-width:1100px;margin:0 auto;padding:26px 20px 80px}
+  header{background:linear-gradient(125deg,#171e40 0%,#4844b7 65%,#167d78 125%);color:#fff;border-radius:20px;padding:27px 30px;margin-bottom:19px;position:relative;overflow:hidden}
+  header:after{content:"";position:absolute;width:240px;height:240px;inset-inline-start:-90px;top:-155px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08)}
+  header h1{font-size:22px;margin:0 0 6px;position:relative;z-index:1}
+  header p{margin:0;max-width:850px;font-size:13px;opacity:.91;position:relative;z-index:1}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;position:relative;z-index:1}
+  .meta span{font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.11)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:20px 22px;margin:0 0 15px;box-shadow:0 4px 18px rgba(37,47,88,.035)}
+  h2{font-size:17px;color:#353483;margin:0 0 12px;padding-bottom:9px;border-bottom:2px solid #efeffa}
+  h2 .n{display:inline-block;background:#eeedff;border:1px solid #dedaFF;color:#514dc3;border-radius:8px;padding:1px 8px;margin-left:7px;font-size:12px;vertical-align:2px}
+  h3{font-size:14.5px;color:#363b64;margin:17px 0 8px}
+  p{margin:7px 0}
+  .lead{color:#5f6982;font-size:13px;margin:0 0 12px}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.8px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right;vertical-align:top}
+  th{background:#f3f4fb;color:#3b4169;font-weight:800}
+  tr:nth-child(even) td{background:#fbfbfe}
+  .tag{display:inline-block;border:1px solid #e1e3ee;background:#f8f8fc;color:#656e86;border-radius:999px;padding:2px 8px;margin:2px;font-size:10.5px}
+  .callout{border-right:4px solid var(--brand);background:#f3f3ff;border-radius:10px;padding:11px 14px;margin:10px 0}
+  .callout.green{border-right-color:var(--teal);background:#eef9f6}
+  .callout.warn{border-right-color:#d09a36;background:#fff8e8}
+  .callout strong{color:#30375b}
+  .small{font-size:11.5px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+  .card{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fff}
+  .card h3{margin:0 0 5px;font-size:13px}
+  .card p{margin:0;color:var(--muted);font-size:11.7px}
+  .swatch-list{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+  .swatch{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff}
+  .swatch-color{height:40px}
+  .swatch-text{padding:7px 8px;font-size:10.5px;line-height:1.5}
+  .swatch-text strong{display:block;direction:ltr;text-align:right;color:#313957;font-size:10px}
+  .swatch-text span{color:var(--muted)}
+  .sample{border-radius:12px;padding:13px;margin:8px 0}
+  .sample-title{font-size:11px;font-weight:800;margin-bottom:7px}
+  .neo-sample{background:#e9edf3;box-shadow:7px 7px 14px #cbd1dc,-7px -7px 14px #fff;border:1px solid rgba(255,255,255,.65)}
+  .glass-sample{color:#fff;background:radial-gradient(150px 80px at 80% 10%,rgba(155,147,255,.36),transparent 72%),linear-gradient(130deg,#171e40,#4642a7 68%,#147d82);}
+  .glass-pane{display:inline-block;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);font-size:10px;backdrop-filter:blur(6px)}
+  .clay-sample{background:#efedf8;box-shadow:7px 8px 15px rgba(100,85,150,.16),inset 1px 1px 2px #fff;border:1px solid #fff;border-radius:18px}
+  .clay-tile{display:inline-block;background:#f7f5ff;padding:7px 11px;border-radius:12px;border:1px solid white;box-shadow:4px 5px 10px rgba(100,85,150,.14),inset 1px 1px 2px white;font-size:10px}
+  pre{direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-word;background:#171c30;color:#e4e8ff;border-radius:12px;padding:13px 15px;overflow:auto;font:11.5px/1.8 Consolas,Monaco,monospace}
+  code{direction:ltr;display:inline-block;background:#f1f2fa;border:1px solid #e3e5f0;border-radius:5px;padding:0 5px;font:11.5px Consolas,Monaco,monospace}
+  ul{margin:6px 0;padding-right:21px}
+  li{margin:4px 0}
+  .status{display:inline-block;border-radius:999px;padding:3px 8px;font-size:10px;font-weight:800}
+  .ok{background:#e8f5ef;color:#17644e}.warn-status{background:#fff4db;color:#805c0b}.bad{background:#fcecef;color:#9c3047}.info{background:#e9f1ff;color:#345b9b}
+  .component-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .component{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fcfcff}
+  .component h3{margin:0 0 5px}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .button{display:inline-block;padding:7px 11px;border-radius:9px;font-size:10.5px;font-weight:800}
+  .button.primary{background:#5b57d9;color:#fff;box-shadow:0 5px 11px rgba(82,77,194,.22)}
+  .button.secondary{background:#fff;border:1px solid #dfe3ef;color:#35405c}
+  .button.ghost{background:transparent;border:1px solid #aaa8ed;color:#4d49bd}
+  .focus-sample{outline:3px solid rgba(91,87,217,.38);outline-offset:2px}
+  .kbd{display:inline-block;direction:ltr;border:1px solid #cfd3df;background:#fff;border-radius:5px;padding:0 5px;font:10px Consolas,monospace}
+  .footer-note{text-align:center;font-size:11px;color:#828aa0;margin-top:19px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}.swatch-list{grid-template-columns:repeat(2,1fr)}.component-grid{grid-template-columns:1fr}header{padding:21px}.wrap{padding:18px 12px 50px}section{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>سند ۰۴ — سیستم طراحی و قراردادهای بصری</h1>
+  <p>سیستم طراحی، سه زبان بصری را به‌صورت هدفمند میان سایت شرکتی، سایت عمومی همایش و پنل‌های دانشگاهی تقسیم می‌کند؛ رنگ و محتوای هر دانشگاه از کانفیگ می‌آید، نه از کپی یا تغییر کد.</p>
+  <div class="meta"><span>نسخه: پیش‌نویس ۰.۱</span><span>مبنای بصری: پیش‌نمایش تعاملی ۰۴</span><span>دو‌زبانه: فارسی + انگلیسی</span><span>ایموجی در UI: ممنوع</span></div>
+</header>
+
+<section>
+  <h2><span class="n">۱</span>تصمیم نهایی جهت بصری</h2>
+  <p class="lead">این نگاشت بر اساس ترجیح تو ثبت شده؛ سبک‌ها برای هر «نوع محصول» مشخص‌اند، نه این‌که همه‌ی جلوه‌ها را بی‌قاعده در یک صفحه روی هم بریزیم.</p>
+  <table>
+    <tr><th style="width:22%">سطح محصول</th><th style="width:23%">زبان بصری</th><th>دلیل و مرز اجرا</th></tr>
+    <tr><td><b>سایت شرکتی محصول</b><br><span class="small">apps/marketing</span></td><td><b>Neumorphism نرم</b></td><td>تمایز و حس لمس‌پذیر برای معرفی محصول؛ سایه‌ها روی سطوح و کارت‌ها، با CTA پرکنتراست. متن طولانی و فرم درخواست دمو روی سطوح ساده می‌ماند تا خوانایی و تبدیل کاربر قربانی تزئینات نشود.</td></tr>
+    <tr><td><b>سایت عمومی همایش</b><br><span class="small">صفحات عمومی apps/web</span></td><td><b>Glassmorphism کنترل‌شده</b><br><span class="small">پیشنهاد فنی من</span></td><td>برای رویداد علمی، لایه‌ی شیشه‌ای روی بنر و تاریخ‌های مهم تصویر متمایز و معاصر می‌دهد؛ اما بدنه‌ی صفحه، متن راهنما، محورهای علمی و فرم ثبت‌نام زمینه‌ی خوانا و نسبتاً مات دارند. دلیل انتخاب: جلوه‌ی شیشه‌ای با هویت رویداد/بنر هماهنگ است و برای محتوای طولانی، از clay یا سایه‌های نئومورفیک کم‌خواناتر نمی‌شود.</td></tr>
+    <tr><td><b>پنل‌های دانشگاهی</b><br><span class="small">شرکت‌کننده، داور، ادیتور، ادمین</span></td><td><b>Claymorphism حرفه‌ای و مهارشده</b></td><td>کارت‌ها و خلاصه‌های وضعیت می‌توانند عمق لطیف داشته باشند تا پنل از حالت خشک خارج شود. چون پنل‌ها داده‌محورند، جدول‌ها، فرم‌ها، تاریخچه‌ی مقاله و کنترل‌های پرتکرار از سطح‌های تمیز و واضح استفاده می‌کنند؛ clay روی قاب و کارت است، نه روی هر سلول و متن.</td></tr>
+  </table>
+  <div class="callout green"><strong>قاعده‌ی مشترک:</strong> هر سه پوسته از یک هسته‌ی کامپوننت و توکن‌های معنایی استفاده می‌کنند. نام، رنگ و لوگوی دانشگاه قابل تنظیم است؛ قوانین امنیتی، دسترس‌پذیری، اندازه‌گیری و رفتار کامپوننت‌ها یکسان می‌ماند.</div>
+</section>
+
+<section>
+  <h2><span class="n">۲</span>پالت رنگ پیشنهادی محصول</h2>
+  <p class="lead">پالت پایه را با توجه به کاربرد دانشگاهی، هویت دیجیتال، و نیاز به کنتراست انتخاب کردم. Indigo رنگ کنش اصلی است؛ Teal و Violet رنگ مکمل‌اند و جایگزین رنگ‌های معنایی وضعیت نمی‌شوند.</p>
+  <div class="swatch-list">
+    <div class="swatch"><div class="swatch-color" style="background:#5b57d9"></div><div class="swatch-text"><strong>#5B57D9</strong><span>رنگ اصلی / CTA</span></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#139a8a"></div><div class="swatch-text"><strong>#139A8A</strong><span>مکمل / جزئیات بصری</span></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#9573e9"></div><div class="swatch-text"><strong>#9573E9</strong><span>تأکید ثانویه</span></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#f5f6fb"></div><div class="swatch-text"><strong>#F5F6FB</strong><span>زمینه‌ی روشن</span></div></div>
+    <div class="swatch"><div class="swatch-color" style="background:#202641"></div><div class="swatch-text"><strong>#202641</strong><span>متن اصلی</span></div></div>
+  </div>
+  <h3>رنگ‌های معنایی وضعیت</h3>
+  <p><span class="status ok">موفقیت</span> <code>#217A62</code> · <span class="status warn-status">نیازمند توجه</span> <code>#805C0B</code> · <span class="status bad">خطا/رد</span> <code>#9C3047</code> · <span class="status info">اطلاع‌رسانی</span> <code>#345B9B</code></p>
+  <div class="callout warn"><strong>کنتراست:</strong> رنگ‌های Teal و Violet در نقش تزئینی یا روی زمینه‌ی روشن استفاده می‌شوند، نه به‌عنوان متن ریز روی سفید. متن دکمه‌ی اصلی سفید روی Indigo است؛ همه‌ی حالت‌های متن، تمرکز و وضعیت باید آزمون کنتراست داشته باشند.</div>
+  <p class="small">رنگ هر همایش می‌تواند از تنظیمات همان نصب عوض شود. در نسخه‌ی واقعی، ادیتور «رنگ اصلی» را انتخاب می‌کند و سامانه از پالت مجاز، سایه‌ها و رنگ متن مناسب را می‌سازد؛ دریافت CSS آزاد یا رنگی که کنتراست را بشکند مجاز نیست.</p>
+</section>
+
+<section>
+  <h2><span class="n">۳</span>دستور زبان هر پوسته</h2>
+  <div class="grid">
+    <article class="card">
+      <h3>سایت شرکتی — Neumorphism</h3>
+      <div class="sample neo-sample"><div class="sample-title">معرفی محصول و مزیت‌ها</div><span class="button primary">درخواست جلسه‌ی معرفی</span></div>
+      <p>زمینه‌ی خنثی گرم/سرد، سطوح برجسته‌ی کم‌عمق، گوشه‌های نرم، متن تیره و دکمه‌ی اصلی واضح. کنترل‌های فرورفته محدود؛ از فروبردن پاراگراف یا input بدون مرز قابل‌مشاهده پرهیز شود.</p>
+    </article>
+    <article class="card">
+      <h3>سایت همایش — Glassmorphism سبک</h3>
+      <div class="sample glass-sample"><div class="sample-title">همایش ملی پژوهش‌های نو</div><span class="glass-pane">مهلت ارسال · ۱۵ آذر</span></div>
+      <p>گرادیان برند در Hero، شفافیت/blur فقط در لایه‌های منتخب؛ نسخه‌ی مات و پشتیبان برای مرورگر/حالت کم‌توان. متن روی پنل شیشه‌ای فقط وقتی استفاده می‌شود که پشت آن یکنواخت و کنتراست کافی باشد.</p>
+    </article>
+    <article class="card">
+      <h3>پنل‌های دانشگاهی — Claymorphism</h3>
+      <div class="sample clay-sample"><div class="sample-title">خلاصه‌ی وضعیت مقاله</div><span class="clay-tile">نیازمند اقدام</span></div>
+      <p>عمق لطیف، شعاع گوشه‌ی بیشتر، سطح‌های چندلایه و نشانگرهای کوچک. کارت‌های خلاصه و دعوت به اقدام Clay هستند؛ جدول داده، متن فرم، کنترل انتخاب و بدنه‌ی مقاله تا حد زیادی تخت و دقیق باقی می‌مانند.</p>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">۴</span>قرارداد کامپوننت‌های پایه</h2>
+  <div class="component-grid">
+    <article class="component"><h3>دکمه‌ها</h3><p class="small">Primary فقط برای یک اقدام اصلی در هر بخش؛ Secondary برای اقدام معمول؛ خطرناک با رنگ معنایی و تأیید مجدد.</p><div class="row"><span class="button primary">ارسال مقاله</span><span class="button secondary">ذخیره‌ی پیش‌نویس</span><span class="button ghost">مشاهده‌ی جزئیات</span></div></article>
+    <article class="component"><h3>فرم‌ها</h3><p class="small">label همواره بیرون از input؛ حالت خطا فقط با رنگ تشخیص داده نمی‌شود (متن + آیکون + مرز)؛ focus واضح؛ ذخیره‌ی خودکارِ پیش‌نویس در گام‌های طولانی.</p><div class="row"><span class="tag">برچسب همیشه قابل مشاهده</span><span class="tag">پیام خطای قابل اقدام</span></div></article>
+    <article class="component"><h3>جدول‌های داده</h3><p class="small">در Clay panel، پس‌زمینه‌ی جدول تخت و سطرها واضح؛ سرستون پایدار؛ مرتب‌سازی/فیلتر قابل کشف؛ در موبایل تبدیل به کارت یا اسکرول افقی با نشانه‌ی واضح.</p></article>
+    <article class="component"><h3>وضعیت‌ها و اعلان‌ها</h3><p class="small">رنگ وضعیت همیشه با متن برچسب‌دار همراه است؛ از سایه یا رنگ تنها برای انتقال معنا استفاده نمی‌کنیم.</p><div class="row"><span class="status ok">پذیرفته شد</span><span class="status warn-status">در انتظار اقدام</span><span class="status bad">رد شده</span><span class="status info">در حال داوری</span></div></article>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">۵</span>توکن‌ها و پیاده‌سازی</h2>
+  <p class="lead">تمام پوسته‌ها باید به tokenهای معنایی متصل شوند؛ هر اپ مجاز نیست رنگ hex و سایه‌ی پراکنده‌ی خود را برای هر کامپوننت بسازد.</p>
+  <pre>/* shared semantic tokens — example */
+:root {
+  --color-brand-500: #5B57D9;
+  --color-brand-700: #4541BD;
+  --color-accent-teal: #139A8A;
+  --color-accent-violet: #9573E9;
+  --color-canvas: #F5F6FB;
+  --color-surface: #FFFFFF;
+  --color-ink: #202641;
+  --color-muted: #66708A;
+  --color-border: #E3E7F0;
+  --radius-control: 10px;
+  --radius-card: 18px;
+  --shadow-card: 0 12px 28px rgba(32, 38, 65, .10);
+}
+
+/* app-level skin; tenant branding only overrides approved tokens */
+[data-skin="neo"]   { /* marketing / company site */ }
+[data-skin="glass"] { /* public conference site */ }
+[data-skin="clay"]  { /* conference panels */ }</pre>
+  <ul>
+    <li>رنگ/برند همایش از <code>conferences.brand_tokens</code> خوانده می‌شود؛ مقادیر از allowlist توکن‌ها می‌آیند و مستقیم به HTML/CSS خام تبدیل نمی‌شوند.</li>
+    <li>کامپوننت مشترک در <code>packages/ui</code>؛ پوست‌ها با class/data attribute و token تعریف می‌شوند، نه fork شدن کامپوننت برای هر دانشگاه.</li>
+    <li>آیکون‌ها از <code>lucide-react</code>؛ ایموجی در عنوان، navigation، badge یا empty state ممنوع.</li>
+    <li>فونت فارسی وزیرمتن و انگلیسی Inter به‌صورت محلی؛ fallback مناسب؛ هیچ وابستگی به فونت CDN نداریم.</li>
+    <li>متن UI در فایل ترجمه؛ چیدمان با locale جهت RTL/LTR می‌گیرد؛ آیکون‌های جهت‌دار هم در انگلیسی mirror می‌شوند.</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="n">۶</span>دسترس‌پذیری و کیفیت تعامل</h2>
+  <ul>
+    <li>هدف کنتراست متن عادی حداقل <b>WCAG AA (۴.۵:۱)</b>؛ متن بزرگ/آیکون کاربردی حداقل ۳:۱؛ رنگ هر دانشگاه پیش از انتشار بررسی می‌شود.</li>
+    <li>تمام کنترل‌ها با صفحه‌کلید قابل استفاده‌اند؛ focus ring واضح و غیرقابل حذف؛ ترتیب فوکوس در RTL/LTR منطقی است. نمونه: <span class="kbd">Tab</span>، <span class="kbd">Enter</span>، <span class="kbd">Esc</span>.</li>
+    <li>جلوه‌ی glass باید fallback مات داشته باشد؛ blur/shadow هرگز تنها نشانه‌ی مرز یا وضعیت نیست. حالت <code>prefers-reduced-motion</code> رعایت می‌شود.</li>
+    <li>انیمیشن برای بازخورد/انتقال کوتاه و هدفمند؛ بارگذاری با skeleton؛ خطاها قابل فهم و دارای راه‌حل؛ در حالت شبکه‌ی کند، سطح اصلی محتوا همچنان قابل استفاده می‌ماند.</li>
+    <li>Mobile-first؛ در صفحه‌ی کوچک، پنل/جدول به الگوی قابل استفاده تبدیل می‌شود، نه صرفاً نسخه‌ی فشرده‌ی دسکتاپ.</li>
+  </ul>
+  <div class="callout">Dark mode از همان tokenهای معنایی ساخته می‌شود؛ نسخه‌ی روشن مبنای نمونه‌ی حاضر است. تغییر تم نباید وضعیت، برند دانشگاه یا کنتراست را با هم قاطی کند.</div>
+</section>
+
+<section>
+  <h2><span class="n">۷</span>وضعیت و موارد باقی‌مانده</h2>
+  <table>
+    <tr><th>موضوع</th><th>وضعیت</th><th>یادداشت</th></tr>
+    <tr><td>نقشه‌ی پوسته‌ها</td><td><span class="status ok">ثبت شد</span></td><td>شرکتی = Neo · سایت عمومی همایش = Glass سبک · پنل‌ها = Clay حرفه‌ای</td></tr>
+    <tr><td>پالت محصول</td><td><span class="status info">پیشنهاد فنی</span></td><td>Indigo + Teal + Violet؛ قابل تنظیم در سطح دانشگاه، با کنترل کنتراست</td></tr>
+    <tr><td>نام برند/لوگو</td><td><span class="status warn-status">بعداً</span></td><td>پس از انتخاب نام، نشان هندسی و lockup لوگو طراحی می‌شود.</td></tr>
+    <tr><td>نمونه‌ی موبایل و نمونه‌سازی در کد</td><td><span class="status warn-status">گام بعد</span></td><td>پس از ساخت monorepo، همین توکن‌ها در <code>packages/ui</code> پیاده و روی سایت شرکتی، همایش و سه پنل تست می‌شوند.</td></tr>
+  </table>
+  <p class="small">پیش‌نمایش قابل تعامل: <code>04-design-system-preview.html</code>. دکمه‌ی «ترکیب پیشنهادی» میان پوسته‌ی سایت شرکتی، سایت همایش و پنل جابه‌جا می‌شود؛ با انتخاب کارت سبک، می‌توان هر گزینه را دستی و روی همه‌ی صفحه‌ها مقایسه کرد.</p>
+</section>
+
+<p class="footer-note">سند ۰۴ · سیستم طراحی سامانه‌ی مدیریت همایش · سند اجرایی برای طراح و ایجنت‌های کدنویس</p>
+</div>
+</body>
+</html>
