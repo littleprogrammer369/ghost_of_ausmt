@@ -5,24 +5,32 @@
  * What this DOES validate:
  *   - Structural integrity of the root manifests (package.json, turbo.json,
  *     pnpm-workspace.yaml) parsed as JSON / YAML, not by substring search.
- *   - The pnpm lockfile's multiple YAML documents: the env document's
- *     packageManagerDependencies pin versus the root manifest's packageManager,
- *     and the project document's root importer dependencies.
+ *   - Manifest shape: a root of null, an array, or a scalar is rejected, as are
+ *     invalid shapes for the specific fields the validator reads.
+ *   - Workspace membership: exactly apps/* and packages/*, each once, with no
+ *     missing, duplicate, non-string, or unsupported entries.
+ *   - The pnpm lockfile's multiple YAML documents: a required env document
+ *     carrying packageManagerDependencies.pnpm (specifier and version) matching
+ *     the root manifest's packageManager, a separate project document with a
+ *     root importer, and an agreeing lockfileVersion on both.
+ *   - That the root validate script is exactly `node scripts/validate-workspace.js`,
+ *     so a no-op echo or a recursive turbo invocation is rejected.
  *   - That the pinned Node runtime markers (.nvmrc, .node-version) agree with
  *     each other and with the Node process actually running this script.
  *   - That declared dev tooling (turbo) is present as a dependency, that it
  *     resolves from node_modules, and that turbo's root task (//#validate)
- *     points at a script that exists.
+ *     points at that script.
  *
  * What this does NOT do:
  *   - It is NOT application lint, typecheck, or build coverage. No application
  *     code exists in this repository yet.
  *   - It does not treat the presence of a "build"/"test" script name as a
- *     defect: legitimate future tasks may add them, and whether such a script
- *     has a real executable target is a separate concern.
+ *     defect: legitimate future tasks may add them.
  *   - It does not claim that a regex over .gitignore proves secrets are
  *     excluded, or that a regex over the ADR proves role/security semantics.
  *     Those are documentation-presence checks and are labelled as such.
+ *   - It does not execute the text of any script configured in a fixture; the
+ *     validate command is compared as a documented contract instead.
  *
  * The negative cases are covered by scripts/validate-workspace.test.js, which
  * runs the same check functions against deliberately broken temporary
@@ -41,20 +49,27 @@ const yaml = require('js-yaml');
 const repoRoot = process.cwd();
 
 /**
- * Every check reports a stable id so a failing run can be asserted by id,
- * and so a test can require an explicit failure rather than the mere
- * occurrence of a label that also appears in passing output.
+ * Create a per-run result sink.
+ *
+ * Each runChecks call gets its own array and its own report/fail closures, so a
+ * previously returned outcome.results can never be mutated by a later run and
+ * each returned array is a distinct object. Module-level mutable state was the
+ * earlier defect: clearing a shared array still left every caller's array
+ * aliased to it, so a second run retroactively rewrote the first run's results.
  */
-const results = [];
-
-function report(id, passed, detail) {
-  results.push({ id, passed, detail: detail === undefined ? null : detail });
-  return passed;
-}
-
-function fail(id, message) {
-  results.push({ id, passed: false, detail: message });
-  return false;
+function createResultSink() {
+  const results = [];
+  return {
+    results,
+    report(id, passed, detail) {
+      results.push({ id, passed, detail: detail === undefined ? null : detail });
+      return passed;
+    },
+    fail(id, message) {
+      results.push({ id, passed: false, detail: message });
+      return false;
+    },
+  };
 }
 
 function exists(relPath) {
@@ -234,8 +249,10 @@ function projectRootImporter(projectDoc) {
  * @returns {{passed: boolean, results: Array, summary: string}}
  */
 function runChecks(root, options) {
-  // Reset results for each invocation so tests are isolated.
-  results.length = 0;
+  const sink = createResultSink();
+  const results = sink.results;
+  const report = sink.report.bind(sink);
+  const fail = sink.fail.bind(sink);
   const opts = options || {};
   const injectedNodeVersion = opts.nodeVersion || process.versions.node;
 
@@ -244,6 +261,25 @@ function runChecks(root, options) {
   const has = (rel) => fs.existsSync(abs(rel));
   const text = (rel) => fs.readFileSync(abs(rel), 'utf8');
   const maybeText = (rel) => (has(rel) ? text(rel) : null);
+
+  /**
+   * Classify a parsed manifest root. Valid JSON syntax does not imply a valid
+   * manifest: `null`, an array, and a bare scalar all parse successfully but
+   * have no fields to read. Returns a stable failure id plus the object to
+   * use downstream (empty object when invalid, so no check dereferences null).
+   */
+  function classifyManifest(id, value) {
+    if (value === null) {
+      return { id: 'manifest-null', detail: `${id} root is null`, value: {} };
+    }
+    if (Array.isArray(value)) {
+      return { id: 'manifest-array', detail: `${id} root is an array`, value: {} };
+    }
+    if (typeof value !== 'object') {
+      return { id: 'manifest-scalar', detail: `${id} root is a ${typeof value}`, value: {} };
+    }
+    return { id: null, detail: null, value };
+  }
 
   const required = [
     'package.json',
@@ -262,19 +298,24 @@ function runChecks(root, options) {
   report('required-files', true, `${required.length} files present`);
 
   // --- package.json -------------------------------------------------------
+  // A malformed manifest is reported and the remaining checks continue with an
+  // empty object, so one bad file cannot crash the run. Checks that need a
+  // field then fail on their own specific id rather than a blanket exception.
   const manifest = loadManifestAt(root);
   if (!manifest.present) {
     fail('package-json-parse', 'package.json not found');
     return { passed: false, results, summary: 'package.json not found' };
   }
   if (!manifest.ok) {
-    // Deliberately no second parse attempt: report and keep the rest of the
-    // checks running with an empty manifest so one bad file cannot crash the run.
     fail('package-json-parse', manifest.error);
   } else {
     report('package-json-parse', true);
   }
-  const pkg = manifest.ok ? manifest.value : {};
+  const manifestShape = classifyManifest('package.json', manifest.value);
+  if (manifestShape.id) {
+    fail(manifestShape.id, manifestShape.detail);
+  }
+  const pkg = manifestShape.value;
 
   const pm = typeof pkg.packageManager === 'string' ? pkg.packageManager : '';
   const pmMatch = /^pnpm@(\d+\.\d+\.\d+)$/.exec(pm);
@@ -293,23 +334,62 @@ function runChecks(root, options) {
       fail('workspace-yaml-parse', parsed.error);
     } else {
       report('workspace-yaml-parse', true);
-      const packages = parsed.value && parsed.value.packages;
-      if (!Array.isArray(packages)) {
-        fail('workspace-packages-array', `packages must be an array, got ${typeof packages}`);
+      // Structurally parsed, never matched by substring. The approved layout is
+      // exactly the app container and the package container, each listed once.
+      const supported = ['apps/*', 'packages/*'];
+      if (parsed.value === null || typeof parsed.value !== 'object' || Array.isArray(parsed.value)) {
+        fail('workspace-root-shape', `root must be a mapping, got ${parsed.value === null ? 'null' : Array.isArray(parsed.value) ? 'array' : typeof parsed.value}`);
+      } else if (!Object.prototype.hasOwnProperty.call(parsed.value, 'packages')) {
+        fail('workspace-packages-missing', 'no "packages" key');
+      } else if (!Array.isArray(parsed.value.packages)) {
+        // Covers a scalar/mapping container, so an unusable shape is reported
+        // under the workspace id rather than crashing a later glob filter.
+        fail(
+          'workspace-packages-array',
+          `packages must be an array, got ${parsed.value.packages === null ? 'null' : Array.isArray(parsed.value.packages) ? 'array' : typeof parsed.value.packages}`,
+        );
       } else {
-        const supported = ['apps/*', 'packages/*'];
-        const unsupported = packages.filter((g) => !supported.includes(g));
+        const packages = parsed.value.packages;
+        const nonStrings = packages.filter((g) => typeof g !== 'string');
+        if (nonStrings.length > 0) {
+          fail(
+            'workspace-packages-non-string',
+            `${nonStrings.length} non-string item(s): ${JSON.stringify(nonStrings).slice(0, 120)}`,
+          );
+        }
+        if (packages.length === 0) {
+          fail('workspace-globs-exact', 'packages is empty; both apps/* and packages/* are required');
+        }
+        const expected = ['apps/*', 'packages/*'];
+        // A missing required container and a duplicate entry are distinct
+        // defects with distinct ids rather than one combined glob message.
+        for (const glob of expected) {
+          const count = packages.filter((g) => g === glob).length;
+          if (count === 0) {
+            fail('workspace-glob-missing', `required glob "${glob}" is absent`);
+          } else if (count > 1) {
+            fail('workspace-glob-duplicate', `glob "${glob}" listed ${count} times`);
+          }
+        }
+        const unsupported = packages.filter(
+          (g) => typeof g === 'string' && !expected.includes(g) && !supported.includes(g),
+        );
         if (unsupported.length > 0) {
           fail(
             'workspace-supported-globs',
             `unsupported glob(s): ${unsupported.join(', ')}; supported: ${supported.join(', ')}`,
           );
-        } else {
-          report(
-            'workspace-supported-globs',
-            true,
-            packages.length === supported.length ? 'apps/*, packages/*' : packages.join(', '),
-          );
+        }
+        // Report the overall membership verdict only when no individual glob
+        // problem was already reported, so a failure is not also announced as a
+        // success under a coarser id.
+        const globFailures = results.filter(
+          (r) => r.id.startsWith('workspace-') && !r.id.endsWith('parse') && !r.id.endsWith('globs-exact'),
+        );
+        const anyGlobFailure = globFailures.length > 0
+          || results.some((r) => r.id === 'workspace-globs-exact' && !r.passed);
+        if (!anyGlobFailure) {
+          report('workspace-globs-exact', true, 'apps/*, packages/* (each exactly once)');
         }
       }
     }
@@ -324,30 +404,86 @@ function runChecks(root, options) {
       fail('turbo-json-parse', parsed.error);
     } else {
       report('turbo-json-parse', true);
-      const turboJson = parsed.value;
-      const tasks = turboJson.tasks || turboJson.pipeline || {};
+      const turboShape = classifyManifest('turbo.json', parsed.value);
+      if (turboShape.id) {
+        fail(turboShape.id, turboShape.detail);
+      }
+      const turboJson = turboShape.value;
+      // Task definitions must be a mapping before an individual task key can be
+      // read out of it; a scalar/array here is reported, not dereferenced.
+      const tasksContainer = turboJson.tasks !== undefined ? turboJson.tasks : turboJson.pipeline;
+      if (tasksContainer === undefined) {
+        fail('turbo-tasks-missing', 'no "tasks" (or legacy "pipeline") key');
+      } else if (tasksContainer === null || typeof tasksContainer !== 'object' || Array.isArray(tasksContainer)) {
+        fail(
+          'turbo-tasks-shape',
+          `tasks must be a mapping, got ${tasksContainer === null ? 'null' : Array.isArray(tasksContainer) ? 'array' : typeof tasksContainer}`,
+        );
+      }
+      const tasks = tasksContainer && typeof tasksContainer === 'object' && !Array.isArray(tasksContainer)
+        ? tasksContainer
+        : {};
       const rootTask = tasks['//#validate'];
 
       if (!rootTask) {
         fail('turbo-root-task-registered', 'no //#validate task registered in turbo.json');
       } else {
         report('turbo-root-task-registered', true, '//#validate');
-        if (rootTask.cache !== false) {
-          fail('turbo-root-task-cache-false', `expected cache:false, got ${JSON.stringify(rootTask.cache)}`);
+        if (rootTask === null || typeof rootTask !== 'object' || Array.isArray(rootTask)) {
+          fail(
+            'turbo-root-task-shape',
+            `//#validate must be a mapping, got ${rootTask === null ? 'null' : Array.isArray(rootTask) ? 'array' : typeof rootTask}`,
+          );
         } else {
-          report('turbo-root-task-cache-false', true, 'cache disabled for environment-sensitive run');
+          if (rootTask.cache !== false) {
+            fail('turbo-root-task-cache-false', `expected cache:false, got ${JSON.stringify(rootTask.cache)}`);
+          } else {
+            report('turbo-root-task-cache-false', true, 'cache disabled for environment-sensitive run');
+          }
         }
       }
 
-      const scripts = pkg.scripts || {};
-      if (!Object.prototype.hasOwnProperty.call(scripts, 'validate')) {
-        fail('turbo-root-task-targets-real-script', 'root package.json has no "validate" script');
-      } else if (typeof scripts.validate !== 'string' || scripts.validate.length === 0) {
-        fail('turbo-root-task-targets-real-script', 'root "validate" script is empty');
-      } else if (!has('scripts/validate-workspace.js')) {
-        fail('turbo-root-task-targets-real-script', 'validate script has no scripts/validate-workspace.js target');
+      // The root script must be the agreed direct command. The existence of
+      // scripts/validate-workspace.js on disk is not evidence that the script
+      // runs it, so the command text itself is the contract: 'echo PASS' would
+      // otherwise pass on the strength of a file it never invokes.
+      const VALIDATE_COMMAND = 'node scripts/validate-workspace.js';
+      const scriptsValue = pkg.scripts;
+      if (scriptsValue === undefined || scriptsValue === null) {
+        fail('turbo-root-task-targets-real-script', 'root package.json has no "scripts" object');
+      } else if (typeof scriptsValue !== 'object' || Array.isArray(scriptsValue)) {
+        fail(
+          'turbo-root-task-targets-real-script',
+          `scripts must be a mapping, got ${Array.isArray(scriptsValue) ? 'array' : typeof scriptsValue}`,
+        );
       } else {
-        report('turbo-root-task-targets-real-script', true, scripts.validate);
+        const scripts = scriptsValue;
+        if (!Object.prototype.hasOwnProperty.call(scripts, 'validate')) {
+          fail('turbo-root-task-targets-real-script', 'root package.json has no "validate" script');
+        } else if (typeof scripts.validate !== 'string' || scripts.validate.trim() === '') {
+          fail('turbo-root-task-targets-real-script', 'root "validate" script is empty or not a string');
+        } else if (!has('scripts/validate-workspace.js')) {
+          fail('turbo-root-task-targets-real-script', 'validate script has no scripts/validate-workspace.js target');
+        } else if (scripts.validate.trim() === VALIDATE_COMMAND) {
+          report('turbo-root-task-targets-real-script', true, VALIDATE_COMMAND);
+        } else if (/^echo\b/.test(scripts.validate.trim())) {
+          fail(
+            'turbo-root-task-targets-real-script',
+            `validate is a no-op echo command: "${scripts.validate}"`,
+          );
+        } else if (/\bturbo\b/.test(scripts.validate)) {
+          // The root task //#validate is executed BY turbo, so a root script
+          // invoking turbo would recurse into the task it is already running.
+          fail(
+            'turbo-root-task-targets-real-script',
+            `validate invokes turbo, which would recurse into //#validate: "${scripts.validate}"`,
+          );
+        } else {
+          fail(
+            'turbo-root-task-targets-real-script',
+            `validate must be exactly "${VALIDATE_COMMAND}", got "${scripts.validate}"`,
+          );
+        }
       }
     }
   }
@@ -366,43 +502,82 @@ function runChecks(root, options) {
     } else {
       report('lockfile-parse', true, `${parsed.documents.length} document(s)`);
 
-      // Every document must declare the same lockfileVersion.
-      const versions = parsed.documents
-        .map((d) => d.lockfileVersion)
-        .filter((v) => v !== undefined);
-      const uniqueVersions = [...new Set(versions.map(String))];
-      if (uniqueVersions.length > 1) {
-        fail('lockfile-version-consistent', `conflicting lockfileVersion values: ${uniqueVersions.join(', ')}`);
-      } else {
-        report('lockfile-version-consistent', true, uniqueVersions[0] || 'none declared');
-      }
-
-      // The env document is the one carrying packageManagerDependencies.
-      // pnpm writes it first when present; the project document is always the
-      // LAST document, and it is the only place the project's dependency graph
-      // is trustworthy (never pnpm's own platform binaries in the env doc).
+      // The env document is the one carrying packageManagerDependencies. pnpm
+      // writes it FIRST when present. The project document is always the LAST,
+      // and it is the only place the project's dependency graph is trustworthy
+      // (never pnpm's own platform binaries in the env doc). The two documents
+      // are never merged.
       const envDocIndex = parsed.documents.findIndex(
         (d) => d && d.importers && d.importers['.'] && d.importers['.'].packageManagerDependencies !== undefined,
       );
       const envDoc = envDocIndex >= 0 ? parsed.documents[envDocIndex] : null;
       const projectDoc = parsed.documents[parsed.documents.length - 1];
 
-      if (envDoc) {
-        const position = envDocIndex === 0 ? 'first' : `document ${envDocIndex + 1}`;
+      // Contract for THIS project: with a pnpm 12 packageManager pin in
+      // package.json, pnpm writes a separate env document. A lockfile without
+      // one cannot demonstrate that the manager version was pinned at install
+      // time, so it is a failure rather than "nothing to compare". This is a
+      // project-specific contract; it does not assert that every historical
+      // single-document lockfile in general is malformed.
+      if (!envDoc) {
+        fail(
+          'lockfile-env-document',
+          'no document carries importers["."].packageManagerDependencies; a pnpm env document is required for this project',
+        );
+      } else if (envDocIndex !== 0) {
+        fail(
+          'lockfile-env-document',
+          `env document found at position ${envDocIndex + 1} of ${parsed.documents.length}; pnpm writes it first`,
+        );
+      } else {
         report(
           'lockfile-env-document',
           true,
-          `${position} of ${parsed.documents.length} carries packageManagerDependencies`,
+          `first of ${parsed.documents.length} carries packageManagerDependencies`,
         );
-      } else {
-        report('lockfile-env-document', true, 'single-document lockfile; no env document');
       }
 
-      // Structural pin comparison, NOT substring search: the version resolved
-      // in the env document must equal the version pinned in package.json.
+      // A separate project document with a root importer is required, so the
+      // dependency graph cannot be read out of the env document by accident.
+      if (parsed.documents.length < 2) {
+        fail('lockfile-project-document', 'a separate project document is required');
+      } else if (!projectRootImporter(projectDoc).found) {
+        fail('lockfile-project-root-importer', 'project document has no root importer (".")');
+      } else {
+        report('lockfile-project-root-importer', true, 'project document root importer present');
+      }
+
+      // The env and project documents must each declare a valid lockfileVersion,
+      // and the two must agree. "none declared" is not acceptable here because
+      // an undeclared version would make agreement unverifiable.
+      const envVersion = envDoc ? envDoc.lockfileVersion : undefined;
+      const projectVersion = projectDoc ? projectDoc.lockfileVersion : undefined;
+      if (envVersion === undefined || envVersion === null) {
+        fail('lockfile-version-env-document', 'env document declares no lockfileVersion');
+      } else if (projectVersion === undefined || projectVersion === null) {
+        fail('lockfile-version-project-document', 'project document declares no lockfileVersion');
+      } else if (String(envVersion) !== String(projectVersion)) {
+        fail(
+          'lockfile-version-consistent',
+          `env declares ${envVersion}, project declares ${projectVersion}`,
+        );
+      } else {
+        report('lockfile-version-consistent', true, `both documents ${envVersion}`);
+      }
+
+      // Structural pin comparison, NOT substring search: both the specifier and
+      // the resolved version in the env document must equal package.json.
       const pin = envPackageManagerPin(envDoc);
       if (!pin.found) {
-        report('lockfile-package-manager-pin', true, 'no env packageManagerDependencies to compare');
+        fail(
+          'lockfile-package-manager-pin',
+          'env document has no packageManagerDependencies.pnpm entry',
+        );
+      } else if (!pin.specifier || !pin.version) {
+        fail(
+          'lockfile-package-manager-pin',
+          `env pnpm entry is incomplete: specifier=${pin.specifier} version=${pin.version}`,
+        );
       } else if (!pmMatch) {
         fail('lockfile-package-manager-pin', `manifest pin is not exact, cannot compare (${pm || 'missing'})`);
       } else {
@@ -419,9 +594,18 @@ function runChecks(root, options) {
       }
 
       // Project dependency graph comes from the PROJECT document, never from
-      // pnpm's platform binaries in the env document.
+      // pnpm's own platform binaries in the env document.
       const importer = projectRootImporter(projectDoc);
-      const declaredDev = pkg.devDependencies || {};
+      const devDepsValue = pkg.devDependencies;
+      if (devDepsValue !== undefined && (devDepsValue === null || typeof devDepsValue !== 'object' || Array.isArray(devDepsValue))) {
+        fail(
+          'lockfile-dev-dependencies-shape',
+          `package.json devDependencies must be a mapping, got ${devDepsValue === null ? 'null' : Array.isArray(devDepsValue) ? 'array' : typeof devDepsValue}`,
+        );
+      }
+      const declaredDev = devDepsValue && typeof devDepsValue === 'object' && !Array.isArray(devDepsValue)
+        ? devDepsValue
+        : {};
       const declaredDevNames = Object.keys(declaredDev);
 
       for (const name of declaredDevNames) {
@@ -480,7 +664,8 @@ function runChecks(root, options) {
   // --- declared tooling resolves for real ----------------------------------
   // A declaration in package.json is not proof of installation; this check
   // resolves turbo from node_modules and reports the truth.
-  const declaredDev = pkg.devDependencies || {};
+  const devDeps = pkg.devDependencies;
+  const declaredDev = devDeps && typeof devDeps === 'object' && !Array.isArray(devDeps) ? devDeps : {};
   const turboDeclared = Object.prototype.hasOwnProperty.call(declaredDev, 'turbo');
   if (!turboDeclared) {
     fail('turbo-declared-dependency', 'turbo is not a root devDependency');

@@ -2,41 +2,56 @@
 
 ## What it validates
 
-This check confirms the structural integrity of the minimal pnpm + Turborepo workspace foundation:
+This check confirms the structural integrity of the minimal pnpm + Turborepo workspace foundation. It enforces these specific guarantees:
 
 - Root manifests (`package.json`, `turbo.json`, `pnpm-workspace.yaml`) parse as JSON/YAML, not by substring search.
-- The pnpm lockfile contains two YAML documents:
-  1. Env document: `packageManagerDependencies.pnpm` (specifier & version) must match `package.json.packageManager`.
-  2. Project document: root importer's `devDependencies` must exactly match `package.json.devDependencies`.
-- Declared dev tooling (`turbo`) must be installed locally and resolve from `node_modules`.
-- Runtime markers (`.nvmrc`, `.node-version`) must agree with each other and with the actual Node process executing the validation.
-- Required documentation phrases are present in `docs/adr/0001-mvp-foundations-and-roles.md` (multi-conference MVP, four roles, scoped support access, email+password login, OTP as open decision, no payment gateway in MVP). These are documentation-presence checks only; they do not prove any behavioural or security property.
+- Manifest shape: a root of `null`, an array, or a scalar is rejected, as are invalid shapes for the fields the validator reads (`scripts`, `devDependencies`, `tasks`, and the individual task definition).
+- Workspace membership: exactly `apps/*` and `packages/*`, each present exactly once, with no missing, duplicate, non-string, or unsupported entries.
+- The pnpm lockfile contains two YAML documents: an env document (written first) carrying `packageManagerDependencies.pnpm` whose **specifier and version** both match `package.json.packageManager`, plus a separate project document with a root importer. Both documents must declare an agreeing `lockfileVersion`.
+- The root `validate` script is exactly `node scripts/validate-workspace.js`, so a no-op `echo` or a script that recurses back into Turbo is rejected.
+- Runtime markers (`.nvmrc`, `.node-version`) agree with each other and with the Node process actually running the validation.
+- Declared dev tooling (`turbo`) is present as a dependency and resolves from `node_modules` at the declared version.
+- Turbo's root task `//#validate` is registered with `cache: false` and points at that script.
+- Documentation-presence phrases are present in `docs/adr/0001-mvp-foundations-and-roles.md`.
+
+It deliberately does **not** claim to be application coverage: there is no lint, typecheck, build, or end-to-end coverage here, because no application code exists in this repository yet. The documentation-presence checks are exactly that — a missing phrase is caught, but a regex cannot prove role semantics, security properties, or secret exclusion. Those remain human-review controls.
 
 ## How to run
 
-```bash
-# Validate using the pinned runtime
-node scripts/validate-workspace.js
+These are distinct paths. `pnpm validate` does **not** execute the Turbo task; it runs Node directly.
 
-# Or via Turbo (same thing)
+```bash
+# 1. Direct validation — runs the Node validator with no Turbo involvement
 pnpm validate
-# or
-turbo run validate
+
+# 2. The validation test suite (node:test)
+node --test scripts/validate-workspace.test.js
+
+# 3. Turbo task graph for the root //#validate task, without running it
+pnpm exec turbo run validate --dry=json
+
+# 4. Real execution of the root //#validate task through Turbo
+pnpm exec turbo run validate
 ```
+
+Use `pnpm exec turbo` for the project-local Turbo. A bare `turbo` command assumes a globally installed binary that may not exist, may be a different version, and is not part of this project's pinned toolchain.
+
+To validate a fixture's negative cases, run the test suite; the validator itself only reports pass/fail on the real repository.
 
 ## Expected output
 
 A clean run prints `[PASS]` for every check and ends with `all configuration checks passed` and exit code 0.
 
-A failing run prints `[FAIL]` for the offending check(es), includes a short explanation, and exits with code 1.
+A failing run prints `[FAIL]` for the offending check(s) with a specific, stable check id and a short explanation, and exits with code 1. Tests assert on those check ids rather than on the presence of a label that also appears in passing output.
+
+The Turbo run reports one task: `//#validate`. Because the task is registered with `cache: false`, every invocation re-runs the validator and reports `0 cached`; a cached result would mean the cache had not actually been disabled.
 
 ## Implementation notes
 
-- The validation is deliberately narrow: it does **not** execute any application lint, typecheck, or build, because no application code exists in this repository yet.
-- It does **not** treat the presence of a `build` or `test` script name as a defect; legitimate future work may add them.
-- It does **not** claim that a regex over `.gitignore` proves secrets are excluded, or that a regex over the ADR proves role or security semantics. Those checks are labelled as documentation presence only.
-- Test cases live in `scripts/validate-workspace.test.js` and are executed via `node --test scripts/`.
-- The fixture helpers in `scripts/fixture.js` copy the real workspace foundation into a temporary directory so no repository file is mutated during testing.
+- Each `runChecks` call owns its result array and its own reporting functions, so no run can observe or mutate another run's results.
+- Invalid input shapes are rejected with specific check ids, never by a blanket `try/catch` that would mask a genuine programming error as a pass.
+- No script text from a test fixture is ever executed; the validate command is compared as a documented contract.
+- Tests build private temporary workspaces (`scripts/fixture.js`) and remove only their own directories.
 
 ## Related files
 
