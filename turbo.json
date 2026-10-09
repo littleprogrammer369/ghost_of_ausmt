@@ -1,0 +1,8 @@
+{
+  "tasks": {
+    "validate": {
+      "dependsOn": [],
+      "outputs": []
+    }
+  }
+}

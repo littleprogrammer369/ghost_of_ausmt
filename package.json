@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "packageManager": "pnpm@12.10.1",
+  "scripts": {
+    "validate": "node scripts/validate-workspace.js"
+  }
+}
