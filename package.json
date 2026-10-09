@@ -3,5 +3,9 @@
   "packageManager": "pnpm@12.10.1",
   "scripts": {
     "validate": "node scripts/validate-workspace.js"
+  },
+  "devDependencies": {
+    "js-yaml": "5.4.3",
+    "turbo": "2.11.7"
   }
 }
