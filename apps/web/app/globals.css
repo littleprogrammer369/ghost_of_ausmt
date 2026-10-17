@@ -1,0 +1,441 @@
+@import 'tailwindcss';
+
+/*
+ * Semantic design tokens for the Academic Conference Platform.
+ *
+ * Source of truth: docs/04-design-system.html (sections 2 and 5).
+ * Indigo is the action colour; Teal and Violet are complements and never
+ * replace semantic status colours. A tenant may only override token values
+ * from an approved allow-list; raw CSS is never accepted from a tenant.
+ */
+@theme {
+  /* Brand */
+  --color-brand-50: #eeedff;
+  --color-brand-100: #e0ddff;
+  --color-brand-200: #aaa8ed;
+  --color-brand-300: #8f8be6;
+  --color-brand-400: #6f6bdd;
+  --color-brand-500: #5b57d9;
+  --color-brand-600: #514dc3;
+  --color-brand-700: #4541bd;
+
+  /* Complements */
+  --color-teal-500: #139a8a;
+  --color-teal-700: #167d78;
+  --color-violet-500: #9573e9;
+
+  /* Surfaces and text */
+  --color-canvas: #f5f6fb;
+  --color-canvas-alt: #eeeff8;
+  --color-surface: #ffffff;
+  --color-ink: #202641;
+  --color-muted: #5c6478;
+  --color-line: #e3e7f0;
+
+  /* Semantic status. Never used alone: always paired with text and an icon. */
+  --color-success: #217a62;
+  --color-success-surface: #e8f5ef;
+  --color-warning: #805c0b;
+  --color-warning-surface: #fff4db;
+  --color-danger: #9c3047;
+  --color-danger-surface: #fcecef;
+  --color-info: #345b9b;
+  --color-info-surface: #e9f1ff;
+
+  /* Radius scale from docs/04-design-system.html */
+  --radius-control: 10px;
+  --radius-card: 18px;
+  --radius-hero: 22px;
+
+  /* Elevation */
+  --shadow-card: 0 12px 28px rgba(32, 38, 65, 0.1);
+}
+
+/*
+ * Skin tokens. Each skin sets the variables it needs; the shared component
+ * classes below read only these tokens, so no component is forked per tenant.
+ */
+:root,
+[data-skin='glass'] {
+  /* Public conference site: controlled Glassmorphism (docs/04 §1). */
+  --skin-hero-gradient: linear-gradient(
+    125deg,
+    #171e40 0%,
+    #4844b7 65%,
+    #167d78 125%
+  );
+  --skin-hero-ink: #ffffff;
+  --skin-hero-muted: rgba(255, 255, 255, 0.82);
+
+  --skin-pane-surface: rgba(255, 255, 255, 0.16);
+  --skin-pane-border: rgba(255, 255, 255, 0.32);
+  --skin-pane-ink: #ffffff;
+  --skin-pane-blur: blur(6px);
+
+  --skin-card-surface: #ffffff;
+  --skin-card-border: #e3e7f0;
+  --skin-card-shadow: var(--shadow-card);
+
+  --skin-btn-primary-bg: var(--color-brand-500);
+  --skin-btn-primary-bg-hover: var(--color-brand-600);
+  --skin-btn-primary-ink: #ffffff;
+  --skin-btn-secondary-bg: #ffffff;
+  --skin-btn-secondary-ink: #35405c;
+  --skin-btn-secondary-border: #dfe3ef;
+  --skin-btn-ghost-ink: #4d49bd;
+  --skin-btn-ghost-border: #aaa8ed;
+
+  --skin-radius-card: var(--radius-card);
+  --skin-radius-control: var(--radius-control);
+}
+
+[data-skin='neo'] {
+  /* Company marketing site: restrained Neumorphism. */
+  --skin-canvas: #e9edf3;
+  --skin-card-surface: #e9edf3;
+  --skin-card-border: rgba(255, 255, 255, 0.65);
+  --skin-card-shadow:
+    7px 7px 14px #cbd1dc, -7px -7px 14px #ffffff;
+  --skin-radius-card: 16px;
+  --skin-radius-control: 12px;
+}
+
+[data-skin='clay'] {
+  /*
+   * University-facing panels: restrained Claymorphism. Depth stays on cards
+   * and status summaries; tables, forms and controls keep flat, precise
+   * surfaces so data stays readable.
+   */
+  --skin-clay-surface: #f4f2ff;
+  --skin-clay-border: #ffffff;
+  --skin-clay-shadow:
+    7px 8px 15px rgba(100, 85, 150, 0.16), inset 1px 1px 2px #ffffff;
+  --skin-clay-tile-surface: #f7f5ff;
+  --skin-clay-tile-border: #ffffff;
+  --skin-clay-tile-shadow:
+    4px 5px 10px rgba(100, 85, 150, 0.14), inset 1px 1px 2px #ffffff;
+  --skin-clay-radius: 18px;
+
+  --skin-card-surface: #ffffff;
+  --skin-card-border: #e3e7f0;
+  --skin-card-shadow: 0 1px 2px rgba(32, 38, 65, 0.06);
+  --skin-radius-card: 16px;
+  --skin-radius-control: var(--radius-control);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    /* Direction comes from <html dir>, set per locale in the root layout. */
+    text-underline-offset: 0.2em;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family:
+      system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* A visible focus ring is required and never removed. */
+  :focus-visible {
+    outline: 3px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---------- Surfaces ---------- */
+
+  .ui-container {
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .ui-container--wide {
+    max-width: 1120px;
+    padding-inline: 16px;
+  }
+
+  .ui-container--narrow {
+    max-width: 760px;
+    padding-inline: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .ui-container--wide,
+    .ui-container--narrow {
+      padding-inline: 24px;
+    }
+  }
+
+  .ui-card {
+    border-radius: var(--skin-radius-card, var(--radius-card));
+    border: 1px solid var(--skin-card-border, #e3e7f0);
+    background-color: var(--skin-card-surface, #ffffff);
+    box-shadow: var(--skin-card-shadow, none);
+  }
+
+  .ui-card--flat {
+    /* Dense data keeps a flat, precise surface regardless of skin. */
+    box-shadow: none;
+  }
+
+  .glass-surface {
+    background-color: var(--skin-pane-surface);
+    border: 1px solid var(--skin-pane-border);
+    border-radius: var(--radius-control);
+  }
+
+  @supports (backdrop-filter: blur(4px)) {
+    .glass-surface {
+      backdrop-filter: var(--skin-pane-blur);
+      -webkit-backdrop-filter: var(--skin-pane-blur);
+    }
+  }
+
+  .hero-surface {
+    background-image: var(--skin-hero-gradient);
+    color: var(--skin-hero-ink);
+    border-radius: var(--radius-hero);
+  }
+
+  .clay-surface {
+    background-color: var(--skin-clay-surface);
+    border: 1px solid var(--skin-clay-border);
+    border-radius: var(--skin-clay-radius);
+    box-shadow: var(--skin-clay-shadow);
+  }
+
+  .clay-tile {
+    background-color: var(--skin-clay-tile-surface);
+    border: 1px solid var(--skin-clay-tile-border);
+    border-radius: 12px;
+    box-shadow: var(--skin-clay-tile-shadow);
+  }
+
+  /* ---------- Controls ---------- */
+
+  .ui-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid transparent;
+    border-radius: var(--skin-radius-control, var(--radius-control));
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ui-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-button--sm {
+    min-height: 34px;
+    padding-block: 5px;
+    padding-inline: 12px;
+    font-size: 13px;
+  }
+
+  .ui-button--md {
+    min-height: 42px;
+    padding-block: 9px;
+    padding-inline: 16px;
+    font-size: 14px;
+  }
+
+  .ui-button--lg {
+    min-height: 50px;
+    padding-block: 13px;
+    padding-inline: 22px;
+    font-size: 15px;
+  }
+
+  .ui-button--primary {
+    background-color: var(--skin-btn-primary-bg);
+    color: var(--skin-btn-primary-ink);
+  }
+
+  .ui-button--primary:hover:not(:disabled) {
+    background-color: var(--skin-btn-primary-bg-hover);
+  }
+
+  .ui-button--secondary {
+    background-color: var(--skin-btn-secondary-bg);
+    color: var(--skin-btn-secondary-ink);
+    border-color: var(--skin-btn-secondary-border);
+  }
+
+  .ui-button--secondary:hover:not(:disabled) {
+    background-color: var(--color-canvas-alt);
+  }
+
+  .ui-button--ghost {
+    background-color: transparent;
+    color: var(--skin-btn-ghost-ink);
+    border-color: var(--skin-btn-ghost-border);
+  }
+
+  .ui-button--ghost:hover:not(:disabled) {
+    background-color: var(--color-brand-50);
+  }
+
+  .press-surface {
+    transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .press-surface:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  /* ---------- Fields ---------- */
+
+  .ui-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .ui-field__label {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .ui-field__state {
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+
+  .ui-field__input {
+    min-height: 42px;
+    padding-block: 9px;
+    padding-inline: 12px;
+    border: 1px solid var(--skin-btn-secondary-border);
+    border-radius: var(--skin-radius-control, var(--radius-control));
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font: inherit;
+  }
+
+  .ui-field__input--error {
+    border-color: var(--color-danger);
+    border-width: 2px;
+  }
+
+  .ui-field__help {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--color-muted);
+  }
+
+  .ui-field__error {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--color-danger);
+  }
+
+  .ui-field__error-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    border-radius: 50%;
+    background-color: var(--color-danger);
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  /* ---------- Status ---------- */
+
+  .ui-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding-block: 3px;
+    padding-inline: 9px;
+    font-size: 11.5px;
+    font-weight: 700;
+    /* Leading dot gives the tone a non-colour redundant cue. */
+  }
+
+  .ui-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  .ui-status--success {
+    background-color: var(--color-success-surface);
+    color: var(--color-success);
+  }
+
+  .ui-status--warning {
+    background-color: var(--color-warning-surface);
+    color: var(--color-warning);
+  }
+
+  .ui-status--danger {
+    background-color: var(--color-danger-surface);
+    color: var(--color-danger);
+  }
+
+  .ui-status--info {
+    background-color: var(--color-info-surface);
+    color: var(--color-info);
+  }
+
+  /* ---------- Utilities ---------- */
+
+  .skip-link {
+    position: absolute;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    top: 8px;
+    z-index: 50;
+    padding-block: 8px;
+    padding-inline: 16px;
+    border-radius: var(--radius-control);
+    background-color: var(--color-brand-500);
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+}

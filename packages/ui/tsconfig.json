@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["react", "react-dom"],
+    "jsx": "preserve",
+    "verbatimModuleSyntax": true,
+    "composite": false,
+    "noEmit": false
+  },
+  "include": ["src/**/*"],
+}

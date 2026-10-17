@@ -1,0 +1,123 @@
+{
+  "layout": {
+    "skipToContent": "Skip to main content",
+    "languageSwitch": "Switch language",
+    "languageSwitchLabel": "Current language: English. Click to go to Persian."
+  },
+  "nav": {
+    "home": "Home",
+    "dates": "Important Dates",
+    "topics": "Topics",
+    "news": "News",
+    "acceptedPapers": "Accepted Papers",
+    "committee": "Scientific Committee",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "menuButton": "Main menu",
+    "closeMenu": "Close menu",
+    "login": "Sign in",
+    "register": "Register"
+  },
+  "topBar": {
+    "phone": "Secretariat phone",
+    "email": "Secretariat email",
+    "socialTitle": "Social networks"
+  },
+  "hero": {
+    "posterAlt": "Conference poster",
+    "countdownTitle": "Countdown to the conference opening",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "submitPaper": "Submit a paper",
+    "exploreTopics": "Explore conference topics",
+    "quickFactsTitle": "Key deadline",
+    "deadlineLabel": "Paper submission deadline"
+  },
+  "dates": {
+    "title": "Important Dates"
+  },
+  "about": {
+    "title": "About the Conference",
+    "posterAlt": "Full-size conference poster"
+  },
+  "topics": {
+    "title": "Conference Topics",
+    "description": "Topics below are grouped to help authors quickly find their closest area of interest.",
+    "keywordsLabel": "Keywords"
+  },
+  "news": {
+    "title": "Latest News",
+    "readMore": "Read more"
+  },
+  "sponsors": {
+    "title": "Sponsors and Publishers"
+  },
+  "committee": {
+    "title": "Scientific Committee",
+    "description": "Members of the scientific committee and organizers of this sample conference."
+  },
+  "footer": {
+    "aboutTitle": "About the conference",
+    "quickLinksTitle": "Quick links",
+    "contactTitle": "Contact the secretariat",
+    "newsletterTitle": "Newsletter",
+    "newsletterHelp": "Stay informed about the latest announcements.",
+    "newsletterEmail": "Your email",
+    "newsletterSubmit": "Subscribe",
+    "copyright": "All rights reserved."
+  },
+  "uiPreview": {
+    "title": "Component Samples",
+    "lead": "This is a display page and does not represent any real panel. The goal is to inspect colour, spacing and keyboard behaviour across both languages and both directions.",
+    "buttons": {
+      "title": "Buttons",
+      "primary": "Primary action",
+      "secondary": "Secondary action",
+      "ghost": "View details"
+    },
+    "cards": {
+      "title": "Cards",
+      "flatTitle": "Flat surface · dense data",
+      "flatDescription": "Default for tables, forms and long text; the highest readability.",
+      "glassTitle": "Glass surface · public site",
+      "glassDescription": "For selected layers on the hero and key dates, with a matte fallback.",
+      "clayTitle": "Layered surface · university panel",
+      "clayDescription": "For status summaries and calls to action; the highest readability."
+    },
+    "status": {
+      "title": "Status badges",
+      "accepted": "Accepted",
+      "pending": "Awaiting action",
+      "rejected": "Rejected",
+      "inReview": "Under review"
+    },
+    "containers": {
+      "title": "Layout width",
+      "wideTitle": "Public page width",
+      "wideDescription": "The usual measure for content sections of the conference site.",
+      "narrowTitle": "Reading width",
+      "narrowDescription": "For guidance text and short forms."
+    },
+    "textField": {
+      "title": "Form fields",
+      "label": "Secretariat email",
+      "optional": "Optional",
+      "required": "Required",
+      "placeholder": "Sample name",
+      "help": "This helper text is only for demonstration.",
+      "errorLabel": "With error",
+      "error": "This address is not valid."
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The requested path does not exist in this preview.",
+    "backHome": "Go back home"
+  },
+  "unavailable": {
+    "title": "Not yet implemented",
+    "description": "This section was not built in this task. The links and buttons below are deliberately disabled so they do not work once a real service is connected.",
+    "reason": "Reason: requires an authorization server and storage."
+  }
+}
